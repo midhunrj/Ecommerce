@@ -1239,7 +1239,7 @@ module.exports = {
   removeproductoffer,
   coupondelete,
   couponeditpage,
-  couponupdate
-
+  couponupdate,
+      
   // toggleUserStatus
 }
