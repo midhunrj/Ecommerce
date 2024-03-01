@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel='stylesheet' type='text/css' media='screen' href='grm.css'>
+  <title><%= locals.title ? title : "Signup page" %></title>
+  
+</head>
+
+<body>
+  <div class="ginger">
+    <form action="/Otp" method="post" class="geo">
+      <h4 id="lab">Enter the otp sent to the email</h4>
+    
+      <div class="otp-input-container">
+        <input type="text" id="otp" name="otp" placeholder="enter otp" pattern="\d*" inputmode="numeric" maxlength="6">
+        <% if (locals.message) { %>
+         <h5 id="lab"><%= message %></h5>
+          <% } %>
+      </div>
+      <% if (locals.error) { %>
+        <h5><%= error %></h5>
+        <% } %>
+      <button type="submit">Verify</button>
+    </form>
+
+    <form method="post" id="ginger" action="/resendotp">
+      <div id="countdownText">Resend OTP in 60s</div>
+      <button type="submit" onclick="resendOTP()" id="resendBtn" style="display: none;">Resend OTP</button>
+    </form>
+  </div>
+
+  <script>
+    let countdown;
+
+    function startCountdown() {
+      let seconds = 60;
+      countdown = setInterval(function () {
+        document.getElementById('countdownText').textContent = `Resend OTP in ${seconds}s`;
+        seconds--;
+
+        if (seconds < 0) {
+          clearInterval(countdown);
+          document.getElementById('countdownText').style.display = 'none';
+          document.getElementById('resendBtn').style.display = 'block';
+        }
+      }, 1000);
+    }
+
+    function resendOTP() {
+      document.getElementById('countdownText').style.display = 'block';
+      document.getElementById('resendBtn').style.display = 'none';
+      startCountdown();
+    }
+
+    startCountdown();
+  </script>
+</body>
+
+</html>

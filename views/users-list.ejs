@@ -1,0 +1,203 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Evara Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+     <!-- Favicon -->
+     <link rel="shortcut icon" type="image/x-icon" href="Admin-assets/imgs/theme/favicon.svg">
+     <!-- Template CSS -->
+     <link href="/Admin-assets/css/main.css" rel="stylesheet" type="text/css"/>
+     <link href="/dash.css">
+     <style>
+     /* Style for pagination page items */
+.page-item {
+  background-color: #f8f9fa; /* Background color for page items */
+  border: 1px solid #dee2e6; /* Border color for page items */
+  color: #6c757d; /* Text color for page items */
+  margin-right: 5px; /* Adjust margin between page items */
+}
+
+/* Style for active page item */
+.page-item.active {
+  background-color: #007bff; /* Background color for active page item */
+  border-color: #007bff; /* Border color for active page item */
+  color: #fff; /* Text color for active page item */
+}
+
+    </style>
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <img src="Admin-assets/imgs/theme/logo.png" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <%- include("./layouts/nav.ejs") %>
+    </aside>
+    <main class="main-wrap">
+        <%- include("./layouts/header.ejs") %>
+    <% if(locals.message){ %>
+        <h4><%= message %></h4>
+        <% } %>
+        <div class="card mb-4">
+                <header class="card-header">
+                    <h4 class="card-title">User details</h4>
+                    
+                </header>
+                <div class="card-body">
+                <div class="table-responsive">
+                <div class="table-responsive">
+                <table class="table align-middle table-nowrap mb-0">      
+                <thead class="table-light">
+                <tr>
+                                        <th scope="col" class="text-center">
+                                            <div class="form-check align-middle">
+                                                <input class="form-check-input" type="checkbox" id="transactionCheck01">
+                                                <label class="form-check-label" for="transactionCheck01"></label>
+                                            </div>
+                                        </th>
+                                        <th class="align-middle" scope="col">Name</th>
+                                        <th class="align-middle" scope="col">Email</th>
+                                        <th class="align-middle" scope="col">Mobile</th>
+                                        <th colspan="2" class="align-middle" scope="col">Status</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  <% if(users.length>0) {
+            for(let i=0;i<users.length;i++) {
+                 %>
+                                    <tr>
+                                        <td class="text-center">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="transactionCheck02">
+                                                <label class="form-check-label" for="transactionCheck02"></label>
+                                            </div>
+                                        </td>
+                                        <td><a href="#" class="fw-bold"></a><%= users[i].username %> </td>
+                                        
+                    <td><%= users[i].email %></td>
+                    <td><%= users[i].phone %></td>
+                    
+                   <td> <% if (users[i].is_blocked==0) { %>
+                                         
+                                         <button type="submit" class="btn btn-success"> 
+                                            <a data-bs-toggle="modal" data-bs-target="#confirmationModal<%= i %>" onclick="confirmDelete('<%= users[i]._id %>') " style="color: white;">
+                                            </i>UnBlocked</a></button>
+                                        
+                                         <% } else { %>
+                                             <button type="submit" class="btn btn-danger"> 
+                                                <a href="/admin/unblock-user?id=<%= users[i]._id %>"style="color: white;">
+                                                 
+                                                </i>Blocked</a></button>
+                                               
+                                            
+                                         <% } %>
+                   </td> 
+                                    </tr>
+                                    <%
+                
+              }}
+              else{ %>
+                  <tr>
+                      <td colspan="5">Users Not found</td>
+                  </tr>
+                  <%
+              }
+              %>
+      </table>
+      <div class="pagination-area mt-15 mb-sm-5 mb-lg-0">
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-start">
+      <% for (let currentPage = 1; currentPage <= totalNumberOfPages; currentPage++) { %>
+        <li class="page-item <%= currentPage == page ? 'active' : '' %>">
+          <a class="page-link" href="/admin/users?page=<%= currentPage %>"><%= currentPage %></a>
+        </li>
+      <% } %>
+    </ul>
+  </nav>
+</div>
+
+
+    
+
+    
+    <a href="/admin_home">Go to home page</a>
+    </form>
+    
+</div>
+    </div>
+    </div>
+                </div>
+                </div>
+    </main>
+    
+    <% for(let i = 0; i < users.length; i++) { %>
+        <div class="modal fade" id="confirmationModal<%= i %>" tabindex="-1" aria-labelledby="confirmationModalLabel<%= i %>" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel<%= i %>">Confirm Blocking</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Are you sure you want to block this user</p>
+              </div>
+              <% console.log("thisssjsdfjkdfsd" + users[i]._id) %>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="deleteButton<%= i %>" href="/admin/block-user?id=<%=users[i]._id %>" class="btn btn-danger">Block</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% } %>
+<script>
+    function updateUserStatus(userId) {
+    console.log(userId);
+  
+    $.ajax({
+      url:`/admin/users?id=${userId}`,
+      type: "PUT",
+      contentType: "application/json",
+      data: JSON.stringify({ is_blocked: 1 }),
+      success: function () {
+        console.log("User blocked successfully");
+        location.reload();
+      },
+      error: function (xhr, status, error) {
+        console.error("Failed to block user", error);
+      },
+    });
+  }</script>
+  <script>
+    function confirmDelete(userId) {
+    // Implement your logic to confirm deletion using the categoryId
+    console.log('Confirming deletion of category:', userId);
+}</script>
+  <script src="../public/userblock.js"></script>
+<script src="Admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
+<script src="/Admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
+<script src="/Admin-assets/js/vendors/select2.min.js"></script>
+<script src="/Admin-assets/js/vendors/perfect-scrollbar.js"></script>
+<script src="/Admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
+<script src="/Admin-assets/js/vendors/chart.js"></script>
+<!-- Main Script -->
+<script src="/Admin-assets/js/main.js" type="text/javascript"></script>
+<script src="/Admin-assets/js/custom-chart.js" type="text/javascript"></script>
+    
+    </body>
+</html>
+

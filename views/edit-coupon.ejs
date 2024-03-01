@@ -1,0 +1,153 @@
+<%- include("./layouts/Admin-header.ejs") %>
+<section class="content-main">
+    <form action="/update-coupon?id=<%= Coupons._id%>" method="post" onsubmit="return validate()">
+        <div class="container mt-5">
+            <div class="content-header">
+                <h2 class="content-title"> Edit Coupon</h2>
+            </div>
+            
+            <div class="row gx-3">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="code">Coupon Code</label>
+                        <input type="text" class="form-control" name="code" id="couponcode" value="<%= Coupons.Couponcode %>" placeholder="Enter coupon code">
+                        <div id="codeError" class="Error"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="type">Coupon Type</label>
+                        <input type="text" class="form-control" name="type" id="type"  value="<%= Coupons.Coupontype %>"placeholder="Enter coupon type">
+                        <div id="typeError" class="Error"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-3">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="expirydate">Expiry Date</label>
+                        <input type="date" class="form-control" name="expirydate" id="expirydate"  value="<%= Coupons.Expirydate %>" placeholder="Enter expiry date">
+                        <div id="expirydateError" class="Error"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="limit">Usage Limit</label>
+                        <input type="number" class="form-control" name="limit" id="limit" value="<%= Coupons.Usagelimit %>" placeholder="Enter usage limit">
+                        <div id="limitError" class="Error"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="amount">Discount Amount</label>
+                        <input type="text" class="form-control" name="amount" id="Amount" value="<%= Coupons.Amount %>" placeholder="Enter Amount">
+                        <div id="amountError" class="Error"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-3">
+                <div class="col-md-4 mt-20">
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" name="description" id="description" value="<%= Coupons.Description %>" placeholder="Enter description" rows="5"></textarea>
+                        <div id="descriptionError" class="Error"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="miniamount">Minimum Amount</label>
+                    <input type="text" class="form-control" name="miniamount" id="miniAmount" value="<%= Coupons.MinimumAmount %>" placeholder="Enter  minimum Amount">
+                    <div id="miniamountError" class="Error"></div>
+                </div>
+            </div>
+
+            <div class="row gx-3">
+                <div class="col-md-12">
+                    <button class="btn btn-md rounded font-sm hover-up" type="submit">Publish</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+
+<%- include('./layouts/Admin-footer.ejs') %>
+
+<script>
+    function validate() {
+        // Input fields
+        const code = document.getElementById('couponcode');
+        const type = document.getElementById('type');
+        const expirydate = document.getElementById('expirydate');
+        const limit = document.getElementById('limit');
+        const amount = document.getElementById('Amount');
+        const miniamount = document.getElementById('miniAmount');
+        const description = document.getElementById('description');
+
+        // Error fields
+        const codeError = document.getElementById('codeError');
+        const typeError = document.getElementById('typeError');
+        const expirydateError = document.getElementById('expirydateError');
+        const limitError = document.getElementById('limitError');
+        const amountError = document.getElementById('amountError');
+        const miniamountError = document.getElementById('miniamountError');
+        const descriptionError = document.getElementById('descriptionError');
+
+        // Reset error messages
+        codeError.innerHTML = '';
+        typeError.innerHTML = '';
+        expirydateError.innerHTML = '';
+        limitError.innerHTML = '';
+        amountError.innerHTML = '';
+        miniamountError.innerHTML = '';
+        descriptionError.innerHTML = '';
+
+        // Validate each field and display error messages if empty or invalid
+        let isValid = true;
+        if (!code.value.trim()) {
+            codeError.innerHTML = 'Coupon code is required';
+            isValid = false;
+        } else if (!/^[A-Z].*$/.test(code.value)) {
+            codeError.innerHTML = 'Coupon code must start with a capital letter';
+            isValid = false;
+        }
+        if (!type.value.trim()) {
+            typeError.innerHTML = 'Coupon type is required';
+            isValid = false;
+        }
+        if (!expirydate.value.trim()) {
+            expirydateError.innerHTML = 'Expiry date is required';
+            isValid = false;
+        }
+        if (!limit.value.trim()) {
+            limitError.innerHTML = 'Usage limit is required';
+            isValid = false;
+        } else if (!/^\d+$/.test(limit.value)) {
+            limitError.innerHTML = 'Usage limit must be a number';
+            isValid = false;
+        }
+        if (!amount.value.trim()) {
+            amountError.innerHTML = 'Discount amount is required';
+            isValid = false;
+        }
+        if (!miniamount.value.trim()) {
+            miniamountError.innerHTML = 'minimum amount is required';
+            isValid = false;
+         } else if (!/^\d+(\.\d{1,2})?$/.test(amount.value)) {
+            amountError.innerHTML = 'Invalid discount amount';
+            isValid = false;
+        }
+        else if (!/^\d+(\.\d{1,2})?$/.test(miniamount.value)) {
+            miniamountError.innerHTML = 'Invalid minimum amount';
+            isValid = false;
+        }
+        if (!description.value.trim()) {
+            descriptionError.innerHTML = 'Description is required';
+            isValid = false;
+        }
+
+        // Return false if any field is empty or invalid, preventing form submission
+        return isValid;
+    }
+</script>
+

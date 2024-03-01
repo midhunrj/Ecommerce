@@ -1,0 +1,106 @@
+let originalPriceCache = {};
+
+const addCategoryOffer = async (req, res) => {
+  try {
+      const percentage = parseInt(req.body.percentage);
+      const categoryId = req.body.categoryId;
+
+      const findCategory = await Category.findOne({ _id: categoryId });
+      console.log(findCategory);
+
+      await Category.updateOne(
+          { _id: categoryId },
+          {
+              $set: {
+                  offerAmount: percentage
+              }
+          }
+      )
+      .then(data => {
+          console.log(data);
+          console.log("categoryOffer added");
+      });
+
+      const productData = await Product.find({ Category: categoryId, isVerified: true });
+      console.log(productData);
+
+      for (const product of productData) {
+          const originalprice = product.price; // Store original price
+          console.log("before offer", originalprice);
+          product.price -= Math.floor(product.price * (percentage / 100));
+          await product.save();
+
+          // Store the original price in the cache
+          originalPriceCache[product._id.toString()] = originalprice.toString();
+      }
+
+      res.json({ status: true });
+
+  } catch (error) {
+      console.log(error.message);
+  }
+}
+
+
+const removerCategoryOffer = async (req, res) => {
+    try {
+        console.log(req.body);
+        const categoryId = req.body.categoryId;
+        const findCategory = await Category.findOne({ _id: categoryId });
+        console.log(findCategory);
+
+        const percentage = findCategory.offerAmount;
+        console.log(percentage);
+
+        const productData = await Product.find({ Category: categoryId, isVerified: true });
+
+        if (productData.length > 0) {
+            for (const product of productData) {
+                const originalprice = originalPriceCache[product._id];
+                if (originalprice) {
+                    product.price = originalprice; // Use original price from cache
+                    await product.save();
+                } else {
+                    console.log("Original price not found for product:", product._id);
+                }
+            }
+        }
+
+        findCategory.offerAmount = 0;
+        await findCategory.save();
+
+        // Clear the cache after use
+        originalPriceCache = {};
+
+        res.json({ status: true });
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+<% console.log(products[i].Category,"category ids \n"); %>
+<% console.log("jugfrrddrfd", category); %>
+<% if(category && category.length > 0){ %>
+    <% for(let j=0; j<category.length; j++){ %>
+        <% console.log(category[j]._id); %>
+        <% if(products[i].Category.toString() === category[j]._id.toString()){ %>
+            <% console.log("before offer discounted", category[j].offerAmount); %>
+            <% if(category[j].offerAmount > 0){ %>
+                <% let originalPrice = Math.floor(products[i].price / (1 - category[j].offerAmount / 100)); %>
+
+                <% console.log("original price", originalPrice); %>
+                <div class="price mb-2">
+                    <span>&#8377;<%= products[i].price %></span>
+                    <span class="old-price">&#8377;<%= originalPrice %></span>
+                    <span class="text-danger"><%= category[j].offerAmount %>% off</span>
+                </div>
+            <% } else { %>
+                <div class="price mb-2">
+                    &#8377;<%= products[i].price %>
+                </div>
+            <% } %>
+        <% } %>
+    <% } %>
+<% } %>
+

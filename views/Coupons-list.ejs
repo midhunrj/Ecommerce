@@ -1,0 +1,61 @@
+<%- include('./layouts/Admin-header.ejs') %>
+<style>
+    .long-column {
+        white-space: normal;
+    }
+    .content-main {
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+    .table-responsive {
+        margin-top: 20px;
+    }
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f9f9f9;
+    }
+    .btn-group {
+        margin-right: 5px;
+    }
+</style>
+<section class="content-main">
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">Coupon Code</th>
+                        <th class="text-center">Coupon Type</th>
+                        <th class="text-center">Max Discount</th>
+                        <th class="text-center">Usage Limit</th>
+                        <th class="text-center">Description</th>
+                        <th class="text-center">Expiry Date</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if(Coupons && Coupons.length > 0) { %>
+                        <% for(var i = 0; i < Coupons.length; i++) { %>
+                            <tr>
+                                <td class="text-center"><%= Coupons[i].Couponcode %></td>
+                                <td class="text-center"><%= Coupons[i].Coupontype %></td>
+                                <td class="text-center"><%= Coupons[i].Amount %></td>
+                                <td class="text-center"><%= Coupons[i].Usagelimit %></td>
+                                <td class="long-column text-center"><%= Coupons[i].Description %></td>
+                                <td class="text-center"><%= Coupons[i].Expirydate %></td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <a class="btn btn-sm btn-info" href="/edit-coupon?coupon=<%= Coupons[i]._id %>">Edit</a>
+                                        <a class="btn btn-sm btn-danger" href="/delete-coupon?coupon=<%= Coupons[i]._id %>">Delete</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }} else { %>
+                            <tr>
+                                <td class="text-center" colspan="7">No Coupons Added</td>
+                            </tr>
+                        <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

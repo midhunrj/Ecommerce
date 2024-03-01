@@ -1,0 +1,19 @@
+
+<li class="nav-item">
+    <a class="nav-link" id="referal-tab" data-bs-toggle="tab" href="#referal" role="tab" aria-controls="referal" aria-selected="true"><i class="fi-rs-user mr-10"></i>Refer a Friend</button>
+</li>
+
+
+<div class="tab-pane fade" id="referal" role="tabpanel" aria-labelledby="referal-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                            <span class="close">&times;</span>
+                                            <h2>Refer a Friend</h2>
+                                            </div>
+                                            <div class="card-body">
+                                            <p>Share your referral code:</p>
+                                            <input type="text" id="referralCodeInput" readonly>
+                                            <button onclick="shareReferral()">Share</button>
+                                            </div>
+                                        </div>
+                                    </div>

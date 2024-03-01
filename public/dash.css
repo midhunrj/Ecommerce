@@ -1,0 +1,43 @@
+ body {
+      font-family: Arial, sans-serif;
+    }
+ table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+ th {
+      background-color: #f2f2f2;
+    }
+
+.edit {
+      background-color:green; /* Green */
+      color: white;
+      padding: 8px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      border-radius: 4px;
+    }
+
+    .delete {
+      background-color: red; /* Red */
+      color: white;
+      padding: 8px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      border-radius: 4px;
+      margin-left: 10px;
+    }
+  a{
+    color:white;
+    text-decoration: none;
+  }  
+  

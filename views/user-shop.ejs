@@ -1,0 +1,603 @@
+<%- include("./layouts/user-header.ejs") %>
+    <div class="mobile-header-active mobile-header-wrapper-style">
+        <div class="mobile-header-wrapper-inner">
+            <div class="mobile-header-top">
+                <div class="mobile-header-logo">
+                    <a href="index.html"><img src="assets/imgs/theme/logo.png" alt="logo"></a>
+                </div>
+                <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
+                    <button class="close-style search-close">
+                        <i class="icon-top"></i>
+                        <i class="icon-bottom"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="mobile-header-content-area">
+                <div class="mobile-search search-style-3 mobile-header-border">
+                    <form action="/shop" method="get">
+                        <input type="text" name="search" placeholder="Search for items…">
+                        <button type="submit"><i class="fi-rs-search"></i></button>
+                    </form>
+                </div>
+                <div class="mobile-menu-wrap mobile-header-border">
+                    <div class="main-categori-wrap mobile-header-border">
+                        <a class="categori-button-active-2" href="#">
+                            <span class="fi-rs-apps"></span> Browse Categories
+                        </a>
+                        <div class="categori-dropdown-wrap categori-dropdown-active-small">
+                            <ul>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-dress"></i>Women's Clothing</a></li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-tshirt"></i>Men's Clothing</a></li>
+                                <li> <a href="shop-grid-right.html"><i class="evara-font-smartphone"></i> Cellphones</a></li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-desktop"></i>Computer & Office</a></li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-cpu"></i>Consumer Electronics</a></li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-home"></i>Home & Garden</a></li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-high-heels"></i>Shoes</a></li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-teddy-bear"></i>Mother & Kids</a></li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-kite"></i>Outdoor fun</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- mobile menu start -->
+                    <nav>
+                        <ul class="mobile-menu">
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/home">Home</a>
+                                <!-- <ul class="dropdown">
+                                    <li><a href="index.html">Home 1</a></li>
+                                    <li><a href="index-2.html">Home 2</a></li>
+                                    <li><a href="index-3.html">Home 3</a></li>
+                                    <li><a href="index-4.html">Home 4</a></li>
+                                </ul> -->
+                            </li>
+                            <li class="menu-item-has-children"><span class="menu-expand"></span>shop
+                                
+                            </li>
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Mega menu</a>
+                                <ul class="dropdown">
+                                    <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Women's Fashion</a>
+                                        <ul class="dropdown">
+                                            <li><a href="shop-product-right.html">Dresses</a></li>
+                                            <li><a href="shop-product-right.html">Blouses & Shirts</a></li>
+                                            <li><a href="shop-product-right.html">Hoodies & Sweatshirts</a></li>
+                                            <li><a href="shop-product-right.html">Women's Sets</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Men's Fashion</a>
+                                        <ul class="dropdown">
+                                            <li><a href="shop-product-right.html">Jackets</a></li>
+                                            <li><a href="shop-product-right.html">Casual Faux Leather</a></li>
+                                            <li><a href="shop-product-right.html">Genuine Leather</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Technology</a>
+                                        <ul class="dropdown">
+                                            <li><a href="shop-product-right.html">Gaming Laptops</a></li>
+                                            <li><a href="shop-product-right.html">Ultraslim Laptops</a></li>
+                                            <li><a href="shop-product-right.html">Tablets</a></li>
+                                            <li><a href="shop-product-right.html">Laptop Accessories</a></li>
+                                            <li><a href="shop-product-right.html">Tablet Accessories</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            </li>
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Pages</a>
+                                <ul class="dropdown">
+                                    <li><a href="page-about.html">About Us</a></li>
+                                    <li><a href="page-contact.html">Contact</a></li>
+                                    <li><a href="page-account.html">My Account</a></li>
+                                    <li><a href="page-login-register.html">login/register</a></li>
+                                    <li><a href="page-purchase-guide.html">Purchase Guide</a></li>
+                                    <li><a href="page-privacy-policy.html">Privacy Policy</a></li>
+                                    <li><a href="page-terms.html">Terms of Service</a></li>
+                                    <li><a href="page-404.html">404 Page</a></li>
+                                </ul>
+                            </li>
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Language</a>
+                                <ul class="dropdown">
+                                    <li><a href="#">English</a></li>
+                                    <li><a href="#">French</a></li>
+                                    <li><a href="#">German</a></li>
+                                    <li><a href="#">Spanish</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- mobile menu end -->
+                </div>
+                <div class="mobile-header-info-wrap mobile-header-border">
+                    <div class="single-mobile-header-info mt-30">
+                        <a  href="page-contact.html"> Our location </a>
+                    </div>
+                    <div class="single-mobile-header-info">
+                        <a href="page-login-register.html">Log In / Sign Up </a>
+                    </div>
+                    <div class="single-mobile-header-info">
+                        <a href="#">(+01) - 2345 - 6789 </a>
+                    </div>
+                </div>
+                <div class="mobile-social-icon">
+                    <h5 class="mb-15 text-grey-4">Follow Us</h5>
+                    <a href="#"><img src="assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                    <a href="#"><img src="assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
+                    <a href="#"><img src="assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                    <a href="#"><img src="assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                    <a href="#"><img src="assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="/home" rel="nofollow">Home</a>
+                    <span></span> Shop
+                </div>
+            </div>
+        </div>
+        <section class="mt-50 mb-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 primary-sidebar sticky-sidebar">
+                        <div class="widget-category mb-30">
+                            <h5 class="section-title style-1 mb-30 wow fadeIn animated">Category</h5>
+                            <% if(category && category.length > 0) { %>
+                                <ul class="categories">
+                                    <li>
+                                        <a href="/shop">All category</a>
+                                    </li>
+                                    <% for (let i = 0; i < category.length; i++) { %>
+                                        <li>
+                                            <a href="#" onclick="handleCategoryClick('<%= category[i]._id %>')">
+                                                <%= category[i].catName %>
+                                            </a>
+                                        </li>
+                                    <% } %>
+                                </ul>
+                            <% } %>
+                        </div>
+    
+                        <div class="sidebar-widget price_range range mb-30">
+                            <div class="widget-header position-relative mb-20 pb-10">
+                                <h5 class="widget-title mb-10">Filter by price</h5>
+                                <div class="bt-1 border-color-1"></div>
+                            </div>
+                            <form action="/shop" method="get">
+                                <!-- Existing code for search and category filters -->
+
+                                <!-- Price Range Filter -->
+                                <div>
+                                    <label class="form-group   form-group "> <b>Price Range: </b></label>
+                                    <select name="priceRange" class="form-control">
+                                        <option value="0-999">0-999</option>
+                                        <option value="1000-4999">1000-4999</option>
+                                        <option value="5000-14999">5000-14999</option>
+                                        <option value="15000-49999">15000-49999</option>
+                                        <option value="greater than 50000">greater than 50000</option>
+                                    </select>
+                                </div>
+                                <br>
+                                <br>
+
+                           
+                            
+                                    <button type="submit">Filter</button></form>
+                        </div>
+    
+                        <div class="sidebar-widget product-sidebar mb-30 p-30 bg-grey border-radius-10">
+                            <div class="widget-header position-relative mb-20 pb-10">
+                                <h5 class="widget-title mb-10">New products</h5>
+                                <div class="bt-1 border-color-1"></div>
+                            </div>
+                            <div class="single-post clearfix">
+                                <div class="image">
+                                    <img src="assets/imgs/shop/thumbnail-3.jpg" alt="#">
+                                </div>
+                                <div class="content pt-10">
+                                    <h5><a href="shop-product-detail.html">Chen Cardigan</a></h5>
+                                    <p class="price mb-0 mt-5">$99.50</p>
+                                    <div class="product-rate">
+                                        <div class="product-rating" style="width:90%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- ... (repeat for other products) ... -->
+                        </div>
+    
+                        <div class="banner-img wow fadeIn mb-45 animated d-lg-block d-none">
+                            <img src="assets/imgs/banner/banner-11.jpg" alt="">
+                            <div class="banner-text">
+                                <span>Women Zone</span>
+                                <h4>Save 17% on <br>Office Dress</h4>
+                                <a href="shop-grid-right.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-lg-9">
+                        <div class="shop-product-fillter style-2">
+                            <div class="totall-product">
+                                <p> We found <strong class="text-brand"><%= products.length %></strong> items for you!</p>
+                            </div>
+                            <div class="sort-by-product-area">
+                                <div class="sort-by-cover mr-10">
+                                    <div class="sort-by-product-wrap">
+                                        <div class="sort-by">
+                                            <span><i class="fi-rs-apps"></i>Show:</span>
+                                        </div>
+                                        <div class="sort-by-dropdown-wrap">
+                                            <span> 50 <i class="fi-rs-angle-small-down"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="sort-by-dropdown">
+                                        <ul>
+                                            <li><a class="active" href="#">50</a></li>
+                                            <li><a href="#">100</a></li>
+                                            <li><a href="#">150</a></li>
+                                            <li><a href="#">200</a></li>
+                                            <li><a href="#">All</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="sort-by-cover">
+                                    <div class="sort-by-product-wrap">
+                                        <div class="sort-by">
+                                            <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
+                                        </div>
+                                        <div class="sort-by-dropdown-wrap">
+                                            <span> Featured <i class="fi-rs-angle-small-down"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="sort-by-dropdown">
+                                        <ul>
+                                            <li><a class="active" href="#">Featured</a></li>
+                                            <li><a href="#">Price: Low to High</a></li>
+                                            <li><a href="#">Price: High to Low</a></li>
+                                            <li><a href="#">Release Date</a></li>
+                                            <li><a href="#">Avg. Rating</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% if (products && products.length > 0) { %>
+                            <% for (let i = 0; i < products.length; i++) { %>
+                             <div class="product-list mb-50" style="display: flex; align-items: center;">
+
+   <div class="product-cart-wrap" style="display: flex; width: 100%;">
+                                  <div class="product-img-action-wrap" style="width: 30%;">
+                                    <div class="product-img product-img-zoom">
+                                      <div class="product-img-inner">
+                                        <a href="/productDetails?id=<%= products[i]._id %>">
+                                          <img class="default-img" src="./productImage/<%= products[i].image[0] %>"
+                                               style="height:200px;" alt="product">
+                                        </a>
+                                      </div>
+                                    </div>
+                                    <div class="product-action-1">
+                                      <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal"
+                                         data-bs-target="#quickViewModal"><i class="fi-rs-search"></i></a>
+                                      <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i
+                                          class="fi-rs-heart"></i></a>
+                                      <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i
+                                          class="fi-rs-shuffle"></i></a>
+                                    </div>
+                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                      <span class="hot">Hot</span>
+                                    </div>
+                                  </div>
+                                  <div class="product-content-wrap" style="width: 70%; padding-left: 20px;">
+                                    <div class="product-category">
+                                      <a href="shop-grid-right.html"><%= products[i].Brand %></a>
+                                    </div>
+                                    <h2><a href="shop-product-right.html"><%= products[i].productname %></a></h2>
+                                    <div class="product-price">
+                                        <% if(category&&category.length>0){ %>
+                                            <% for(let j=0; j<category.length; j++){ %>
+                                                <% console.log(category[j]._id); %>
+                                                <% if(products[i].Category.toString() === category[j]._id.toString()){ %>
+                                                    <% console.log("before offer discounted", category[j].offer); %>
+                                                <% let productprice=products[i].price %>
+                                                <% let productoffer=products[i].offer %>
+                                                <% let categoryoffer=category[j].offer %>
+                                                <% if(category[j].offer > 0|| products[i].offer>0){ %>
+                                                    <% let originalPrice = Math.floor(productprice / (1 - categoryoffer+productoffer / 100)); %>
+
+                                                    <% console.log("original price", originalPrice); %>
+                                                    <div class="price mb-2">
+                                                        <span>&#8377;<%= products[i].price %></span>
+                                                        <span class="old-price">&#8377;<%= products[i].originalprice %></span>
+                                                        <span class="text-danger"><%= categoryoffer+productoffer %>% off</span>
+                                                    </div>
+                                                    <% } else { %>
+                                                        <div class="price mb-2">
+                                                            &#8377;<%= products[i].price %>
+                                                        </div>
+                                                    <% } %>
+                                                <% } %>
+                                            <% }} %>
+                                    </div>
+                                    <p class="mt-15"><%= products[i].description %></p>
+                                    <div class="product-action-1 show">
+                                      <a aria-label="Buy now" class="action-btn" href="javascript:void(0);" onclick="addToCart('<%= products[i]._id %>')">
+                                        <i class="fi-rs-shopping-bag-add"></i> Add to Cart
+                                      </a>
+                                      <div class="rating-result" title="90%">
+                                        <span>
+                                          <span>90%</span>
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            <% } %>
+                          <% } %>
+                  
+                          <!--pagination-->
+                          <div class="pagination-area mt-15 mb-sm-5 mb-lg-0">
+                            <nav aria-label="Page navigation example">
+                              <ul class="pagination justify-content-start">
+                                <% for (let page = 1; page <= totalNumberOfPages; page++) { %>
+                                  <li class="page-item <%= page === currentPage ? 'active' : '' %>">
+                                    <a class="page-link" href="/shop?page=<%= page %>"><%= page %></a>
+                                  </li>
+                                <% } %>
+                              </ul>
+                            </nav>
+                          </div>
+                  
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+    
+        
+    </main>
+    <footer class="main">
+        <section class="newsletter p-30 text-white wow fadeIn animated">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-7 mb-md-3 mb-lg-0">
+                        <div class="row align-items-center">
+                            <div class="col flex-horizontal-center">
+                                <img class="icon-email" src="assets/imgs/theme/icons/icon-email.svg" alt="">
+                                <h4 class="font-size-20 mb-0 ml-3">Sign up to Newsletter</h4>
+                            </div>
+                            <div class="col my-4 my-md-0 des">
+                                <h5 class="font-size-15 ml-4 mb-0">...and receive <strong>$25 coupon for first shopping.</strong></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <!-- Subscribe Form -->
+                        <form class="form-subcriber d-flex wow fadeIn animated">
+                            <input type="email" class="form-control bg-white font-small" placeholder="Enter your email">
+                            <button class="btn bg-dark text-white" type="submit">Subscribe</button>
+                        </form>
+                        <!-- End Subscribe Form -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section-padding footer-mid">
+            <div class="container pt-15 pb-20">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="widget-about font-md mb-md-5 mb-lg-0">
+                            <div class="logo logo-width-1 wow fadeIn animated">
+                                <a href="index.html"><img src="assets/imgs/theme/logo.png" alt="logo"></a>
+                            </div>
+                            <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">Contact</h5>
+                            <p class="wow fadeIn animated">
+                                <strong>Address: </strong>562 Wellington Road, Street 32, San Francisco
+                            </p>
+                            <p class="wow fadeIn animated">
+                                <strong>Phone: </strong>+01 2222 365 /(+91) 01 2345 6789
+                            </p>
+                            <p class="wow fadeIn animated">
+                                <strong>Hours: </strong>10:00 - 18:00, Mon - Sat
+                            </p>
+                            <h5 class="mb-10 mt-30 fw-600 text-grey-4 wow fadeIn animated">Follow Us</h5>
+                            <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
+                                <a href="#"><img src="assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                                <a href="#"><img src="assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
+                                <a href="#"><img src="assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                                <a href="#"><img src="assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                                <a href="#"><img src="assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3">
+                        <h5 class="widget-title wow fadeIn animated">About</h5>
+                        <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Delivery Information</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms &amp; Conditions</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Support Center</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2  col-md-3">
+                        <h5 class="widget-title wow fadeIn animated">My Account</h5>
+                        <ul class="footer-list wow fadeIn animated">
+                            <li><a href="#">Sign In</a></li>
+                            <li><a href="#">View Cart</a></li>
+                            <li><a href="#">My Wishlist</a></li>
+                            <li><a href="#">Track My Order</a></li>
+                            <li><a href="#">Help</a></li>
+                            <li><a href="#">Order</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4">
+                        <h5 class="widget-title wow fadeIn animated">Install App</h5>
+                        <div class="row">
+                            <div class="col-md-8 col-lg-12">
+                                <p class="wow fadeIn animated">From App Store or Google Play</p>
+                                <div class="download-app wow fadeIn animated">
+                                    <a href="#" class="hover-up mb-sm-4 mb-lg-0"><img class="active" src="assets/imgs/theme/app-store.jpg" alt=""></a>
+                                    <a href="#" class="hover-up"><img src="assets/imgs/theme/google-play.jpg" alt=""></a>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-lg-12 mt-md-3 mt-lg-0">
+                                <p class="mb-20 wow fadeIn animated">Secured Payment Gateways</p>
+                                <img class="wow fadeIn animated" src="assets/imgs/theme/payment-method.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="container pb-20 wow fadeIn animated">
+            <div class="row">
+                <div class="col-12 mb-20">
+                    <div class="footer-bottom"></div>
+                </div>
+                <div class="col-lg-6">
+                    <p class="float-md-left font-sm text-muted mb-0">&copy; 2022, <strong class="text-brand">Evara</strong> - HTML Ecommerce Template </p>
+                </div>
+                <div class="col-lg-6">
+                    <p class="text-lg-end text-start font-sm text-muted mb-0">
+                        Designed by <a href="http://alithemes.com" target="_blank">Alithemes.com</a>. All rights reserved
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="text-center">
+                    <h5 class="mb-5">Now Loading</h5>
+                    <div class="loader">
+                        <div class="bar bar1"></div>
+                        <div class="bar bar2"></div>
+                        <div class="bar bar3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Vendor JS-->
+    <!-- Include SweetAlert library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<!-- Your script handling the AJAX success callback -->
+<script>
+    function addToCart(productId) {
+        console.log("Product ID:", productId);
+    // if (!productId || productId === "undefined") {
+    //     console.error("Invalid productId");
+    //     return;
+    // }
+
+        $.ajax({
+            url: '/Add-cart',
+            method: 'POST',
+            data: { productId: productId },  // Pass productId in the request payload
+        success: (response) => {
+            console.log(response);
+            if (response.success) {
+                // Show SweetAlert for success
+                Swal.fire({
+                    title: 'Product Added!',
+                    text: 'Product has been added to your cart.',
+                    icon: 'success',
+                    timer: 3000  // Optional: Close the alert after 3 seconds
+                }); 
+               } else {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: response.message ||'Failed to add product to cart.',
+                            icon: 'error',
+                            timer: 3000
+                        });
+                    }
+                },
+                error: function (error) {
+                    console.error("AJAX error:", error);
+
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to add product to cart.',
+                        icon: 'error',
+                        timer: 3000
+                    });
+                }
+            });
+    }
+    
+</script>
+<script>
+    function handleCategoryClick(categoryId) {
+        window.location.href = `/shop?id=${categoryId}`;
+    }
+</script>
+<script>
+    function applyFilters() {
+      // Gather selected filters
+      const selectedCategories = $('input[name="Category"]:checked').map(function () {
+        return this.value;
+      }).get();
+  
+      const selectedColors = $('input[name="colors"]:checked').map(function () {
+        return this.value;
+      }).get();
+  
+      // Add more lines to gather other filters (brands, price range, etc.)
+  
+      // Make an AJAX request
+      $.ajax({
+        type: 'GET',
+        url: '/apply-filters',
+        data: {
+          categories: selectedCategories.join(','),
+          colors: selectedColors.join(',')
+          // Add more lines to include other filters in the request
+        },
+        success: function (data) {
+          // Update the product list with the filtered results
+          $('#product-list-container').html(data);
+        },
+        error: function (error) {
+          console.error('Error applying filters:', error);
+        }
+      });
+    }
+  
+    // Attach the applyFilters function to the filter button click event
+    $('#filter-button').on('click', function () {
+      applyFilters();
+    });
+  </script>
+
+
+    <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/plugins/slick.js"></script>
+    <script src="assets/js/plugins/jquery.syotimer.min.js"></script>
+    <script src="assets/js/plugins/wow.js"></script>
+    <script src="assets/js/plugins/jquery-ui.js"></script>
+    <script src="assets/js/plugins/perfect-scrollbar.js"></script>
+    <script src="assets/js/plugins/magnific-popup.js"></script>
+    <script src="assets/js/plugins/select2.min.js"></script>
+    <script src="assets/js/plugins/waypoints.js"></script>
+    <script src="assets/js/plugins/counterup.js"></script>
+    <script src="assets/js/plugins/jquery.countdown.min.js"></script>
+    <script src="assets/js/plugins/images-loaded.js"></script>
+    <script src="assets/js/plugins/isotope.js"></script>
+    <script src="assets/js/plugins/scrollup.js"></script>
+    <script src="assets/js/plugins/jquery.vticker-min.js"></script>
+    <script src="assets/js/plugins/jquery.theia.sticky.js"></script>
+    <script src="assets/js/plugins/jquery.elevatezoom.js"></script>
+    <!-- Template  JS -->
+    <script src="./assets/js/main.js?v=3.4"></script>
+    <script src="./assets/js/shop.js?v=3.4"></script>
+</body>
+
+</html>

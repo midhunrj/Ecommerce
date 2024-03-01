@@ -1,0 +1,243 @@
+<%- include("./layouts/user-header.ejs") %>
+
+<section class="content-main">
+    <% if (orders && orders._id && users && users._id.toString() === orders.userId) { %>
+        <% let grandtotal = 0 %>
+
+        <div class="container">
+            <div class="content-header">
+                <h2 class="content-title card-title">Order Detail</h2>
+                <p>Details for Order ID: <%= orders._id %></p>
+            </div>
+
+            <div class="card">
+                <header class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                            <span>
+                                <i class="material-icons md-calendar_today"></i>
+                                <b>Wed, Aug 13, 2022, 4:34PM</b>
+                            </span> <br>
+                            <small class="text-muted">Order ID: <%= orders._id %></small>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                            <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200" id="statusSelect">
+                                <option><%= orders.Status %></option>
+
+                                <% if (orders.Status === "Delivered") { %>
+                                    <option value="return Order" <%= orders.Status === 'return Order' ? 'selected' : '' %>>Return Order</option>
+                                    <option value="refund" <%= orders.Status === 'refund' ? 'selected' : '' %>>Refund</option>
+                                <% } else if(orders.Status=="Confirmed") { %>
+                                    <option value="Cancelled" <%= orders.Status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                    
+                                
+                                <% } else if(orders.Status=="Cancelled") { %>
+                                   
+                                    
+                                <% } %>
+                            </select>
+
+                            <a class="btn btn-primary" href="#" onclick="updateOrderStatus()">Save</a>
+                            
+                        </div>
+                    </div>
+                </header>
+
+                <div class="card-body">
+                    <div class="row mb-50 mt-20 order-info-wrap text-center">
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <div class="text">
+                                    <h6 class="mb-1">Customer</h6>
+                                    <p class="mb-1">
+                                        <%= users.username %> <br> <%= users.email %> <br> +<%= users.phone %>
+                                    </p>
+                                    <a href="#">View profile</a>
+                                </div>
+                            </article>
+                        </div>
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <div class="text">
+                                    <h6 class="mb-1">Order info</h6>
+                                    <p class="mb-1">
+                                        Shipping: Fargo express <br>
+                                        Pay method: <%= orders.paymentstatus %> <br>
+                                        Status: new
+                                    </p>
+                                    <a href="#" onclick="downloadInvoice('<%= orders._id %>')">Download Order Info</a>
+
+                                </div>
+                            </article>
+                        </div>
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <div class="text">
+                                    <h6 class="mb-1">Deliver to</h6>
+                                    <p class="mb-1">
+                                        City: <%= orders.Address[0].city %>,
+                                        <%= orders.Address[0].state %>,
+                                        <br>
+                                        <%= orders.Address[0].address %>,
+                                        <%= orders.Address[0].landmark %> <br>
+                                        <%= orders.Address[0].country %> <%= orders.Address[0].pincode %><br>
+                                        Mobile : <%= orders.Address[0].phone %>
+                                    </p>
+                                    <a href="#">View profile</a>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th width="40%">Product</th>
+                                            <th width="20%">Unit Price</th>
+                                            <th width="20%">Quantity</th>
+                                            <th width="20%" class="text-end">Total</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <% for (let i = 0; i < orders.products.length; i++) { %>
+                                            <tr>
+                                                <td>
+                                                    <% if (products) { %>
+                                                        <% let product = products.find(p => p._id.toString() === orders.products[i].product.toString()); %>
+                                                        <% if (product) { %>
+                                                            <a class="itemside" href="#">
+                                                                <div class="left">
+                                                                    <img src="/productImage/<%= product.image[0] %>" width="40" height="40" class="img-xs" alt="product">
+                                                                </div>
+                                                                <div class="info"> <%= product.productname %> </div>
+                                                            </a>
+                                                        <% } %>
+                                                    <% } %>
+                                                </td>
+                                                <td> &#8377;<%= orders.products[i].price.toFixed(2) %> </td>
+                                                <td> <%= orders.products[i].quantity %></td>
+                                                <td class="text-end"> &#8377;<%= orders.products[i].subtotal %> </td>
+                                                <% grandtotal += orders.products[i].subtotal %>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="float-end">
+                                <dl class="dlist">
+                                    <dt>Subtotal:</dt>
+                                    <dd> &#8377;<%= grandtotal.toFixed(2) %></dd>
+                                </dl>
+
+                                <dl class="dlist">
+                                    <% let shippay = grandtotal < 1000 ? 40 : 0 %>
+                                    <dt>Shipping cost:</dt>
+                                    <dd>&#8377;<%= shippay %></dd>
+                                </dl>
+
+                                <dl class="dlist">
+                                    <dt>Grand total:</dt>
+                                    <% grandtotal += shippay %>
+                                    <dd> <b class="h5">&#8377;<%= grandtotal.toFixed(2) %></b> </dd>
+                                </dl>
+
+                                <dl class="dlist">
+                                    <dt class="text-muted">Status:</dt>
+                                    <dd>
+                                        <span class="badge rounded-pill alert-success text-success">Payment done</span>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="box shadow-sm bg-light">
+                                <h6 class="mb-15">Payment info</h6>
+                                <p>
+                                    <img src="assets/imgs/card-brands/2.png" class="border" height="20">
+                                    <% if (orders.payment == "COD") { %>Cash on Delivery <% } else { %> Mastercard <% } %><br>
+                                    Phone: +1 (800) 555-154-52
+                                </p>
+                            </div>
+
+                            <div class="h-25 pt-4">
+                                <div class="mb-3">
+                                    <label>Notes</label>
+                                    <textarea class="form-control" name="notes" id="notes" placeholder="Type some note"></textarea>
+                                </div>
+                                <button class="btn btn-primary">Save note</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <a class="btn btn-primary" href="/order-tracks?id=<%= orders._id %>">View Order Tracking</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <% } %> <!-- card end// -->
+</section> <!-- content-main end// -->
+<%- include("./layouts/footer.ejs") %>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    function updateOrderStatus() {
+        var newStatus = $('#statusSelect').val();
+        var orderID = '<%= orders._id %>';
+
+        // Send AJAX request to update order status
+        $.ajax({
+            url: '/update-order-status',
+            method: 'POST',
+            data: { orderID: orderID, newStatus: newStatus },
+            success: function (response) {
+                console.log('Order status updated successfully');
+                setTimeout(function () {
+                    window.location.href = '/profile#orders';
+                }, 1000);
+                // Optionally update the UI to reflect the new status
+            },
+            error: function (error) {
+                console.error('Error updating order status');
+            }
+        });
+    }
+</script>
+
+<script>
+    function downloadInvoice(orderId) {
+        // Send AJAX request to download the invoice PDF
+        $.ajax({
+            url: `/download-invoice/${orderId}`,
+            method: 'GET',
+            // xhrFields: {
+            //     responseType: 'blob' // Set response type to blob
+            // },
+            success: async function(response) {
+                console.log(response);
+                // Create a temporary link element to trigger the download
+                // var url = window.URL.createObjectURL(response);
+                // var link = document.createElement('a');
+                // link.href = url;
+                // link.download = `order-${orderId}-invoice.pdf`;
+                // document.body.appendChild(link);
+                // link.click();
+                // document.body.removeChild(link);
+                // window.URL.revokeObjectURL(url);
+              await  easyinvoice.download(`order-invoice-${orderId}`, response.pdf);
+            },
+            error: function(error) {
+                console.error('Error downloading invoice:', error);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,495 @@
+<%- include("./layouts/user-header.ejs") %>
+   
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="/home" rel="nofollow">Home</a>
+                    <span></span> Pages
+                    <span></span> Account
+                </div>
+            </div>
+        </div>
+        <section class="pt-150 pb-150">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 m-auto">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="dashboard-menu">
+                                    <ul class="nav flex-column" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="false"><i class="fi-rs-settings-sliders mr-10"></i>Dashboard</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="fi-rs-shopping-bag mr-10"></i>Orders</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="true"><i class="fi-rs-marker mr-10"></i>My Address</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="fi-rs-user mr-10"></i>Account details</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="referal-tab" data-bs-toggle="tab" href="#referal" role="tab" aria-controls="referal" aria-selected="true"><i class="fi-rs-user mr-10"></i>Refer a Friend</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="page-login-register.html"><i class="fi-rs-sign-out mr-10"></i>Logout</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="wallet-tab" data-bs-toggle="tab" href="#wallet" role="tab" aria-controls="wallet" aria-selected="false">
+                                                <i class="fa-thin fa-wallet"></i>Wallet
+                                            </a>
+                                        </li>
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="tab-content dashboard-content">
+                                    <div class="tab-pane fade active show" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5 class="mb-0">Hello <%=users.username %> </h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <h5 class="card-title"><%=users.username %></h5>
+                                                <p class="card-text"><strong>Email:</strong><%= users.email %></p>
+                                                <p class="card-text"><strong>Mobile:</strong><%= users.phone %></p>
+                                                <p class="card-text"><strong>AccountID:</strong><%= users._id %></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                                        <% if(orders) { %>
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5 class="mb-0">Your Orders</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Order</th>
+                                                                <th>Date</th>
+                                                                <th>Status</th>
+                                                                <th>payment method</th>
+                                                                <th>payment status</th>
+                                                                <th>Total</th>
+                                                                <th>Actions</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% for(let i=orders.length-1;i>=0;i--){ %>
+                                                            <tr>
+                                                                <td><%=orders[i]._id %></td>
+                                                                <td><%=orders[i].Date %></td>
+                                                                <td><%=orders[i].Status %></td>
+                                                                <td><%=orders[i].payment %></td>
+                                                                <td><%=orders[i].paymentstatus %></td>
+                                                                <td><%=orders[i].Totalprice %></td>
+                                                                <td><a href="/order-detail?id=<%= orders[i]._id %>" class="btn-small d-block">View</a></td>
+                                                            </tr>
+                                                            <% }} %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+                                        <div class="row">
+                                            <% if(userAddress){ %>
+                                            <% userAddress.Address.forEach((Address) => { %>
+                                            <div class="col-lg-6">
+                                                <div class="card mb-3 mb-lg-0">
+                                                    <div class="card-header">
+                                                        <h5 class="mb-0"><%=Address.name %></h5>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <address><%= Address.address %><br>
+                                                            <%= Address.landmark %>,<br> <%= Address.city %>. <br><%= Address.state %>, <%= Address.pincode %></address>
+                                                        <p><%= Address.country %></p>
+                                                        <p><%= Address.phone %></p>
+                                                        <p><%= Address.altphone %></p>
+                                                        <a href="edit-address?id=<%= Address._id %>" class="btn-small">Edit</a>
+                                                        <a href="/delete-address?id=<%= Address._id %>" class="btn-small">Delete</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% })} %>
+                                        </div>
+                                        <div class="row">
+                                            <div>
+                                                <a href="/address-page"><button class="btn btn-primary w-70">Add Address</button></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5>Account Details</h5>
+                                            </div>
+                                            <a href="/address-page">Add address</a>
+                                            <div class="card-body">
+                                                <p>Already have an account? <a href="page-login-register.html">Log in instead!</a></p>
+                                                <form method="post" name="enq" action="/edit-userdetails?id=<%=users._id %>">
+                                                    <div class="row">
+                                                        <div class="form-group col-md-6">
+                                                            <label>Name:<span class="required">*</span></label>
+                                                            <input required="" value="<%= users.username %>" class="form-control square" name="name" type="text">
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label>Email Address <span class="required">*</span></label>
+                                                            <input required="" value="<%= users.email %>" class="form-control square" name="email" type="email">
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label>Mobile Number <span class="required">*</span></label>
+                                                            <input required="" value="<%= users.phone %>" class="form-control square" name="mobile" type="tel">
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <a href="/change-password?id=<%= users._id %>" id="changePasswordLink">Change Password</a>
+                                                        </div>
+                                                        <span style="color:red;"><%= message %></span>
+                                                        <div class="col-md-12">
+                                                            <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="wallet" role="tabpanel" aria-labelledby="wallet-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3 class="mb-0">Wallet</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <!-- Display wallet balance -->
+                                                <p>Wallet Balance: <span id="balance"><%= users.wallet %></span></p>
+                                                <!-- Add form to add funds to the wallet -->
+                                                <form id="addFundsForm">
+                                                    <div class="mb-3">
+                                                        <label for="amount" class="form-label">Amount</label>
+                                                        <input type="number" class="form-control" id="amount" name="amount" placeholder="Enter amount">
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Add Funds</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="referal" role="tabpanel" aria-labelledby="referal-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                
+                                                <h2>Refer a Friend</h2>
+                                            </div>
+                                            <div class="card-body">
+                                                <p>Share your referral code:</p>
+
+                                                <input type="hidden" id="referralCodeInput" value="<%=users._id %>" readonly>
+                                                <button class="btn btn-primary" onclick="shareReferral()">Share</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Share Options</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <button class="btn btn-success" onclick="shareViaEmail()">Email</button>
+                                                    <button class="btn btn-info" onclick="shareViaWhatsApp()">WhatsApp</button>
+                                                    <button class="btn btn-warning" onclick="shareViaSMS()">SMS</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+    <footer class="main">
+        <section class="newsletter p-30 text-white wow fadeIn animated">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-7 mb-md-3 mb-lg-0">
+                        <div class="row align-items-center">
+                            <div class="col flex-horizontal-center">
+                                <img class="icon-email" src="assets/imgs/theme/icons/icon-email.svg" alt="">
+                                <h4 class="font-size-20 mb-0 ml-3">Sign up to Newsletter</h4>
+                            </div>
+                            <div class="col my-4 my-md-0 des">
+                                <h5 class="font-size-15 ml-4 mb-0">...and receive <strong>$25 coupon for first shopping.</strong></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <!-- Subscribe Form -->
+                        <form class="form-subcriber d-flex wow fadeIn animated">
+                            <input type="email" class="form-control bg-white font-small" placeholder="Enter your email">
+                            <button class="btn bg-dark text-white" type="submit">Subscribe</button>
+                        </form>
+                        <!-- End Subscribe Form -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section-padding footer-mid">
+            <div class="container pt-15 pb-20">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="widget-about font-md mb-md-5 mb-lg-0">
+                            <div class="logo logo-width-1 wow fadeIn animated">
+                                <a href="index.html"><img src="assets/imgs/theme/logo.svg" alt="logo"></a>
+                            </div>
+                            <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">Contact</h5>
+                            <p class="wow fadeIn animated">
+                                <strong>Address: </strong>562 Wellington Road, Street 32, San Francisco
+                            </p>
+                            <p class="wow fadeIn animated">
+                                <strong>Phone: </strong>+01 2222 365 /(+91) 01 2345 6789
+                            </p>
+                            <p class="wow fadeIn animated">
+                                <strong>Hours: </strong>10:00 - 18:00, Mon - Sat
+                            </p>
+                            <h5 class="mb-10 mt-30 fw-600 text-grey-4 wow fadeIn animated">Follow Us</h5>
+                            <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
+                                <a href="#"><img src="assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                                <a href="#"><img src="assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
+                                <a href="#"><img src="assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                                <a href="#"><img src="assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                                <a href="#"><img src="assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3">
+                        <h5 class="widget-title wow fadeIn animated">About</h5>
+                        <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Delivery Information</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms &amp; Conditions</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Support Center</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2  col-md-3">
+                        <h5 class="widget-title wow fadeIn animated">My Account</h5>
+                        <ul class="footer-list wow fadeIn animated">
+                            <li><a href="#">Sign In</a></li>
+                            <li><a href="#">View Cart</a></li>
+                            <li><a href="#">My Wishlist</a></li>
+                            <li><a href="#">Track My Order</a></li>
+                            <li><a href="#">Help</a></li>
+                            <li><a href="#">Order</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4">
+                        <h5 class="widget-title wow fadeIn animated">Install App</h5>
+                        <div class="row">
+                            <div class="col-md-8 col-lg-12">
+                                <p class="wow fadeIn animated">From App Store or Google Play</p>
+                                <div class="download-app wow fadeIn animated">
+                                    <a href="#" class="hover-up mb-sm-4 mb-lg-0"><img class="active" src="assets/imgs/theme/app-store.jpg" alt=""></a>
+                                    <a href="#" class="hover-up"><img src="assets/imgs/theme/google-play.jpg" alt=""></a>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-lg-12 mt-md-3 mt-lg-0">
+                                <p class="mb-20 wow fadeIn animated">Secured Payment Gateways</p>
+                                <img class="wow fadeIn animated" src="assets/imgs/theme/payment-method.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="container pb-20 wow fadeIn animated">
+            <div class="row">
+                <div class="col-12 mb-20">
+                    <div class="footer-bottom"></div>
+                </div>
+                <div class="col-lg-6">
+                    <p class="float-md-left font-sm text-muted mb-0">&copy; 2022, <strong class="text-brand">Evara</strong> - HTML Ecommerce Template </p>
+                </div>
+                <div class="col-lg-6">
+                    <p class="text-lg-end text-start font-sm text-muted mb-0">
+                        Designed by <a href="http://alithemes.com" target="_blank">Alithemes.com</a>. All rights reserved
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="text-center">
+                    <h5 class="mb-5">Now Loading</h5>
+                    <div class="loader">
+                        <div class="bar bar1"></div>
+                        <div class="bar bar2"></div>
+                        <div class="bar bar3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Vendor JS-->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- <script>
+        // Get the modal
+        var modal = document.getElementById("referralModal");
+    
+        // Get the button that opens the modal
+        var btn = document.getElementById("openModalBtn");
+    
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+    
+        // When the user clicks on the button, open the modal
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+    
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+    
+        // Share referral code function
+        function shareReferral() {
+            // Retrieve referral code (you can replace this with your own logic to fetch the user's referral code)
+            var referralCode = document.getElementById("referralCodeInput").value;
+    
+            // Example: Open email client with referral code pre-filled in the message body
+            var emailBody = "Hey! Use my referral code: " + referralCode;
+            window.location.href = "mailto:?subject=Join and get rewarded&body=" + emailBody;
+        }
+    </script> -->
+    <script>
+        $(document).ready(function() {
+    // Check for hash fragment in URL
+    if (window.location.hash === '#orders') {
+        // Activate the "Orders" tab
+        $('#orders-tab').tab('show');
+    }
+});
+    </script>
+ <script>
+    // Function to open the modal dialog
+    function shareReferral() {
+        $('#shareModal').modal('show');
+    }
+
+    // Function to share via email
+    function shareViaEmail() {
+        var referralCode = document.getElementById("referralCodeInput").value;
+        var signupLink = "http://localhost:5000/signup?ref=" + encodeURIComponent(referralCode);
+        var emailBody = "Hey! Use my referral code: " + referralCode + ". Sign up using this link: " + signupLink;
+        var emailLink = "mailto:?subject=Join and get rewarded&body=" + encodeURIComponent(emailBody);
+        window.location.href = emailLink;
+        $('#shareModal').modal('hide');
+    }
+
+    // Function to share via WhatsApp
+    function shareViaWhatsApp() {
+        var referralCode = document.getElementById("referralCodeInput").value;
+        var signupLink = "http://localhost:5000/signup?ref=" + encodeURIComponent(referralCode);
+        var whatsappMessage = "Hey! Use my referral code: " + referralCode + ". Sign up using this link: " + signupLink;
+        var whatsappLink = "https://wa.me/?text=" + encodeURIComponent(whatsappMessage);
+        window.open(whatsappLink);
+        $('#shareModal').modal('hide');
+    }
+
+    // Function to share via SMS
+    function shareViaSMS() {
+        var referralCode = document.getElementById("referralCodeInput").value;
+        var signupLink = "http://localhost:5000/signup?ref=" + encodeURIComponent(referralCode);
+        var smsMessage = "Hey! Use my referral code: " + referralCode + ". Sign up using this link: " + signupLink;
+        var smsLink = "sms:?body=" + encodeURIComponent(smsMessage);
+        window.location.href = smsLink;
+        $('#shareModal').modal('hide');
+    }
+</script>
+     <script>
+        $(document).ready(function() {
+    // Check for hash fragment in URL
+    if (window.location.hash === '#address') {
+        // Activate the "Orders" tab
+        $('#address-tab').tab('show');
+    }
+});
+    </script>
+    <script>
+        // Handle form submission to add funds to the wallet
+        $('#addFundsForm').submit(function(e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: '/Add-money-to-Wallet', // Change the URL to your backend route for adding funds
+                data: formData,
+                success: function(response) {
+                    console.log(response);
+                    console.log(response.Wallet);
+                    // Update wallet balance display
+                    var walletbank=document.getElementById("balance").textContent
+                    console.log("current balance",walletbank);
+                    // walletbank =parseInt(walletbank)+(response.Wallet)
+                    walletbank=parseInt(response.Wallet)
+                    document.getElementById("balance").textContent=walletbank
+                    Swal.fire({
+        title: 'Money Added!',
+        text: response.message,
+        icon: 'success',
+        timer: 3000
+    });
+                },
+                error: function(err) {
+                    console.error(err);
+                    Swal.fire({
+                title: 'Error!',
+                text: 'Failed to Add money to wallet.',
+                icon: 'error',
+                timer: 3000
+            });
+                }
+            });
+        });
+    </script>
+    
+    <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/plugins/slick.js"></script>
+    <script src="assets/js/plugins/jquery.syotimer.min.js"></script>
+    <script src="assets/js/plugins/wow.js"></script>
+    <script src="assets/js/plugins/jquery-ui.js"></script>
+    <script src="assets/js/plugins/perfect-scrollbar.js"></script>
+    <script src="assets/js/plugins/magnific-popup.js"></script>
+    <script src="assets/js/plugins/select2.min.js"></script>
+    <script src="assets/js/plugins/waypoints.js"></script>
+    <script src="assets/js/plugins/counterup.js"></script>
+    <script src="assets/js/plugins/jquery.countdown.min.js"></script>
+    <script src="assets/js/plugins/images-loaded.js"></script>
+    <script src="assets/js/plugins/isotope.js"></script>
+    <script src="assets/js/plugins/scrollup.js"></script>
+    <script src="assets/js/plugins/jquery.vticker-min.js"></script>
+    <script src="assets/js/plugins/jquery.theia.sticky.js"></script>
+    <!-- Template  JS -->
+    <script src="./assets/js/main.js?v=3.4"></script>
+</body>
+
+</html>

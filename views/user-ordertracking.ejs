@@ -1,0 +1,163 @@
+<%- include("./layouts/profile-header.ejs") %>
+
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Order Tracking</h2>
+                    <p>Details for Order ID: 3453012</p>
+                </div>
+            </div>
+            <div class="card">
+                <header class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                            <span>
+                                <i class="material-icons md-calendar_today"></i> <b>Wed, Aug 13, 2022, 4:34PM</b>
+                            </span> <br>
+                            <small class="text-muted">Order ID: <%= orders._id %></small> <br>
+                            <small class="text-muted">Your order has been <%= orders.Status %></small>
+                        </div>
+                        <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                            <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200" id="statusSelect">
+                                <option><%= orders.Status %></option>
+
+                                <% if (orders.Status === "Delivered") { %>
+                                    <option value="return Order" <%= orders.Status === 'return Order' ? 'selected' : '' %>>Return Order</option>
+                                    <option value="refund" <%= orders.Status === 'refund' ? 'selected' : '' %>>Refund</option>
+                                <% } else if(orders.Status=="Confirmed") { %>
+                                    <option value="Cancelled" <%= orders.Status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                    
+                                
+                                <% } else if(orders.Status=="Cancelled") { %>
+                                    <option value="Cancelled" <%= orders.Status === 'Cancelled' ? 'selected' : '' %>>Confirmed</option>
+                                    
+                                <% } %>
+                            </select>
+                            <a class="btn btn-primary" href="#" onclick="updateOrderStatus()">Save</a>
+                           
+                    </div>
+                </header> <!-- card-header end// -->
+                <div class="steps-container">
+                    <div class="steps d-flex flex-wrap flex-sm-nowrap justify-content-between">
+                        <div class="step <%= orders.Status === 'Confirmed' ? 'completed' : '' %>">
+                            <!-- Confirmed Order -->
+                            <div class="step-icon-wrap">
+                                <div class="step-icon"><i class="material-icons md-shopping_cart"></i></div>
+                            </div>
+                            <h4 class="step-title">Confirmed Order</h4>
+                            <small class="text-muted text-sm">15 March 2022</small>
+                        </div>
+                        <div class="step <%= orders.Status === 'Processing' ? 'completed' : (orders.Status === 'Quality Check' ? 'completed' : '') %>">
+                            <!-- Processing Order -->
+                            <div class="step-icon-wrap">
+                                <div class="step-icon"><i class="material-icons md-settings"></i></div>
+                            </div>
+                            <h4 class="step-title">Processing Order</h4>
+                            <small class="text-muted text-sm">16 March 2022</small>
+                        </div>
+                        <div class="step <%= orders.Status === 'Quality Check' ? 'completed' : '' %>">
+                            <!-- Quality Check -->
+                            <div class="step-icon-wrap">
+                                <div class="step-icon"><i class="material-icons md-shopping_bag"></i></div>
+                            </div>
+                            <h4 class="step-title">Quality Check</h4>
+                            <small class="text-muted text-sm">17 March 2022</small>
+                        </div>
+                        <div class="step <%= orders.Status === 'Product Dispatched' ? 'dispatched' : '' %>">
+                            <!-- Product Dispatched -->
+                            <div class="step-icon-wrap">
+                                <div class="step-icon"><i class="material-icons md-local_shipping"></i></div>
+                            </div>
+                            <h4 class="step-title">Product Dispatched</h4>
+                            <small class="text-muted text-sm">18 March 2022</small>
+                        </div>
+                        <div class="step <%= orders.Status === 'Product Delivered' ? 'delivered' : '' %>">
+                            <!-- Product Delivered -->
+                            <div class="step-icon-wrap">
+                                <div class="step-icon"><i class="material-icons md-check_circle"></i></div>
+                            </div>
+                            <h4 class="step-title">Product Delivered</h4>
+                            <small class="text-muted text-sm">20 March 2022</small>
+                        </div>
+                    </div>
+                    <div class="connecting-line"></div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="row mb-50 mt-20 order-info-wrap text-center">
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <div class="text">
+                                    <h6 class="mb-1">Customer</h6>
+                                    <p class="mb-1">
+                                        <%= users.username %> <br> <%= users.email %> <br> +<%= users.phone %>
+                                    </p>
+                                    <a href="#">View profile</a>
+                                </div>
+                            </article>
+                        </div>
+
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <div class="text">
+                                    <h6 class="mb-1">Order info</h6>
+                                    <p class="mb-1">
+                                        Shipping: Fargo express <br>
+                                        Pay method: <%= orders.paymentstatus %> <br>
+                                        Status: new
+                                    </p>
+                                    <a href="#">Download info</a>
+                                </div>
+                            </article>
+                        </div>
+
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <div class="text">
+                                    <h6 class="mb-1">Deliver to</h6>
+                                    <p class="mb-1">
+                                        City: <%= orders.Address[0].city %>,
+                                        <%= orders.Address[0].state %>,
+                                        <br>
+                                        <%= orders.Address[0].address %>,
+                                        <%= orders.Address[0].landmark %> <br>
+                                        <%= orders.Address[0].country %> <%= orders.Address[0].pincode %><br>
+                                        Mobile : <%= orders.Address[0].phone %>
+                                    </p>
+                                    <a href="#">View profile</a>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+
+                   <div class="row">
+                        <div class="text-center mt-100 mb-50">
+                            <a class="btn btn-primary" href="/order-details?id=<%= users._id %>">View Order Details</a>
+                        </div>
+                   </div>
+            </div> <!-- card end// -->
+        </section> <!-- content-main end// -->
+        <%- include("./layouts/footer.ejs") %>
+        <script>
+            function updateOrderStatus() {
+                var newStatus = $('#statusSelect').val();
+                var orderID = '<%= orders._id %>';
+        
+                // Send AJAX request to update order status
+                $.ajax({
+                    url: '/update-order-status',
+                    method: 'POST',
+                    data: { orderID: orderID, newStatus: newStatus },
+                    success: function (response) {
+                        console.log('Order status updated successfully');
+                        setTimeout(function () {
+                            window.location.href = '/profile#orders';
+                        }, 1000);
+                        // Optionally update the UI to reflect the new status
+                    },
+                    error: function (error) {
+                        console.error('Error updating order status');
+                    }
+                });
+            }
+        </script>

@@ -1,0 +1,162 @@
+<%- include("./layouts/Admin-header") %>
+        <section class="content-main">
+            <% if (orders  && orders._id && users  && users._id.toString() === orders.userId) { %>
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Order Tracking</h2>
+                    <p>Details for Order ID: 3453012</p>
+                </div>
+            </div>
+            <div class="card">
+                <header class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                            <span>
+                                <i class="material-icons md-calendar_today"></i> <b>Wed, Aug 13, 2022, 4:34PM</b>
+                            </span> <br>
+                            <small class="text-muted">Order ID: <%= orders._id %></small>
+                        </div>
+                        <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                            <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200" id="statusSelect">
+                                <option><%= orders.Status %></option>
+                                <% if(orders.Status=="Confirmed"){ %>
+                                <option value="Awaiting payment" <%= orders.Status === 'Awaiting payment' ? 'selected' : '' %>>Awaiting payment</option>
+                                <option value="Confirmed" <%= orders.Status === 'Confirmed' ? 'selected' : '' %>>Confirmed</option>
+                                <option value="Shipped" <%= orders.Status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                                <option value="Delivered" <%= orders.Status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                <option value="Cancelled" <%= orders.Status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                <% } else if(orders.Status=="return Order") { %>
+                                    <option value="order return Requested" <%= orders.Status === 'order return Requested' ? 'selected' : '' %>>order return Requested</option>
+                                <option value="order return Approved" <%= orders.Status === 'order return Approved' ? 'selected' : '' %>>order return Approved</option>
+                                <option value="order return Rejected" <%= orders.Status === 'order return Rejected' ? 'selected' : '' %>>order return Rejected</option>
+                                <% } else if(orders.Status=="refund") { %>
+                                    <option value="Refund Requested" <%= orders.Status === 'Refund Requested' ? 'selected' : '' %>>Refund Requested</option>
+                                <option value="Refund Approved" <%= orders.Status === 'Refund Approved' ? 'selected' : '' %>>Refund Approved</option>
+                                <option value="Refund Rejected" <%= orders.Status === 'Refund Rejected' ? 'selected' : '' %>>Refund Rejected</option>
+                                
+                                <% } else if(orders.Status=="Cancelled") { %>
+                                    <option value="Cancelled" <%= orders.Status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                    <% } %>
+                            </select>
+                             <a class="btn btn-primary" href="#" onclick="updateOrderStatus()">Save</a>
+                            <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print"></i></a>
+                        </div>
+                    </div>
+                </header><!-- card-header end// -->
+                <div class="card-body">
+                    <div class="order-tracking mb-100">
+                        <div class="steps d-flex flex-wrap flex-sm-nowrap justify-content-between">
+                            <div class="step completed">
+                                <div class="step-icon-wrap">
+                                    <div class="step-icon"><i class="material-icons md-shopping_cart"></i></div>
+                                </div>
+                                <h4 class="step-title">Confirmed Order</h4>
+                                <small class="text-muted text-sm">15 March 2022</small>
+                            </div>
+                            <div class="step completed">
+                                <div class="step-icon-wrap">
+                                    <div class="step-icon"><i class="material-icons md-settings"></i></div>
+                                </div>
+                                <h4 class="step-title">Processing Order</h4>
+                                <small class="text-muted text-sm">16 March 2022</small>
+                            </div>
+                            <div class="step completed">
+                                <div class="step-icon-wrap">
+                                    <div class="step-icon"><i class="material-icons md-shopping_bag"></i></div>
+                                </div>
+                                <h4 class="step-title">Quality Check</h4>
+                                <small class="text-muted text-sm">17 March 2022</small>
+                            </div>
+                            <div class="step">
+                                <div class="step-icon-wrap">
+                                    <div class="step-icon"><i class="material-icons md-local_shipping"></i></div>
+                                </div>
+                                <h4 class="step-title">Product Dispatched</h4>
+                                <small class="text-muted text-sm">18 March 2022</small>
+                            </div>
+                            <div class="step">
+                                <div class="step-icon-wrap">
+                                    <div class="step-icon"><i class="material-icons md-check_circle"></i></div>
+                                </div>
+                                <h4 class="step-title">Product Delivered</h4>
+                                <small class="text-muted text-sm">20 March 2022</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-50 mt-20 order-info-wrap text-center">
+                        
+                            <div class="col-md-4">
+                                <article class="icontext align-items-start">
+                                    <div class="text">
+                                        <h6 class="mb-1">Customer</h6>
+                                        <p class="mb-1">
+                                            <%= users.username %> <br> <%= users.email %> <br> +<%= users.phone %>
+                                        </p>
+                                        <a href="#">View profile</a>
+                                    </div>
+                                </article>
+                            </div> <!-- col// -->
+                            <div class="col-md-4">
+                                <article class="icontext align-items-start">
+                                    <div class="text">
+                                        <h6 class="mb-1">Order info</h6>
+                                        <p class="mb-1">
+                                            Shipping: Fargo express <br> Pay method: <%= orders.paymentstatus %> <br> Status: new
+                                        </p>
+                                        <a href="#">Download info</a>
+                                    </div>
+                                </article>
+                            </div> <!-- col// -->
+                            <div class="col-md-4">
+                                <article class="icontext align-items-start">
+                                    <div class="text">
+                                        <h6 class="mb-1">Deliver to</h6>
+                                        <p class="mb-1">
+                                            City: <%= orders.Address[0].city %>,
+                                            <%= orders.Address[0].state %>,
+                                             <br>
+                                            <%= orders.Address[0].address %>,
+                                            <%= orders.Address[0].landmark %> <br>
+                                            <%= orders.Address[0].country %> <%= orders.Address[0].pincode %><br>
+                                           Mobile : <%= orders.Address[0].phone %>
+                                        </p>
+                                        <a href="#">View profile</a>
+                                    </div>
+                                </article>
+                            </div> <!-- col// -->
+                        <% } %>
+                    </div> <!-- row // -->
+                    
+                   <div class="row">
+                        <div class="text-center mt-100 mb-50">
+                            <a class="btn btn-primary" href="/admin/order-detail?id=<%= orders._id %>">View Order Details</a>
+                        </div>
+                   </div>
+            </div> <!-- card end// -->
+        </section> <!-- content-main end// -->
+        <%- include("./layouts/Admin-footer") %>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+        <script>
+            function updateOrderStatus() {
+                var newStatus = $('#statusSelect').val();
+                var orderID = '<%= orders._id %>';
+        
+                // Send AJAX request to update order status
+                $.ajax({
+                    url: '/admin/update-order-status',
+                    method: 'POST',
+                    data: { orderID: orderID, newStatus: newStatus },
+                    success: function (response) {
+                        console.log('Order status updated successfully');
+                        setTimeout(function () {
+                       window.location.href = '/admin-orderlist';
+                        }, 1000);
+                        // Optionally update the UI to reflect the new status
+                    },
+                    error: function (error) {
+                        console.error('Error updating order status');
+                    }
+                });
+            }
+        </script>

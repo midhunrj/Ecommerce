@@ -1,0 +1,276 @@
+<%- include("./layouts/Admin-header.ejs") %>
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Products grid</h2>
+                    <p>Lorem ipsum dolor sit amet.</p>
+                </div>
+                <div>
+                    <a href="#" class="btn btn-light rounded font-md">Export</a>
+                    <a href="#" class="btn btn-light rounded  font-md">Import</a>
+                    <a href="#" class="btn btn-primary btn-sm rounded">Create new</a>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <header class="card-header">
+                    <div class="row gx-3">
+                        <div class="col-lg-4 col-md-6 me-auto">
+                            <input type="text" placeholder="Search..." class="form-control">
+                        </div>
+                        <div class="col-lg-2 col-6 col-md-3">
+                            <select class="form-select">
+                                <option>All category</option>
+                                <option>Electronics</option>
+                                <option>Clothings</option>
+                                <option>Something else</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-6 col-md-3">
+                            <select class="form-select">
+                                <option>Latest added</option>
+                                <option>Cheap first</option>
+                                <option>Most viewed</option>
+                            </select>
+                        </div>
+                    </div>
+                </header> <!-- card-header end// -->
+                <div class="card-body">
+                    <div class="row gx-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-5">
+                        <% if(products) %>
+                        <% for(let i=0; i<products.length; i++){ %>
+                        <div class="col">
+                            <div class="card card-product-grid">
+                                <% console.log("productlist images", products[i].image[0]); %>
+                                <a href="#" class="img-wrap"> <img  src="./productImage/<%= products[i].image[0] %>" alt="Product" style="height:200px"> </a>
+                                <div class="info-wrap">
+                                    <a href="#" class="title text-truncate">
+                                        <%= products[i].productname %>
+                                    </a>
+                                    <% console.log(products[i].Category,"category ids \n"); %>
+                                    <% console.log("jugfrrddrfd", category); %>
+                                    <% if(category && category.length > 0){ %>
+                                        <% for(let j=0; j<category.length; j++){ %>
+                                            <% console.log(category[j]._id); %>
+                                            <% if(products[i].Category.toString() === category[j]._id.toString()){ %>
+                                                <% console.log("before offer discounted", category[j].offer); %>
+                                                <% let productprice=products[i].price %>
+                                                <% let productoffer=products[i].offer %>
+                                                <% let categoryoffer=category[j].offer %>
+                                                <% if(category[j].offer > 0|| products[i].offer>0){ %>
+                                                    <% let originalPrice = Math.floor(productprice / (1 - categoryoffer+productoffer / 100)); %>
+
+                                                    <% console.log("original price", originalPrice); %>
+                                                    <div class="price mb-2">
+                                                        <span>&#8377;<%= products[i].price %></span>
+                                                        <span class="old-price">&#8377;<%= products[i].originalprice %></span>
+                                                        <span class="text-danger"><%= categoryoffer+productoffer %>% off</span>
+                                                    </div>
+                                                <% } else { %>
+                                                    <div class="price mb-2">
+                                                        &#8377;<%= products[i].price %>
+                                                    </div>
+                                                <% } %>
+                                            <% } %>
+                                        <% } %>
+                                    <% } %>
+                                    <a href="/edit-product?id=<%= products[i]._id %>" class="btn btn-sm font-sm rounded btn-brand">
+                                        <i class="material-icons md-edit"></i> Edit
+                                    </a>
+                                    <a href="delete-product?id=<%= products[i]._id %>" class="btn btn-sm font-sm btn-light rounded" onclick="confirmDelete('<%= products[i]._id %>')">
+                                        <i class="material-icons md-delete_forever"></i> Delete
+                                    </a>
+                                    <% if (locals.products[i].offer===0) { %>
+                                        <a href="#" class="btn btn-sm font-sm btn-info rounded" onclick="openProductOfferModal('<%= products[i]._id %>')">Apply Offer</a>                                        </button>
+                                        <% }else{ %>
+                                            <button class="btn btn-sm font-sm btn-info rounded"
+                                                onclick="removeOffer('<%= products[i]._id %>')"
+                                                style="width: 100px;">
+                                                <a href="#" class="text-dark">Remove offer</a>
+                                            </button>
+                                            <% } %>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+                <!-- card-body end// -->
+            </div> <!-- card end// -->
+            <div class="pagination-area mt-30 mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                        <li class="page-item"><a class="page-link" href="#">02</a></li>
+                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">16</a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    <script src="/Admin-assets/js/deletWarining.js"></script>
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this item?</p>
+
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="deleteButton" href="#" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+<% for(let i=0;i<products.length;i++){ %>
+<!-- Modal for Product Offer -->
+<div class="modal fade" id="productOfferModal<%= products[i]._id %>" tabindex="-1" aria-labelledby="productOfferModalLabel<%= products[i]._id %>" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productOfferModalLabel<%= products[i]._id %>">Apply Offer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="offerPercentage<%= products[i]._id %>">Offer Percentage:</label>
+                    <input type="number" class="form-control" id="offerPercentage<%= products[i]._id %>" placeholder="Enter offer percentage">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="applyProductOffer('<%= products[i]._id %>')">Apply Offer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="Admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="Admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="Admin-assets/js/vendors/select2.min.js"></script>
+    <script src="Admin-assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="Admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="Admin-assets/js/main.js" type="text/javascript"></script>
+    <script>
+        // Function to open the product offer modal
+        function openProductOfferModal(productId) {
+            // Open the corresponding modal using its ID
+            $('#productOfferModal' + productId).modal('show');
+        }
+    
+        // Function to apply the product offer
+        function applyProductOffer(productId) {
+            // Get the offer percentage entered by the user
+            var offerPercentage = $('#offerPercentage' + productId).val();
+         $.ajax({
+            url:'/Add-productoffer',
+            method:"post",
+            data:{productId,offerPercentage},
+            success:(response)=>{
+                console.log(response);
+                if(response.success==true)
+                {
+                    location.reload()
+                }
+                else if(response.success==false&&response.offer<90)
+                {
+                    swal.fire('Error',response.message,'error')
+                }
+                else
+                {
+                    Swal.fire('Error', 'Failed to add offer.', 'error');
+                }
+            }
+         })
+            // Validate the offer percentage
+            if (offerPercentage === '' || isNaN(offerPercentage) || parseFloat(offerPercentage) <= 0) {
+                alert('Please enter a valid offer percentage.');
+                return;
+            }
+
+
+    
+            // You can perform further validation or processing here
+            
+            // Close the modal
+            $('#productOfferModal' + productId).modal('hide');
+    
+            // Apply the offer (you can send a request to your server here)
+            console.log('Applying ' + offerPercentage + '% offer for product with ID:', productId);
+        }
+
+        function removeOffer(productId) {
+    // alert(categoryId)
+    try {
+        console.log(productId,"jkjk");
+        Swal.fire({
+            title: 'Remove Offer',
+            text: 'Are you sure you want to remove this offer?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, remove it!',
+            timer: 5000,  // 5 seconds
+            timerProgressBar: true
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "/Remove-productOffer",
+                    method: "post",
+                    data: {
+                        productId:productId
+                    },
+                    success: (response) => {
+                    console.log(response);
+                    if (response.success === true) {
+                        // Swal.fire('Removed!', 'The offer has been removed.', 'success');
+                        location.reload()
+                    } else if (response.status === false) {
+                        Swal.fire('failed');
+                    } else {
+                        alert("failed")
+                    }
+                }
+                });
+
+                
+            }
+        });
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+    </script>
+    
+</body>
+
+</html>

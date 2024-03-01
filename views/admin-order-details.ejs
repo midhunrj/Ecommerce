@@ -1,0 +1,216 @@
+<%- include("./layouts/Admin-header.ejs") %>
+        <section class="content-main">
+            <% if (orders  && orders._id && users  && users._id.toString() === orders.userId) { %>
+                <% let grandtotal=0 %>
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Order detail</h2>
+                    <p>Details for Order ID: <%= orders._id %></p>
+                </div>
+            </div>
+            <div class="card">
+                <header class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                            <span>
+                                <i class="material-icons md-calendar_today"></i> <b>Wed, Aug 13, 2022, 4:34PM</b>
+                            </span> <br>
+                            <small class="text-muted">Order ID: <%= orders._id %></small>
+                        </div>
+                        <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                            <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200" id="statusSelect">
+                                <option><%= orders.Status %></option>
+                                <% if(orders.Status=="Confirmed"){ %>
+                                <option value="Awaiting payment" <%= orders.Status === 'Awaiting payment' ? 'selected' : '' %>>Awaiting payment</option>
+                                <option value="Confirmed" <%= orders.Status === 'Confirmed' ? 'selected' : '' %>>Confirmed</option>
+                                <option value="Shipped" <%= orders.Status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                                <option value="Delivered" <%= orders.Status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                <option value="Cancelled" <%= orders.Status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                <% } else if(orders.Status=="return Order") { %>
+                                    <option value="order return Requested" <%= orders.Status === 'order return Requested' ? 'selected' : '' %>>order return Requested</option>
+                                <option value="order return Approved" <%= orders.Status === 'order return Approved' ? 'selected' : '' %>>order return Approved</option>
+                                <option value="order return Rejected" <%= orders.Status === 'order return Rejected' ? 'selected' : '' %>>order return Rejected</option>
+                                <% } else if(orders.Status=="refund") { %>
+                                    <option value="Refund Requested" <%= orders.Status === 'Refund Requested' ? 'selected' : '' %>>Refund Requested</option>
+                                <option value="Refund Approved" <%= orders.Status === 'Refund Approved' ? 'selected' : '' %>>Refund Approved</option>
+                                <option value="Refund Rejected" <%= orders.Status === 'Refund Rejected' ? 'selected' : '' %>>Refund Rejected</option>
+                                
+                                <% } else if(orders.Status=="Cancelled") { %>
+                                    <option value="Cancelled" <%= orders.Status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                    <% }else if(orders.Status=="Delivered"){ %>
+                                        <option value="Delivered" <%= orders.Status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                        <% } %>
+                            </select>
+                            <a class="btn btn-primary" href="#" onclick="updateOrderStatus()">Save</a>
+                            <!-- <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print"></i></a> -->
+                        </div>
+                    </div>
+                </header> <!-- card-header end// -->
+                <div class="card-body">
+                    <div class="row mb-50 mt-20 order-info-wrap text-center">
+                        
+                            <div class="col-md-4">
+                                <article class="icontext align-items-start">
+                                    <div class="text">
+                                        <h6 class="mb-1">Customer</h6>
+                                        <p class="mb-1">
+                                            <%= users.username %> <br> <%= users.email %> <br> +<%= users.phone %>
+                                        </p>
+                                        <!-- <a href="#">View profile</a> -->
+                                    </div>
+                                </article>
+                            </div> <!-- col// -->
+                            <div class="col-md-4">
+                                <article class="icontext align-items-start">
+                                    <div class="text">
+                                        <h6 class="mb-1">Order info</h6>
+                                        <p class="mb-1">
+                                            Shipping: Fargo express <br> Pay method: <%= orders.paymentstatus %> <br> Status: <%= orders.Status %>
+                                        </p>
+                                        <!-- <a href="#">Download info</a> -->
+                                    </div>
+                                </article>
+                            </div> <!-- col// -->
+                            <div class="col-md-4">
+                                <article class="icontext align-items-start">
+                                    <div class="text">
+                                        <h6 class="mb-1">Deliver to</h6>
+                                        <p class="mb-1">
+                                            City: <%= orders.Address[0].city %>,
+                                            <%= orders.Address[0].state %>,
+                                             <br>
+                                            <%= orders.Address[0].address %>,
+                                            <%= orders.Address[0].landmark %> <br>
+                                            <%= orders.Address[0].country %> <%= orders.Address[0].pincode %><br>
+                                           Mobile : <%= orders.Address[0].phone %>
+                                        </p>
+                                        <!-- <a href="#">View profile</a> -->
+                                    </div>
+                                </article>
+                            </div> <!-- col// -->
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th width="40%">Product</th>
+                                            <th width="20%">Unit Price</th>
+                                            <th width="20%">Quantity</th>
+                                            <th width="20%" class="text-end">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        <tr>
+                                            
+                                            
+                                                <% for (let i = 0; i < orders.products.length; i++) { %>
+                                                    <tr>
+                                                        <td>
+                                                            <% if(products){ %>
+                                                            <% let product = products.find(p => p._id.toString() === orders.products[i].product.toString()); %>
+                                                            
+                                                            <% if (product) { %>
+                                                                <a class="itemside" href="#">
+                                                                    <div class="left">
+                                                                        <% console.log("product image",product.image[0]); %>
+                                                                            <img src="/productImage/<%= product.image[0] %>" width="40" height="40" class="img-xs" alt="product">
+                                                                      
+                                                                    </div>
+                                                                    <div class="info"> <%= product.productname %> </div>
+                                                                </a>
+                                                            <% }} %>
+                                                        </td>
+                                                        <td> &#8377;<%= orders.products[i].price.toFixed(2) %> </td>
+                                                        <td> <%= orders.products[i].quantity %></td>
+                                                        <td class="text-end"> &#8377;<%= orders.products[i].subtotal %> </td>
+                                                    
+                                                    <% grandtotal += orders.products[i].subtotal %>
+                                                <% } %>
+                                            </tr>
+                                        
+                                        <tr>
+                                            <td colspan="4">
+                                                <article class="float-end">
+                                                    <dl class="dlist">
+                                                        <dt>Subtotal:</dt>
+                                                        <dd> &#8377;<%= grandtotal.toFixed(2) %></dd>
+                                                    </dl>
+                                                    <dl class="dlist">
+                                                        <% let shippay=0 %>
+                                                        <dt>Shipping cost:</dt>
+                                                        <% if(grandtotal<1000?shippay=40:shippay=0) %>
+                                                        <dd>&#8377;<%= shippay %></dd>
+                                                    </dl>
+                                                    <dl class="dlist">
+                                                        <dt>Grand total:</dt>
+                                                    <% grandtotal +=shippay %>
+                                                        <dd> <b class="h5">&#8377;<%= grandtotal.toFixed(2) %></b> </dd>
+                                                    </dl>
+                                                    <dl class="dlist">
+                                                        <dt class="text-muted">Status:</dt>
+                                                        <dd>
+                                                            <span class="badge rounded-pill alert-success text-success">Payment done</span>
+                                                        </dd>
+                                                    </dl>
+                                                </article>
+                                            </td>
+                                        </tr>
+                                       
+                                    </tbody>
+                                </table>
+                            </div> <!-- table-responsive// -->
+                            <a class="btn btn-primary" href="/admin/order-tracks?id=<%= orders._id %>">View Order Tracking</a>
+                        </div> <!-- col// -->
+                        <div class="col-lg-1"></div>
+                        <div class="col-lg-4">
+                            <div class="box shadow-sm bg-light">
+                                <h6 class="mb-15">Payment info</h6>
+                                <p>
+                                    <%if(orders.payment=="COD"){ %>Cash on Delivery <% }else if(orders.payment="Online"){  %> Online payment <% } %><br>
+                                    <!-- Business name: Grand Market LLC <br> -->
+                                    Phone: +1 (800) 555-154-52
+                                </p>
+                            </div>
+                            <div class="h-25 pt-4">
+                                <div class="mb-3">
+                                    <label>Notes</label>
+                                    <textarea class="form-control" name="notes" id="notes" placeholder="Type some note"></textarea>
+                                </div>
+                                <button class="btn btn-primary">Save note</button>
+                            </div>
+                        </div> <!-- col// -->
+                    </div>
+                </div> <!-- card-body end// -->
+            </div>
+            <% } %> <!-- card end// -->
+        </section> <!-- content-main end// -->
+        <%- include("./layouts/Admin-footer.ejs") %>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+        <script>
+            function updateOrderStatus() {
+                var newStatus = $('#statusSelect').val();
+                var orderID = '<%= orders._id %>';
+        
+                // Send AJAX request to update order status
+                $.ajax({
+                    url: '/admin/update-order-status',
+                    method: 'POST',
+                    data: { orderID: orderID, newStatus: newStatus },
+                    success: function (response) {
+                        console.log('Order status updated successfully');
+                        setTimeout(function () {
+                    window.location.href = '/admin-orderlist';
+                    }, 1000);
+                        // Optionally update the UI to reflect the new status
+                    },
+                    error: function (error) {
+                        console.error('Error updating order status');
+                    }
+                });
+            }
+        </script>

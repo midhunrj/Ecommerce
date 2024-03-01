@@ -1,0 +1,120 @@
+const User = require('../models/usermodel');
+async function getUserFromDatabase(userId) {
+  try {
+    const user = await User.findById(userId);
+    return user;
+  } catch (error) {
+    console.error('Error fetching user from database:', error);
+    throw error;
+  }
+}
+
+const isLogin = async (req, res, next) => {
+  try {
+    console.log("admin---id",req.session.user);
+    if (req.session.user) {
+      console.log('admin here');
+      next();
+    } else {
+      res.redirect('/');
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const isLogout = async (req, res, next) => {
+  try {
+    const admin = await getUserFromDatabase(req.session.user);
+    //  console.log("tgsu is",user);
+    if (admin && admin.is_admin === 1) {
+      next();
+    }
+    {
+      next();
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+
+module.exports = {
+  
+  isLogin,
+  isLogout,
+  
+};
+
+----------------admin and user-----
+const getUserFromDatabase = async (userId) => {
+  try {
+    const user = await User.findById(userId);
+    return user;
+  } catch (error) {
+    console.error('Error fetching user from database:', error);
+    throw error;
+  }
+};
+
+const isUserLogin = async (req, res, next) => {
+  try {
+    const user = await getUserFromDatabase(req.session.user_id);
+
+    if (user && user.is_admin === 0) {
+      console.log('User here');
+      next();
+    } else {
+      res.redirect('/');
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const isUserLogout = async (req, res, next) => {
+  try {
+    const user = await getUserFromDatabase(req.session.user_id);
+
+    if (user && user.is_admin === 0) {
+      next();
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const isAdminLogin = async (req, res, next) => {
+  try {
+    const admin = await getUserFromDatabase(req.session.user_id);
+
+    if (admin && admin.is_admin === 1) {
+      console.log('Admin here');
+      next();
+    } else {
+      res.redirect('/');
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const isAdminLogout = async (req, res, next) => {
+  try {
+    const admin = await getUserFromDatabase(req.session.user_id);
+
+    if (admin && admin.is_admin === 1) {
+      next();
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+module.exports = {
+  getUserFromDatabase,
+  isUserLogin,
+  isUserLogout,
+  isAdminLogin,
+  isAdminLogout,
+};

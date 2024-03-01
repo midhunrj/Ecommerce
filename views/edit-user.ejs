@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit_user</title>
+    <link rel='stylesheet' type='text/css' media='screen' href='grm.css'>
+</head>
+<body>
+    <form method="post" action="/edit-user" novalidate>
+        
+        <input type="text" name="name" id="name" placeholder="Enter name" value="<%= user.username %>" required>
+        <input type="email" name="email" id="email" placeholder="Enter Email" value="<%= user.email %>" required>
+        <input type="tel" name="mobile" id="phone" placeholder="Enter mobile Number" value="<%= user.phone %>" required>
+        <input type="password" name="password" id="password" placeholder="Enter password" value="<%= user.password %>" required>
+        <label>Verified</label>
+        <input type="radio" name="verify" value="1"<% if(user.is_verified==1) { %> checked <% } %>>
+        <label>Unverified</label>
+        <input type="radio" name="verify" value="0"<% if(user.is_verified==0) { %> checked <% } %>>
+        <br><br>
+        <input type="hidden" name="id" value="<%= user._id %>">
+        <button type="submit" value="Update User">Update user</button>
+        <a href="/admin/dashboard">Go to dashboard</a>
+     </form>
+     <% if(typeof message !== "undefined") { %>
+        <p style="color:green;"><%= message %></p>
+     <% 
+     }
+      %>
+
+    
+</body>
+</html>

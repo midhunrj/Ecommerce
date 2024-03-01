@@ -1,0 +1,48 @@
+<div class="info-wrap">
+                                            <a href="#" class="title text-truncate">
+                                                <%= products[i].productname %>
+                                            </a>
+                                            <% for(let j=0;j<category.length;j++){ %>
+                                                <% if(products[i].category==category[j]._id){ %>
+                                                    <% if(category[j].offerAmount>0){ %>
+                                                        <% let dicounted=(products[i].price)-(products[i].price*category[j].offerAmount/100) %>
+                                                        <div class="price mb-2">
+                                                            <span>&#8377;<%= dicounted %></span>
+                                                            <span class="old-price">&#8377;<%= products[i].price %></span>
+                                                            <span class="text-danger"><%=category[j].offerAmount %>%off</span>
+                                                        </div> <!-- price.// -->
+                                                    <% }else{ %>
+                                                        <div class="price mb-2">
+                                                            <span>&#8377<%= products[i].price %></span>
+                                                        </div>
+                                                    <% } %>
+                                                <% } %>
+                                            <% } %>
+                                            <a href="/edit-product?id=<%= products[i]._id %>" class="btn btn-sm font-sm rounded btn-brand">
+                                                <i class="material-icons md-edit"></i> Edit
+                                            </a>
+                                            <a href="delete-product?id=<%= products[i]._id %>" class="btn btn-sm font-sm btn-light rounded"
+                                                onclick="confirmDelete('<%= products[i]._id %>')">
+                                                <i class="material-icons md-delete_forever"></i> Delete
+                                            </a>
+                                        </div>
+
+
+used with category    
+                        ------------------------------------------------                
+                        used without category
+
+
+
+                        <div class="info-wrap">
+                            <a href="#" class="title text-truncate">
+                                <%= products[i].productname %></a>
+                            <div class="price mb-2">&#8377;<%= products[i].price %></div> <!-- price.// -->
+                            <a href="/edit-product?id=<%= products[i]._id %>" class="btn btn-sm font-sm rounded btn-brand">
+                                <i class="material-icons md-edit"></i> Edit
+                            </a>
+                             <a href="delete-product?id=<%= products[i]._id %>" class="btn btn-sm font-sm btn-light rounded"
+                   onclick="confirmDelete('<%= products[i]._id %>')">
+                    <i class="material-icons md-delete_forever"></i> Delete
+                </a>
+                        </div>

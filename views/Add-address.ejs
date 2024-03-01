@@ -1,0 +1,139 @@
+<%- include("./layouts/profile-header.ejs") %>
+<div class="container mt-4">
+    <form id="addressForm" method="post" action="/Add-Address" onsubmit="return validateForm()">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control"  name="name" placeholder="Enter Name" oninput="validateField(this)">
+                    <span id="nameError" class="error"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <input type="text" class="form-control"  name="address" placeholder="Enter Address" oninput="validateField(this)">
+                    <span id="addressError" class="error"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="landmark">Landmark:</label>
+                    <input type="text" class="form-control"  name="landmark" placeholder="Enter landmark" oninput="validateField(this)">
+                    <span id="landmarkError" class="error"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="city">City:</label>
+                    <input type="text" class="form-control"  name="city" placeholder="Enter City" oninput="validateField(this)">
+                    <span id="cityError" class="error"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="state">State:</label>
+                    <input type="text" class="form-control"  name="state" placeholder="Enter State" oninput="validateField(this)">
+                    <span id="stateError" class="error"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="country">Country:</label>
+                    <input type="text" class="form-control"  name="country" placeholder="Enter Country" oninput="validateField(this)">
+                    <span id="countryError" class="error"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="pincode">PIN:</label>
+                    <input type="tel" class="form-control"  name="pincode" placeholder="Enter pincode" oninput="validateField(this)">
+                    <span id="pincodeError" class="error"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="phone">MobileNumber:</label>
+                    <input type="tel" class="form-control"  name="phone" placeholder="Enter phone" oninput="validateField(this)">
+                    <span id="phoneError" class="error"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="altphone">Alternate Mobile:</label>
+                    <input type="tel" class="form-control"  name="altphone" placeholder="Enter Alternate phone" oninput="validateField(this)">
+                    <span id="altphoneError" class="error"></span>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+<%- include("./layouts/footer.ejs") %>
+
+<script>
+    function displayError(element, message) {
+        const errorElement = document.getElementById(`${element.name}Error`);
+        errorElement.innerHTML = message;
+        errorElement.style.color = 'red'; // Set error message color to red
+        setTimeout(() => {
+            errorElement.innerHTML = '';
+        }, 5000);
+    }
+
+    function validateField(element) {
+        const value = element.value.trim();
+        const errorElement = document.getElementById(`${element.name}Error`);
+
+        if (value === '') {
+            errorElement.innerHTML = 'Field is required';
+            errorElement.style.color = 'red'; // Set error message color to red
+        } else {
+            errorElement.innerHTML = ''; // Clear the "Field is required" message
+            errorElement.style.color = ''; // Reset error message color
+
+            // Additional validation based on the field name
+            switch (element.name) {
+                case 'name':
+                    if (!/^[A-Z]/.test(value)) {
+                        displayError(element, 'First letter should be capital');
+                    }
+                    break;
+                case 'pincode':
+                    if (!/^\d+$/.test(value)) {
+                        displayError(element, 'PIN should contain only numbers');
+                    }
+                    break;
+                case 'phone':
+                case 'altphone':
+                    if (!/^\d{10}$/.test(value)) {
+                        displayError(element, 'Please enter a valid 10-digit phone number');
+                    }
+                    break;
+                // Add similar cases for other fields
+            }
+        }
+    }
+
+    function validateForm() {
+        const formElements = document.forms["addressForm"].elements;
+        let isValid = true;
+
+        Array.from(formElements).forEach(element => {
+            if (element.type !== "submit") {
+                validateField(element);
+                if (element.nextElementSibling.innerHTML !== '') {
+                    isValid = false;
+                }
+            }
+        });
+
+        return isValid;
+    }
+</script>

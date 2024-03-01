@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title><%= locals.title?title:"signup page" %></title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='grm.css'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+</head>
+<body>
+    <div class="container">
+        <% if(locals.message) { %>
+            <h4><%= message %></h4>
+        <% } %>
+        <form method="post" action="/signup" id="lokiverse" onsubmit="return validate()" novalidate>
+            <h2>Create a new Account</h2>
+            
+            
+            <div class="form-group">
+               <label for="username">Name :</label>
+               <div class="input-container">
+                   <input type="text" name="username" id="name" placeholder="Enter your name">
+                   <div id="nameError" class="Error"></div>
+               </div>
+           </div>
+
+           <div class="form-group">
+               <label for="email">Email:</label>
+               <div class="input-container">
+                   <input type="email" name="email" id="email" placeholder="Enter your Email">
+                   <div id="emailError" class="Error"></div>
+               </div>
+           </div>
+
+           <div class="form-group">
+               <label for="phone">Mobile:</label>
+               <div class="input-container">
+                   <input type="tel" name="phone" id="phone" placeholder="Enter your Phone Number" maxlength="10" pattern="[0-9]*">
+                   <div id="phoneError" class="Error"></div>
+               </div>
+           </div>
+
+           <div class="form-group">
+               <label for="password">Password:</label>
+               <div class="input-container">
+                   <input type="password" name="password" id="password" placeholder="Enter your password">
+                   <div id="passwordError" class="Error"></div>
+               </div>
+           </div>
+
+           <div class="form-group">
+               <label for="confirmPassword">Confirm Password:</label>
+               <div class="input-container">
+                   <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password">
+                   <div id="confirmPasswordError" class="Error"></div>
+               </div>
+           </div>
+
+            <!-- Error messages will be displayed here -->
+            <div id="errorMessage" class="Error"></div>
+
+            <button type="submit">Signup</button>
+            <span><br>Already have an Account</span><a href="/" id="log">Login</a>
+        </form>
+    </div>
+
+    <script>
+    function displayError(element, message) {
+        const errorElement = document.getElementById(`${element.id}Error`);
+        errorElement.innerHTML = message;
+        setTimeout(() => {
+          errorElement.innerHTML = '';
+        }, 5000);
+      }
+      
+      function checkEmptyFields() {
+        const fields = ['name', 'email', 'password', 'confirmPassword', 'phone'];
+      
+        let isEmpty = false;
+      
+        fields.forEach(field => {
+          const inputElement = document.getElementById(field);
+          const errorElement = document.getElementById(`${field}Error`);
+      
+          if (inputElement.value.trim() === '') {
+            isEmpty = true;
+            displayError(inputElement, 'Field is required');
+          } else {
+            errorElement.innerHTML = ''; // Clear previous error messages
+          }
+        });
+      
+        return !isEmpty;
+      }
+      
+      function validate() {
+        if (!checkEmptyFields()) {
+          return false; // Stop validation if empty fields are found
+        }
+      
+        // Regex patterns
+        const nameRegex = /^[A-Z]/;
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+        const phoneRegex = /^[0-9]{10}$/;
+      
+        // Input fields
+        const name = document.getElementById('name');
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const phone = document.getElementById('phone');
+      
+        // Validate name field
+        if (!nameRegex.test(name.value)) {
+          displayError(name, 'First letter should be capital');
+          return false;
+        }
+      
+        // Validate email field
+        if (!emailRegex.test(email.value)) {
+          displayError(email, 'Please enter a valid email');
+          return false;
+        }
+      
+        // Validate password field
+        if (!passwordRegex.test(password.value)) {
+          displayError(password, 'Password must be strong');
+          return false;
+        }
+      
+        // Validate confirm password field
+        if (password.value !== confirmPassword.value) {
+          displayError(confirmPassword, 'Passwords do not match');
+          return false;
+        }
+      
+        // Validate phone field
+        if (!phoneRegex.test(phone.value)) {
+          displayError(phone, 'Please enter a valid 10-digit phone number');
+          return false;
+        }
+      
+        // All fields passed validation
+        return true;
+      }
+
+//       function submitForm() {
+//     if (validate()) {
+//         const form = document.getElementById('lokiverse');
+//         const formData = {
+//             username: form.username.value,
+//             email: form.email.value,
+//             password: form.password.value,
+//             confirmPassword: form.confirmPassword.value,
+//             phone: form.phone.value
+//         };
+
+//         const xhr = new XMLHttpRequest();
+//         xhr.open('POST', '/signup', true);
+//         xhr.setRequestHeader('Content-Type', 'application/json');
+
+//         xhr.onreadystatechange = function () {
+//             if (xhr.readyState === 4) {
+//                 if (xhr.status === 200) {
+//                     console.log('Form submitted successfully');
+//                 } else {
+//                     console.error('Form submission failed');
+//                 }
+//             }
+//         };
+
+//         xhr.send(JSON.stringify(formData));
+//     }
+
+//     return false; // Prevent the default form submission
+// }
+      
+  </script>
+  
+</body>
+</html>

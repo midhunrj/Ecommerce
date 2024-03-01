@@ -1,0 +1,191 @@
+<%- include("./layouts/Admin-header") %>
+<div class="col-md-2 col-6">
+    <div class="custom_select">
+        <select id="timeRangeFilter" class="form-select select-nice">
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+            <option selected value="yearly">Yearly</option>
+        </select>
+    </div>
+</div>
+<div class="col-md-2 col-6">
+    <div class="custom_select">
+        <select id="statusFilter" class="form-select select-nice">
+            <option selected>Status</option>
+            <option>All</option>
+            <option>Paid</option>
+            <option>Chargeback</option>
+            <option>Refund</option>
+        </select>
+    </div>
+</div>
+<div class="col-md-2 col-6">
+    <button id="fetchDataButton" class="btn btn-primary">Fetch Data</button>
+</div>
+</div>
+</header>
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table align-middle table-nowrap mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col" class="text-center">
+                        <div class="form-check align-middle">
+                            <input class="form-check-input" type="checkbox" id="transactionCheck01">
+                            <label class="form-check-label" for="transactionCheck01"></label>
+                        </div>
+                    </th>
+                    <th class="align-middle" scope="col">Order ID</th>
+                    <th class="align-middle" scope="col">Billing Name</th>
+                    <th class="align-middle" scope="col">Date</th>
+                    <th class="align-middle" scope="col">Total</th>
+                    <th class="align-middle" scope="col">Payment Status</th>
+                    <th class="align-middle" scope="col">Payment Method</th>
+                    <th class="align-middle" scope="col">Order Status</th>
+                    <th class="align-middle" scope="col">View Details</th>
+                </tr>
+            </thead>
+            <tbody id="orderTableBody">
+                <% for(let i=0;i<orders.length;i++){ %>
+                <tr>
+                    <td class="text-center">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="transactionCheck02">
+                            <label class="form-check-label" for="transactionCheck02"></label>
+                        </div>
+                    </td>
+                    <td><a href="#" class="fw-bold"><%=orders[i]._id %></a> </td>
+                    <td><%= orders[i].Address[0].name %></td>
+                    <td>
+                        <%=orders[i].Date %>
+                    </td>
+                    <td>
+                        <%= orders[i].Totalprice %>
+                    </td>
+                    <td>
+                        <span class="badge badge-pill badge-soft-success"><%= orders[i].paymentstatus %></span>
+                    </td>
+                    <td>
+                        <i class="material-icons md-payment font-xxl text-muted mr-5"></i><%= orders[i].paymentmethod %>
+                    </td>
+                    <td>
+                        <%= orders[i].Status %>
+                    </td>
+                    <td>
+                        <a href="/admin/order-detail?id=<%= orders[i]._id %>" class="btn btn-xs"> View details</a>
+                    </td>
+                    <% } %>
+                </tr>
+                <tr>
+                    <td class="text-center">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="transactionCheck03">
+                            <label class="form-check-label" for="transactionCheck03"></label>
+                        </div>
+                    </td>
+                    <td><a href="#" class="fw-bold">#SK2541</a> </td>
+                    <td>Jamal Burnett</td>
+                    <td>
+                        07 Oct, 2022
+                    </td>
+                    <td>
+                        $380
+                    </td>
+                    <td>
+                        <span class="badge badge-pill badge-soft-danger">Chargeback</span>
+                    </td>
+                    <td>
+                        <i class="material-icons md-payment font-xxl text-muted mr-5"></i> Visa
+                    </td>
+                    <td>
+                        <a href="#" class="btn btn-xs"> View details</a>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="pagination-area mt-30 mb-50">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-start">
+            <% for (let currentPage = 1; currentPage <= totalNumberOfPages; currentPage++) { %>
+                <li class="page-item <%= currentPage == page ? 'active' : '' %>">
+                    <button class="page-link" onclick="fetchDataForPage(<%= currentPage %>)"><%= currentPage %></button>
+                </li>
+            <% } %>
+        </ul>
+    </nav>
+</div>
+<%- include("./layouts/Admin-footer.ejs") %>
+
+<script>
+    document.getElementById('fetchDataButton').addEventListener('click', fetchFilteredOrders);
+
+    function fetchFilteredOrders() {
+        const timeRange = document.getElementById('timeRangeFilter').value;
+        const statusFilter = document.getElementById('statusFilter').value;
+        console.log("Time range selected:", timeRange);
+
+        fetch(`/sales/${timeRange}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(orders => {
+                renderOrders(orders);
+                console.log("order", orders);
+            })
+            .catch(error => {
+                console.error('Error fetching filtered orders:', error);
+                alert('Error fetching filtered orders. Please try again later.');
+            });
+    }
+
+    function renderOrders(orders) {
+        const orderTableBody = document.getElementById('orderTableBody');
+        orderTableBody.innerHTML = '';
+
+        orders.forEach(order => {
+            const row = `
+            <tr>
+                    <td class="text-center">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="transactionCheck02">
+                            <label class="form-check-label" for="transactionCheck02"></label>
+                        </div>
+                    </td>
+                    <td><a href="#" class="fw-bold">${order._id}</a></td>
+                    <td>${order.Address[0].name}</td>
+                    <td>${order.Date}</td>
+                    <td>${order.Totalprice}</td>
+                    <td><span class="badge badge-pill badge-soft-success">${order.paymentstatus}</span></td>
+                    <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i>${order.Status}</td>
+                    <td><a href="/admin/order-detail?id=${order._id}" class="btn btn-xs">View details</a></td>
+                </tr>`;
+            orderTableBody.innerHTML += row;
+        });
+    }
+
+    function fetchDataForPage(page) {
+        // Make an AJAX request to fetch data for the specified page
+        fetch(`/sales-report?page=${page}&timeRange=<%= timeRange %>&status=<%= statusFilter %>`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Handle the received data (e.g., update the UI with new content)
+                console.log('Data for page', page, ':', data);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                alert('Error fetching data. Please try again later.');
+            });
+    }
+</script>

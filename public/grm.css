@@ -1,0 +1,361 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+
+* {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    background-color:violet;
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35rem;
+    padding: 20px;
+    background-color:#696969;
+    height:100vh;
+}  
+/* form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  } */
+
+
+
+/* ... (other styles remain the same) */
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+form h2{
+  text-align: center;
+  color:#e65b00;
+  margin-bottom: 20px; 
+}
+
+.form-group {
+  display: flex;
+  align-items: center; /* Align labels and inputs vertically */
+  margin-bottom: 1rem;
+}
+
+label {
+  display: flex;
+  text-align: left;
+  align-items:center;
+  color: #6f3ce7;
+  margin-right:10px;
+  width:80px;
+  
+}
+input {
+   /* Expand input fields to fill remaining space */
+   display: block;
+  border: 0;
+  margin: 10px 0px;
+  padding: 15px;
+  font-size: 16px;
+  border-radius: 10px;
+  outline: thick;
+  resize: none;
+  background: #f5f5f5;
+  width: 100%; /* Full width input */
+   box-sizing: border-box; /* Include padding and border in the element's total width and height */
+   border:groove;
+  border-color:chocolate;
+  
+}
+
+/* label {
+  display: block;
+  text-align: left;
+  color: #6f3ce7;
+  margin-bottom: 5px;
+} */
+
+/* input {
+  display: block;
+  border: 0;
+  margin: 10px 0px;
+  padding: 15px;
+  font-size: 16px;
+  border-radius: 10px;
+  outline: thick;
+  resize: none;
+  background: #f5f5f5;
+  width: 100%; /* Full width input */
+  /* box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  /* border:groove;
+  border-color:chocolate;
+} */ */ */
+
+
+.one-check {
+    padding-left: 15px;
+}
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to right, #3498db, #e74c3c); /* Gradient background */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+   #lokiverse{
+    background:black; /* Slightly opaque white background */
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 25rem;
+    max-height: 55rem;
+    width: 100%;
+    height:100%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    animation: fadeIn 0.8s ease-in-out;
+     /* Fade in animation */
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+   }
+   
+   /* label {
+     display: block;
+     text-align: left;
+     color: #6f3ce7;
+     margin-bottom: 5px;
+   } */
+   
+   /* input {
+     width: 100%;
+     padding: 15px; /* Adjust the padding as needed */
+     /* margin: 5px 0; /* Adjust the margin as needed */
+     /* box-sizing: border-box;
+     border: 1px solid #ccc;
+     border-radius: 5px;
+     outline: none;
+     color: #333;
+   } */
+    
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h1 {
+    color:chocolate; /* White color for headings */
+    margin-bottom: 20px;
+    font-size: 2em; /* Larger font size */
+    letter-spacing: 2px; /* Add letter spacing */
+  }
+
+  /* input {
+    width: 100%;
+    padding: 15px;
+    margin: 15px 0;
+    box-sizing: border-box;
+    border:groove;
+    border-color:chocolate;
+    background-color: rgba(255, 255, 255, 0.8); /* Slightly opaque white background */
+    /* border-radius: 8px;
+    outline: none;
+    color: #333; /* Dark text color */
+  /* } */ */ */
+
+  input::placeholder {
+    color: #777; /* Lighter placeholder text color */
+  }
+  #name,#password,#phone,#email,#confirmPassword{
+ text-align: center;
+ color:white;
+ background:transparent;
+ border-radius: 2rem;
+ width: 15rem;
+ font-size: 16px;
+ outline: none;
+ transition: all .2s;
+ transition-timing-function: ease-in-out;
+ padding: 1rem 2rem;
+ margin: 1rem;
+}
+
+  #name:focus,#password:focus,#email:focus,#phone:focus,#confirmPassword:focus{
+  width: 20rem;
+  animation-name: colorchange;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes colorchange {
+  0% {
+      border-color:darkviolet;
+      color: darkviolet;
+  }
+  10% {
+      border-color: gold;
+      color: gold;
+  }
+  20% {
+      border-color:aqua;
+      color: aqua;
+  }
+  30% {
+      border-color:tomato;
+      color: tomato;
+  }
+  40% {
+      border-color:mediumpurple;
+      color: mediumpurple;
+  }
+  50% {
+      border-color:forestgreen;
+      color: forestgreen;
+  }
+  60% {
+      border-color:floralwhite;
+      color: floralwhite;
+  }
+  70% {
+      border-color:deeppink;
+      color: deeppink;
+  }
+  80% {
+      border-color:olive;
+      color: olive;
+  }
+  90% {
+      border-color: red;
+      color: red;
+  }
+  100% {
+      border-color: yellow;
+      color: yellow;
+  }
+
+}
+
+  button {
+    background: linear-gradient(to right, #6f3ce7, #c02bb4); /* Gradient button background */
+    font-size: 18px;
+    border: 2px solid rgb(164, 169, 19);
+    border-radius:3rem;
+    font-size: 16px;
+    color:white;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+    padding: 1rem 3rem;
+
+    transition: background 0.5s ease-in-out; /* Smooth background color transition */
+  }
+
+  button:hover {
+    background: linear-gradient(to right, #c02ba2, #720799);
+    border:2px solid rgb(19, 124, 169) /* Darker gradient on hover */
+  }
+
+  /* Add a subtle shake animation on hover for the button */
+  button:hover {
+    animation: shake 0.5s;
+  }
+  #log{
+    color:#c02bb4;
+    font-size:16px;
+  }
+  #log:hover{
+    color: #720799;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25%, 75% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+  }
+  span{
+    color:White;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  #otp{
+    width:10rem;
+    display:flex;
+    float:left;
+    height:2rem;
+    border-radius: 5px;
+    border-style:inset;
+    
+  }
+  #otp:focus{
+    animation-name: colorchange;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+  }
+  
+  #lab{
+     color:#e65b00;
+     font-size: 16px;
+  }
+  .ginger{
+    height:20rem;
+    display:flex;
+    flex-direction:column;
+    background:black;
+   padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 25rem;
+    width: 100%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    animation: fadeIn 0.8s ease-in-out; 
+   }
+  /* .ginger {
+    background: black;
+    padding: 40px;
+    text-align: center;
+    max-width: 20rem;
+    width: 100%;
+    /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.4); */
+    /* animation: fadeIn 0.8s ease-in-out;
+  } */ */
+  .otp-input-container{
+    display: inline-block;
+    color:#333;
+    margin-left: 3rem;
+
+  }
+  #resendbtn{
+    background-color: #3498db;
+  }
+  #countdownText{
+    color:white;
+  }
+  #but{
+    color:white;
+    text-decoration: none;
+  }
+  #resendbtn{
+    width:min-content;
+    height:min-content;
+  }
+ .Error{
+  color: red;
+  font-size: 16px;
+  font-weight: 400;
+ }
+ h4
+ {
+  color:#e65b00;
+ }

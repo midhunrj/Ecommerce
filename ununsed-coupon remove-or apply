@@ -1,0 +1,106 @@
+<html>
+<span id="appliedCouponMessage"></span>
+                                                    <button id="removeCouponButton" class="btn btn-sm btn-danger" style="display: none;" onclick="removeCoupon()">Remove Coupon</button>
+</html>
+
+async function applyCoupon() {
+    event.preventDefault();
+    const couponCode = document.getElementById('coupon').value;
+    const totalSubtotalText = document.querySelector('.product-subtotal span').innerText; // Use innerText instead of value
+    const totalSubtotal = parseFloat(totalSubtotalText.replace('₹', '')); // Parse the totalSubtotal value
+    alert(totalSubtotal);
+
+    // Make AJAX request to apply coupon
+    try {
+        alert("hello");
+        const response = await fetch('/applyCoupon', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ coupon: couponCode, totalSubtotal }),
+        });
+        const data = await response.json();
+
+   
+        if (response.status === 200) {
+            // Show success message
+            Swal.fire('Success', "Coupon applied successfully!", 'success');
+
+            // Update the displayed total amount
+            const discount = data.discount;
+            console.log(discount);
+            updateTotalAmount(data.discount);
+            alert("jhjhjh");
+
+            // Call the function to display the applied coupon message
+            displayAppliedCouponMessage(couponCode);
+            console.log(couponCode,"couponcode");
+        } else if (response.status === 400) {
+            Swal.fire('Error', 'Minimum purchasing amount should be 1000', 'error');
+        } else {
+            // Show error message if coupon code is not valid
+            alert(data.error);
+        }
+    } catch (error) {
+        console.error('Error applying coupon:', error);
+        Swal.fire('Error', "Failed to apply coupon. Please try again.", 'error');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if coupon input field has a value
+    const couponCode = document.getElementById('coupon').value;
+    console.log(couponCode,"coupondertd");
+    if (couponCode) {
+        displayAppliedCouponMessage(couponCode);
+        console.log(couponCode,"coupondddd");
+    }
+});   
+    function updateTotalAmount(discount) {
+        // Get the elements containing the total amount
+        const totalElements = document.querySelectorAll('.product-subtotal');
+        console.log("totalElements ", totalElements);
+    
+        // Loop through each total element and update its text
+        totalElements.forEach(element => {
+            // Update the total amount text
+            element.innerText = `₹${discount}`;
+            console.log("after discount", element.innerText);
+        });
+    }
+    function displayAppliedCouponMessage(couponCode) {    
+    //const couponCode = document.getElementById('coupon').value;
+    const appliedCouponMessage = document.getElementById('appliedCouponMessage');
+    // Add this line for debugging
+    if (appliedCouponMessage) {
+        appliedCouponMessage.innerText = `Coupon "${couponCode}" applied!`;
+        console.log("Coupon message element:", appliedCouponMessage); 
+
+        // Show the remove coupon button
+        const removeCouponButton = document.getElementById('removeCouponButton');
+        if (removeCouponButton) {
+            removeCouponButton.style.display = 'inline';
+        } else {
+            console.error('Remove coupon button not found.');
+        }
+    } else {
+        console.error('Applied coupon message element not found.');
+    }
+}
+
+
+// Function to remove the applied coupon
+function removeCoupon() {
+    // Remove the applied coupon message
+    const appliedCouponMessage = document.getElementById('appliedCouponMessage');
+    appliedCouponMessage.innerHTML = '';
+
+    // Hide the remove coupon button
+    const removeCouponButton = document.getElementById('removeCouponButton');
+    removeCouponButton.style.display = 'none';
+
+    // Reset the total amount
+    updateTotalAmount();
+}
+

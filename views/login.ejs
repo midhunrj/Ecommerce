@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= locals.title?title:"login page" %></title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to right, #3498db, #e74c3c); /* Gradient background */
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-container {
+      background:black; /* Slightly opaque white background */
+      padding: 40px;
+      border-radius: 15px;
+      text-align: center;
+      max-width: 25rem;
+      /* max-height: 26rem; */
+      height:transition 0.3s ease-in-out;
+      width: 100%;
+      /* height:100%; */
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+      animation: fadeIn 0.8s ease-in-out; /* Fade in animation */
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+     #choc{
+      color:chocolate; /* White color for headings */
+      margin-bottom: 20px;
+      font-size: 2em; /* Larger font size */
+      letter-spacing: 2px; /* Add letter spacing */
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      margin: 15px 0;
+      box-sizing: border-box;
+      border:groove;
+      border-color:chocolate;
+      background-color: rgba(255, 255, 255, 0.8); /* Slightly opaque white background */
+      border-radius: 8px;
+      outline: none;
+      color: #333; /* Dark text color */
+    }
+
+    input::placeholder {
+      color: #777; /* Lighter placeholder text color */
+    }
+    #email,#password{
+   text-align: center;
+   color:white;
+   background:transparent;
+   border-radius: 2rem;
+   width: 15rem;
+   font-size: 16px;
+   outline: none;
+   transition: all .2s;
+   transition-timing-function: ease-in-out;
+   padding: 1rem 2rem;
+   margin: 1rem;
+}
+
+    #email:focus,#password:focus{
+    width: 20rem;
+    animation-name: colorchange;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes colorchange {
+    0% {
+        border-color:darkviolet;
+        color: darkviolet;
+    }
+    10% {
+        border-color: gold;
+        color: gold;
+    }
+    20% {
+        border-color:aqua;
+        color: aqua;
+    }
+    30% {
+        border-color:tomato;
+        color: tomato;
+    }
+    40% {
+        border-color:mediumpurple;
+        color: mediumpurple;
+    }
+    50% {
+        border-color:forestgreen;
+        color: forestgreen;
+    }
+    60% {
+        border-color:floralwhite;
+        color: floralwhite;
+    }
+    70% {
+        border-color:deeppink;
+        color: deeppink;
+    }
+    80% {
+        border-color:olive;
+        color: olive;
+    }
+    90% {
+        border-color: red;
+        color: red;
+    }
+    100% {
+        border-color: yellow;
+        color: yellow;
+    }
+
+}
+
+    #jammer {
+      background: linear-gradient(to right, #6f3ce7, #c02bb4); /* Gradient button background */
+      font-size: 18px;
+      border: 2px solid rgb(164, 169, 19);
+      border-radius:3rem;
+      font-size: 16px;
+      color:white;
+      cursor: pointer;
+      transition: all .3s ease-in-out;
+      padding: 1rem 3rem;
+
+      transition: background 0.5s ease-in-out; /* Smooth background color transition */
+    }
+
+    #jammer:hover {
+      background: linear-gradient(to right, #c02ba2, #720799);
+      border:2px solid rgb(19, 124, 169) /* Darker gradient on hover */
+    }
+
+    /* Add a subtle shake animation on hover for the button */
+    #jammer:hover {
+      animation: shake 0.5s;
+    }
+    #forgot{
+      color:chocolate;
+      font-size:16px;
+    }
+    #forgot:hover{
+      color: #720799;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25%, 75% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+    }
+    span{
+      color:White;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    #siren{
+      color:antiquewhite;
+      text-decoration: none;
+    }
+    h4{
+      color:red;
+      text-align: center;
+      max-height: min-content;
+    }
+    #custom-close-btn{
+      color:chocolate;
+    }
+    .Error{
+      color:red;
+      font-size: 16px;
+      font-weight: 300;
+    }
+
+  </style>
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+ </head>
+<body>
+  
+<div class="login-container">
+  <% if(locals.alert ) { %>
+            
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <%= alert %>
+        <button type="button" class="close" id="custom-close-btn" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <% } %>
+      
+    
+      <% if(locals.message) { %>
+        <!-- <h2>Your acoount has been Created Successfully</h2> -->
+        <h4><%= message %></h4>
+      <% } %>
+      
+      
+  <h1 id="choc">Login</h1>  
+  <form action="/admin_login" method="post" onsubmit="return validate()" novalidate>
+    <input type="email" id="email" placeholder="email"  name="email"  >
+    <div id="emailError" class="Error"></div>
+    <input type="password" id="password" placeholder="Password" name="password" >
+    <div id="passwordError" class="Error"></div>
+    <button type="submit" id="jammer">Log In</button>
+    <a href="/forget-password" id="forgot"><br>Forgot Password</a>
+    <span><br><br>Don't have an Account?<br></span><Button id="jammer"><a href="/signup" id="siren" method="get">Signup</a></Button>
+  </form>
+</div>
+<script>setTimeout(()=>{document.getElementById("alert").style.display="none"},3000);</script>
+<script>
+function displayError(element, message) {
+  const errorElement = document.getElementById(`${element.id}Error`);
+  errorElement.innerHTML = message;
+  setTimeout(() => {
+     errorElement.innerHTML = '';
+  }, 5000);
+}
+
+function checkEmptyFields() {
+const fields = [ 'email', 'password'];
+
+let isEmpty = false;
+
+fields.forEach(field => {
+const inputElement = document.getElementById(field);
+if (inputElement.value.trim() === '') {
+displayError(inputElement, 'Field is required');
+isEmpty = true;
+// Stop further checking if an empty field is found
+return false;
+}
+});
+
+return !isEmpty;
+}
+
+
+ 
+
+function validate() {
+  if (!checkEmptyFields()) {
+     return false; // Stop validation if empty fields are found
+  }
+
+  // Regex patterns
+ 
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+ 
+
+  // Input fields
+  
+  const email = document.getElementById('email');
+  const password = document.getElementById('password');
+  
+
+  // Error fields
+  
+  const emailError = document.getElementById('emailError');
+  const passwordError = document.getElementById('passwordError');
+  
+
+  // Validate name field
+
+  // Validate email field
+  if (!emailRegex.test(email.value)) {
+     displayError(email, 'Please enter a valid email');
+     return false;
+  }
+
+  // // Validate password field
+  // if (!passwordRegex.test(password.value)) {
+  //    displayError(password, 'Please enter a valid password');
+  //    return false;
+  // }
+
+  // Validate phone field
+  
+
+  // All fields passed validation
+  return true;
+}
+</script>   
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+</body>
+</html>
+
+
