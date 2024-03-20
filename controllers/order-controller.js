@@ -16,6 +16,8 @@ const orderplaced = async (req, res) => {
     try {
         console.log("hello");
         const userId = req.session.user;
+        const coupon=req.body.coupon
+        console.log(coupon,"coupon");
         const paymentOption = req.body.paymentoption;
         console.log("paymentoption", paymentOption);
         const addressId = req.body.addressId;
@@ -27,6 +29,8 @@ const orderplaced = async (req, res) => {
         // Find the user's cart
 const userCart = await Cart.findOne({ user_id: userId });
  const userdata=await user.findOne({_id:userId})
+ 
+
 if (userCart) {
     // Calculate total price from cart items
     // const totalprice = userCart.cartItems.reduce((total, item) => {
@@ -62,9 +66,23 @@ if (userCart) {
 
         if (selectedAddressDetails) {
             const selectedAddress = selectedAddressDetails.Address.find(address => address._id.toString() === addressId);
-        
+            
             if (selectedAddress) {
-    
+                if(req.session.coupon)
+                {
+                const couponUsage = userdata.coupons.find(c => c.couponCode === coupon);
+                if (!couponUsage) {
+                    // If the user hasn't used the coupon before, create a new entry
+                    
+                    userdata.coupons.push({ couponCode: coupon, usageCount: 1 });
+                  } else {
+                    // If the user has used the coupon before, increment the usage count
+                  couponUsage.usageCount++;
+                  }
+                
+                  // Save the changes to the user document
+                  await userdata.save();
+                }
                 const newOrder = new Order({
                     products: products,
                     Totalprice: totalprice,

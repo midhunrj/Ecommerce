@@ -553,9 +553,12 @@
 
     // Function to apply coupon code asynchronously
     async function applyCoupon() {
+        //alert('hh')
         event.preventDefault();
         const couponCode = document.getElementById('coupon').value;
+        //alert(couponCode)
         const totalSubtotalElement = document.querySelector('.product-subtotal span');
+        //alert(totalSubtotalElement)
         if (totalSubtotalElement) {
             const totalSubtotalText = totalSubtotalElement.innerText;
             const totalSubtotal = parseFloat(totalSubtotalText.replace('₹', ''));
@@ -701,10 +704,11 @@
                  if (paymentOption) {
                     // Call your AJAX function to place the order with the selected address ID
                     console.log("pay",paymentOption);
+                    const couponCode = document.getElementById('coupon').value;
                     $.ajax({
                         url: '/place-order',
                         method: 'POST',
-                        data: { addressId: selectedAddressId, paymentoption: paymentOption,subtotal:numericvalue },
+                        data: { addressId: selectedAddressId, paymentoption: paymentOption,subtotal:numericvalue,coupon:couponCode },
                         success: (response) => {
                             console.log("Response from BE ==>" , response)
                             if (response.success&&response.method=="Online") 

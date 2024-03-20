@@ -5,7 +5,18 @@ const Product=require("../models/productmodel")
 const loadCategoriesPage = async (req, res) => {
   try {
     const categoryData = await Category.find({});
-    res.render("category-products", {category: categoryData});
+    let message;
+    if(req.session.message!='')
+    {
+     message = req.session.message;
+    }
+    else
+    {
+    message=''
+    }
+    res.render("category-products", {message:message,category: categoryData});
+    req.session.message=''
+    message=''
   } catch (error) {
     console.error("Error in loadCategoriesPage:", error.message);
     res.status(500).send("Internal Server Error");
@@ -62,6 +73,8 @@ const deleteCategory = async (req, res) => {
 // Update Category
 const updateCategory = async (req, res) => {
   try {
+    console.log(req.body)
+    console.log(req.body._id);
     const selectedList = req.body.liOrUl;
     const listed = selectedList === "list" ? false : true;
     console.log("helllohjfgjg",selectedList);
@@ -71,16 +84,19 @@ const updateCategory = async (req, res) => {
     const offer = req.body.offer;
     const type = req.body.offerType;
 console.log(offer,type,"offer and offer and offertype");
-    const categorylist=await Category.find({catName:exist,offer:offer,offerType:type})
-
-    const existingproducts = await Category.findOne({ catName:exist,offer:offer,offerType:type });
+    const categorylist=await Category.find({})
+console.log(categorylist,"categorylidt")
+    const existingproducts = await Category.findOne({_id: { $ne: req.body._id  } ,catName: { $regex: new RegExp(exist, 'i') } });
         if (existingproducts)
          {
-          res.render("category-products", {
-            message: "Category already exists",category:categorylist});
+           res.render("category-products", {message: "Category already exists",category:categorylist});
+          // req.session.message="Category Already Exists"
+          // res.redirect("/admin/categories");
+          //res.status(200).json({message: "Category already exists",category:categorylist})
         }
         
      else{   
+      req.session.message=''
     const categoryData = await Category.findByIdAndUpdate(
       { _id: req.body._id },
       {

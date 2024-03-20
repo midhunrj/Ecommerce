@@ -15,9 +15,11 @@ const Cartpage=async(req,res)=>{
         const User=req.session.user
         const cartdata=await Cart.findOne({user_id:User})
         const userdata=await user.findOne({_id:User})
+        let count=req.session.count
         if(!cartdata)
         {
-          return res.status(404).render("cart",{Cart:cartdata,username:userdata.username})
+            let CartIsEmpty="true"
+          return res.status(404).render("cart",{Cart:cartdata,username:userdata.username,count})
         }
        
         const Cartlist=cartdata.cartItems.map(item=>item.product_id)
@@ -41,7 +43,7 @@ const Cartpage=async(req,res)=>{
         // //    await Product.save()
         // }
         const cartItems=cartdata.cartItems
-     return res.render('Cart',{products:Productitems,Cart:cartdata,cartdata:cartItems,username:userdata.username})
+     return res.render('Cart',{products:Productitems,Cart:cartdata,cartdata:cartItems,username:userdata.username,count})
       }
     
     catch (error) {
@@ -53,6 +55,7 @@ const Cartpage=async(req,res)=>{
         const userId = req.session.user;
         const userdata=await user.findOne({_id:userId})
         // Aggregation pipeline to fetch cart data with product details
+        let count=req.session.count
         const cartAggregate = await Cart.aggregate([
             { $match: { user_id: userId } },
             { $unwind: "$cartItems" }, // Unwind to deconstruct cartItems array
@@ -78,7 +81,7 @@ const Cartpage=async(req,res)=>{
         const cartData = cartAggregate[0]; // Assuming there's only one cart per user
         if (!cartData) {
             // Handle the case where the cart is not found for the user
-            return res.status(404).render('Check-out', {username:userdata.username});
+            return res.status(404).render('Check-out', {username:userdata.username,count});
         }
         const products = cartData.products;
         const cartItems = cartData.cartItems;
@@ -88,7 +91,7 @@ const Cartpage=async(req,res)=>{
         const addressData = await Address.findOne({ userid: userId });
 
         // Render the checkout page with fetched data
-        res.render('Check-out', { products, Cart: cartData, cartdata: cartItems, userAddress: addressData,username:userdata.username,Coupons:Coupondata });
+        res.render('Check-out', { products, Cart: cartData, cartdata: cartItems, userAddress: addressData,username:userdata.username,Coupons:Coupondata,count });
 
     } catch (error) {
         console.log(error.message);
@@ -115,23 +118,28 @@ const addToCart = async (req, res) => {
         }
       console.log("products stock",productData.stock);
         // Check if product is in stock
-        if (productData.stock < 1) {
-            return res.status(200).json({ success: false, message: 'Product is out of stock' });
-        }
+        
 
 
         // Check if the user has a cart
         if (cartData) {
             // Check if the product is already in the cart
             const cartItem = cartData.cartItems.find(item => item.product_id == productId);
-
+           // console.log(cartData.cartItems[0].quantity,"cartitem");
+            
             if (cartItem) {
+                if (productData.stock < 1||cartItem.quantity+1>productData.stock) {
+                    return res.status(200).json({ success: false, message: 'Product is out of stock' });
+                }    
                 // Update the quantity and calculate subtotal
                 cartItem.quantity += 1;
                 const subtotal = cartItem.quantity * cartItem.price;
                 cartItem.subtotal = subtotal;
             } else {
                 // Add a new item to cartItems
+                if (productData.stock < 1) {
+                    return res.status(200).json({ success: false, message: 'Product is out of stock' });
+               }
                 const newItem = {
                     product_id: productId,
                     quantity: 1,
@@ -216,6 +224,10 @@ const updateQuantity = async (req, res) => {
                             { new: true }
                         );
                         await updatedCart.save()
+                        if(updatedCart.cartItems.length==0)
+        {
+            await Cart.deleteOne({user_id:userId})
+        }
                     }
                 console.log("productInCart.quantity", productInCart,productInCart.quantity);
 
@@ -281,7 +293,16 @@ const DeleteCart = async (req, res) => {
             },
             { new: true }
         );
-        res.status(200).json({ success: true, message: 'Item removed from cart' });
+        if(updatedCart.cartItems.length==0)
+        {
+            await Cart.deleteOne({user_id:userId})
+        }
+        res.status(200).json({ success: true, message: 'Item removed from cart', });
+        if(updatedCart&updatedCart.cartItems.length==0)
+        {
+            let CartIsEmpty="true"
+            res.render('Cart',{CartIsEmpty})
+        }
         // res.redirect('/cart');
     } catch (error) {
         console.log(error.message);

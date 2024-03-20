@@ -15,7 +15,11 @@
     <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/logo.png">
     <!-- Template CSS -->
     <link rel="stylesheet" href="assets/css/main.css?v=3.4">
-   
+   <style>
+header-top header-top-ptb-1 d-none d-lg-block {
+    background-color: #ff0000; /* Change '#ff0000' to your desired color */
+}
+   </style>
     
 </head>
 
@@ -274,7 +278,7 @@
                                 <div class="header-action-icon-2">
                                     <a class="mini-cart-icon" href="/cart">
                                         <img alt="Evara" src="assets/imgs/theme/icons/icon-cart.svg">
-                                        <span class="pro-count blue"><%= cartdata %></span>
+                                        <span class="pro-count blue" id="cart-count"><%= count?count:0 %></span>
                                     </a>
                                     <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                         <ul>
@@ -825,7 +829,7 @@
                             </div>
                             <div class="col-lg-7 col-md-6">
                                 <div class="single-slider-img single-slider-img-1">
-                                    <img class="animated slider-1-1" src="assets/imgs/slider/back 1.jpeg" alt="product" style="width:100%;height:100%;">
+                                    <img class="animated slider-1-1" src="assets/imgs/slider/ele-1.jpeg" alt="product" style="width:100%;height:100%;">
                                 </div>
                             </div>
                         </div>
@@ -845,7 +849,7 @@
                             </div>
                             <div class="col-lg-7 col-md-6">
                                 <div class="single-slider-img single-slider-img-1">
-                                    <img class="animated slider-1-2" src="assets/imgs/slider/slider-1.jpeg" alt="">
+                                    <img class="animated slider-1-2" src="assets/imgs/slider/back 1.jpeg" alt="" style="width:100%;height:100%;">
                                 </div>
                             </div>
                         </div>
@@ -865,7 +869,7 @@
                             </div>
                             <div class="col-lg-7 col-md-6">
                                 <div class="single-slider-img single-slider-img-1">
-                                    <img class="animated slider-1-3" src="assets/imgs/slider/slider-3.png" alt="">
+                                    <img class="animated slider-1-3" src="assets/imgs/slider/ele-3.jpeg" alt="" style="width:100%;height:100%;">
                                 </div>
                             </div>
                         </div>
@@ -1348,6 +1352,10 @@ function addToCart(productId) {
                 icon: 'success',
                 timer: 3000  // Optional: Close the alert after 3 seconds
             }); 
+            var carticon=document.getElementById('cart-count')
+            var cartcount=parseInt(carticon.innerText)
+             carticon.innerText=cartcount+1
+             
            } else {
                     Swal.fire({
                         title: 'Error!',

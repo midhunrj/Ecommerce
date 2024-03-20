@@ -26,10 +26,10 @@
                                 <option><%= orders.Status %></option>
 
                                 <% if (orders.Status === "Delivered") { %>
-                                    <option value="return Order" <%= orders.Status === 'return Order' ? 'selected' : '' %>>Return Order</option>
+                                    <option class="selectopt" value="return Order" <%= orders.Status === 'return Order' ? 'selected' : '' %>>Return Order</option>
                                     <option value="refund" <%= orders.Status === 'refund' ? 'selected' : '' %>>Refund</option>
                                 <% } else if(orders.Status=="Confirmed") { %>
-                                    <option value="Cancelled" <%= orders.Status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                    <option class="selectopt" value="Cancelled" <%= orders.Status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
                                     
                                 
                                 <% } else if(orders.Status=="Cancelled") { %>

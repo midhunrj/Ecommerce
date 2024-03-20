@@ -79,7 +79,8 @@
                                     </thead>
                                     <tbody>
                                         <% for(let i=0;i<category.length;i++){%>
-
+                                            
+                                            
                                         <tr>
                                             <td class="text-center">
                                                 <div class="form-check">
@@ -126,7 +127,17 @@
                                             
                                             <% } %>
                                         </tr>
-                                        
+                                        <% if (message!='') { %>
+                                            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                                                <div class="toast-header">
+                                                    <strong class="me-auto">Message</strong>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                                                </div>
+                                                <div class="toast-body">
+                                                    <%= message %>
+                                                </div>
+                                            </div>
+                                        <% } %>
                                     
                                         
                                     </tbody>
@@ -162,7 +173,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form method="POST" action="/admin/update-category" >
+                        <form method="POST" action="/admin/update-category" onsubmit="return editCatvalidate(event)">
                             <input type="hidden" value="<%= category[i]._id %>" name="_id" id="editCategoryId" />
                             
                             <div class="mb-4">
@@ -172,10 +183,11 @@
                                 <p class="text-danger" id="editnameError"></p>
                             </div>
                            <div class="mb-4">
-                            <input type="radio" name="liOrUl" value="list" id="listRadio" <% if (!category[i].is_active) { %> checked <% } %> required>
+                            <input type="radio" name="liOrUl" value="list" id="edit-listRadio" <% if (!category[i].is_active) { %> checked <% } %> required>
     <label for="listRadio">List</label>
     <br>
-    <input type="radio" name="liOrUl" value="Unlist" id="unlistRadio" <% if (category[i].is_active) { %> checked <% } %> required>
+    <input type="radio" name="liOrUl" value="unlist" id="edit-unlistRadio" <% if (category[i].is_active) { %> checked <% } %> required>
+
     <label for="unlistRadio">Unlist</label>
 </div>
                             <label for="offer" class="form-label">Offer Amount</label>
@@ -190,7 +202,7 @@
                             <!-- Add other fields for editing as needed -->
             
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <button type="submit"   class="btn btn-primary">Save Changes</button>
                             </div>
                         </form>
                     </div>
@@ -297,11 +309,14 @@ document.addEventListener('DOMContentLoaded', function () {
     return true;
 }
 
-function editCatvalidate() {
-    console.log("Validating edit category form...");
+function editCatvalidate(event) {
+    
+        // event.preventDefault(); // This will prevent the default behavior of the event
+    
+    console.log("Validatng edit category form...");
     var editCatName = document.getElementById("editCategoryName").value.trim();
-    var editListRadio = document.getElementById("listRadio").checked;
-    var editUnlistRadio = document.getElementById("unlistRadio").checked;
+    var editListRadio = document.getElementById("edit-listRadio").checked;
+    var editUnlistRadio = document.getElementById("edit-unlistRadio").checked;
     var editErrorMessage = document.getElementById("editnameError");
 
     // Check if the edited category name is empty
@@ -315,6 +330,7 @@ function editCatvalidate() {
         editErrorMessage.innerText = "Please select List or Unlist";
         return false;
     }
+    
 
     // Reset error message if validation passes
     editErrorMessage.innerText = "";

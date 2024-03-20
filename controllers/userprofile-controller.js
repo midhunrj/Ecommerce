@@ -16,8 +16,9 @@ const getprofilepage=async(req,res)=>{
     const Addressdata=await Address.findOne({userid:Id})
     
     const Orderdata=await Order.find({userId:Id})
+    let count=req.session.count
 
-    res.render('user-profile',{message:'',users:userdata,userAddress:Addressdata,orders:Orderdata,username:userdata.username})
+    res.render('user-profile',{message:'',users:userdata,userAddress:Addressdata,orders:Orderdata,username:userdata.username,count})
 }
 catch(error)
 {
@@ -44,7 +45,8 @@ const editpassword=async(req,res)=>{
         const userdata=await User.findOne({_id:Userid})
         if(userdata)
         {
-            res.render("edit-password",{message1:'',message:"",users:userdata,username:userdata.username})
+            let count=req.session.count
+            res.render("edit-password",{message1:'',message:"",users:userdata,username:userdata.username,count})
         }
         console.log("user id",userdata._id);
     }
@@ -60,22 +62,23 @@ const changepassword = async (req, res) => {
         const data = req.body;
         const newpassword=await bcrypt.hash(data.newpassword,10)
         const confirmpassword=newpassword
+        let count=req.session.count
         const userdata = await User.findOne({_id:Userid});
    console.log("userdata",userdata);
        console.log(data,"passwords");
             if(data.password!==userdata.password)
             {
-            res.render("edit-password", {message:'', message1: "Your current password is wrong",users:userdata });
+            res.render("edit-password", {message:'', message1: "Your current password is wrong",users:userdata,count });
             }
             else{
             if (data.newpassword !== data.confirmpassword) {
-                res.render("edit-password", {message1:'', message: "Your new and confirm password do not match",users:userdata });
+                res.render("edit-password", {message1:'', message: "Your new and confirm password do not match",users:userdata,count });
             }
             else if (data.newpassword.length<8) {
-                res.render("edit-password", {message1:'', message: "Your password is weak it should contain atleast 8 characters",users:userdata });
+                res.render("edit-password", {message1:'', message: "Your password is weak it should contain atleast 8 characters",users:userdata,count });
             }  else if(newpassword==confirmpassword) {
                 await User.updateOne({ _id: Userid }, { $set: { password: newpassword } });
-                res.render("edit-password", { message1:'',message: "Your password has been updated successfully",users:userdata,username:userdata.username });
+                res.render("edit-password", { message1:'',message: "Your password has been updated successfully",users:userdata,username:userdata.username,count });
             }
             }
     } catch (error) {
@@ -246,7 +249,8 @@ catch(error)
           const Userpro=await User.findOne({_id:Id})
           const productIds = orderData.products.map(product => product.product);
           const productdata = await Product.find({ _id: { $in: productIds } });
-          res.render('user-orderdetails',{users:userdata,username:Userpro.username,orders:orderData,products:productdata,userAddress:Addressdata})
+          let count=req.session.count
+          res.render('user-orderdetails',{users:userdata,username:Userpro.username,orders:orderData,products:productdata,userAddress:Addressdata,count})
           console.log("productdata",productdata);
           
         }
@@ -261,7 +265,8 @@ catch(error)
           const orderData=await Order.findById(orderid)
           const userdata=await User.findById(orderData.userId)
           const Userpro=await User.findOne({_id:user})
-          res.render('user-ordertracking',{users:userdata,username:Userpro.username,orders:orderData})
+          let count=req.session.count
+          res.render('user-ordertracking',{users:userdata,username:Userpro.username,orders:orderData,count})
         }
         catch (error) {
           console.log(error.message);

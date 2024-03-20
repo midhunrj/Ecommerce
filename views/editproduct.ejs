@@ -57,7 +57,7 @@
     </aside>
     <main class="main-wrap">
         <%- include("./layouts/header.ejs") %>
-        <form action="/update-Product" method="POST" enctype="multipart/form-data" class="row g-3" onsubmit="return validate()">
+        <form action="/update-Product" method="POST" enctype="multipart/form-data" class="row g-3" onsubmit="return validate()" novalidate>
 
             <!-- <input type="hidden" name="_method" value="PUT"> -->
             <% console.log( "this is "+ products._id ) %>
@@ -133,7 +133,7 @@
             </div>
             
             
-            <input class="form-control" type="file"  name="image" accept="image/*" enctype="multipart/form-data" id="imageInput" value="products.image[0]" onchange="displayImagePreview()" multiple>
+            <input class="form-control" type="file"  name="image" accept="image/*" enctype="multipart/form-data" id="imageInput" value="<%=products.image.join(',')%>" onchange="displayImagePreview()" multiple>
             
             <div id="imageError" class="Error"></div>
             <!-- Container to display added images -->
@@ -193,6 +193,7 @@
         // Handle success or error
         if (data.success) {
           removeImage(filename);
+          validateRemainingImages();
   
         } else {
           console.error("Error deleting image:", data.error);
@@ -203,6 +204,21 @@
       });
   }
   
+  function validateRemainingImages() {
+    const remainingImages = document.querySelectorAll('.image-container');
+    const imageError = document.getElementById('imageError');
+
+    if (remainingImages.length === 0) {
+        // If no images remain, show error message
+        imageError.innerHTML = 'Upload at least one image';
+        setTimeout(() => {
+            imageError.innerHTML = '';
+        }, 5000);
+    } else {
+        // If images remain, clear any previous error message
+        imageError.innerHTML = '';
+    }
+}
   // remove the deleted image
   function removeImage(filename) {
     const imageElement = document.querySelector(`[data-filename="${filename}"]`);
@@ -404,127 +420,142 @@
   
           return !isEmpty;
       }
-        function validate() {
 
-// Input feilds
-const name = document.getElementById('productname');
-   const color = document.getElementById('Color');
-   const brand = document.getElementById('Brand');
-   const price = document.getElementById('price');
-   const description = document.getElementById('description');
-   const stock = document.getElementById('stock');
-   const image = document.getElementById('imageinput');
+      function validate() {
 
-   // Error fields
-   const nameError = document.getElementById('nameError');
-   const descriptionError = document.getElementById('descriptionError');
-   const brandError = document.getElementById('brandError'); // Corrected ID
-   const priceError = document.getElementById('priceError');
-   const colorError = document.getElementById('colorError');
-   const stockError = document.getElementById('stockError');
-   const imageError = document.getElementById('imageError');
+        // Input fields
+        const name = document.getElementById('name');
+        const color = document.getElementById('Color');
+        const brand = document.getElementById('Brand');
+        const price = document.getElementById('price');
+        const description = document.getElementById('description');
+        const stock = document.getElementById('stock');
+        const image = document.getElementById('imageInput');
 
-   // Regex
-   const nameRegex = /^[A-Za-z0-9]/;
-   const descriptionRegex = /^[A-Za-z0-9]/;
-   const colorRegex = /^[A-Za-z]/;
-   const priceRegex = /^[0-9]/;
-   const stockRegex = /^[0-9]/;
-   const brandRegex = /^[A-Za-z]/;
+        // Error fields
+        const nameError = document.getElementById('nameError');
+        const descriptionError = document.getElementById('descriptionError');
+        const brandError = document.getElementById('brandError');
+        const priceError = document.getElementById('priceError');
+        const colorError = document.getElementById('colorError');
+        const stockError = document.getElementById('stockError');
+        const imageError = document.getElementById('imageError');
 
-   // Name field
-   if (name.value.trim() === '') {
-      nameError.innerHTML = 'Field is required';
-      setTimeout(() => {
-         nameError.innerHTML = '';
-      }, 5000);
-      return false;
-   }
-   if (!nameRegex.test(name.value)) {
-      nameError.innerHTML = 'First letter should be capital';
-      setTimeout(() => {
-         nameError.innerHTML = '';
-      }, 5000);
-      return false;
-   }
+        // Regex
+        const nameRegex = /^[A-Za-z0-9]/;
+        const descriptionRegex = /^[A-Za-z0-9]/;
+        const colorRegex = /^[A-Za-z]/;
+        const priceRegex = /^[0-9]/;
+        const stockRegex = /^[0-9]/;
+        const brandRegex = /^[A-Za-z]/;
 
-   // Description field
-   if (description.value.trim() === '') {
-      descriptionError.innerHTML = 'Field is required';
-      setTimeout(() => {
-         descriptionError.innerHTML = '';
-      }, 5000);
-      return false;
-   }
-   if (!descriptionRegex.test(description.value)) {
-      descriptionError.innerHTML = 'Please enter a valid description';
-      setTimeout(() => {
-         descriptionError.innerHTML = '';
-      }, 5000);
-      return false;
-   }
+        // Name field
+        if (name.value.trim() === '') {
+            nameError.innerHTML = 'Field is required';
+            setTimeout(() => {
+                nameError.innerHTML = '';
+            }, 5000);
+            return false;
+        }
+        if (!nameRegex.test(name.value)) {
+            nameError.innerHTML = 'First letter should be capital';
+            setTimeout(() => {
+                nameError.innerHTML = '';
+            }, 5000);
+            return false;
+        }
 
-   // Brand field (Corrected variable name)
-   if (brand.value.trim() === '') {
-      brandError.innerHTML = 'Field is required';
-      setTimeout(() => {
-         brandError.innerHTML = '';
-      }, 5000);
-      return false;
-   }
+        // Description field
+        if (description.value.trim() === '') {
+            descriptionError.innerHTML = 'Field is required';
+            setTimeout(() => {
+                descriptionError.innerHTML = '';
+            }, 5000);
+            return false;
+        }
+        if (!descriptionRegex.test(description.value)) {
+            descriptionError.innerHTML = 'Please enter a valid description';
+            setTimeout(() => {
+                descriptionError.innerHTML = '';
+            }, 5000);
+            return false;
+        }
 
-   // Stock field
-   if (stock.value.trim() === '') {
-      stockError.innerHTML = 'Field is required';
-      setTimeout(() => {
-         stockError.innerHTML = '';
-      }, 5000);
-      return false;
-   }
-   if (!stockRegex.test(stock.value)) {
-      stockError.innerHTML = 'please enter a valid number';
-      setTimeout(() => {
-         stockError.innerHTML = '';
-      }, 5000);
-      return false;
-   }
+        // Brand field
+        if (brand.value.trim() === '') {
+            brandError.innerHTML = 'Field is required';
+            setTimeout(() => {
+                brandError.innerHTML = '';
+            }, 5000);
+            return false;
+        }
 
-   // Image field
-   if (image.value.trim() === '') {
-      imageError.innerHTML = 'Upload at least one image';
-      setTimeout(() => {
-         imageError.innerHTML = '';
-      }, 5000);
-      return false;
-   }
+        // Stock field
+        if (stock.value.trim() === '') {
+            stockError.innerHTML = 'Field is required';
+            setTimeout(() => {
+                stockError.innerHTML = '';
+            }, 5000);
+            return false;
+        }
+        if (!stockRegex.test(stock.value)) {
+            stockError.innerHTML = 'Please enter a valid number';
+            setTimeout(() => {
+                stockError.innerHTML = '';
+            }, 5000);
+            return false;
+        }
 
-   // Color field
-   if (color.value.trim() === '') {
-      colorError.innerHTML = 'Field is required';
-      setTimeout(() => {
-         colorError.innerHTML = '';
-      }, 5000);
-      return false;
-   }
+        // Image field
+        // if (image.value.trim() === '') {
+        //     imageError.innerHTML = 'Upload at least one image';
+        //     setTimeout(() => {
+        //         imageError.innerHTML = '';
+        //     }, 5000);
+        //     return false;
+        // }
 
-   // Price field
-   if (price.value.trim() === '') {
-      priceError.innerHTML = 'Field is required';
-      setTimeout(() => {
-         priceError.innerHTML = '';
-      }, 5000);
-      return false;
-   }
-   if (!priceRegex.test(price.value)) {
-      priceError.innerHTML = 'Please enter a valid number';
-      setTimeout(() => {
-         priceError.innerHTML = '';
-      }, 5000);
-      return false;
-   }
+        const remainingImages = document.querySelectorAll('.image-container');
+        const imageInput = document.getElementById('imageInput');
+        //const imageError = document.getElementById('imageError');
 
-   return true;
-}
+        if (remainingImages.length === 0 && imageInput.files.length === 0) {
+            // If no images are uploaded and no new images are selected, show error message
+            imageError.innerHTML = 'Upload at least one image';
+            setTimeout(() => {
+                imageError.innerHTML = '';
+            }, 5000);
+            return false;
+        }
+
+        // Color field
+        if (color.value.trim() === '') {
+            colorError.innerHTML = 'Field is required';
+            setTimeout(() => {
+                colorError.innerHTML = '';
+            }, 5000);
+            return false;
+        }
+
+        // Price field
+        if (price.value.trim() === '') {
+            priceError.innerHTML = 'Field is required';
+            setTimeout(() => {
+                priceError.innerHTML = '';
+            }, 5000);
+            return false;
+        }
+        if (!priceRegex.test(price.value)) {
+            priceError.innerHTML = 'Please enter a valid number';
+            setTimeout(() => {
+                priceError.innerHTML = '';
+            }, 5000);
+            return false;
+        }
+
+        return true;
+    }
+
     </script>
     
 <script src="Admin-assets/js/vendors/jquery-3.6.0.min.js"></script>

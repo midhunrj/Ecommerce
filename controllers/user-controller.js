@@ -380,16 +380,30 @@ console.log(error.message)
 
 const Homepage = async (req, res) => {
 try{
-const userData = await user.findById({ _id: req.session.user })
+const userData = await user.findOne({_id: req.session.user })
+console.log("user",userData);
 
   req.session.user?true:false;
-  
+  let count=0;
 
-  const cartdata=await Cart.find({user_id:req.session.user}).countDocuments()
+  const cartdata=await Cart.aggregate([{$match:{user_id:req.session.user}},{$unwind:"$cartItems"},{$group:{_id:null,count:{"$sum":"$cartItems.quantity"}}}])
+  console.log(cartdata[0]?.count);
+  
+  if(cartdata.length>0)
+  {
+     count=cartdata[0].count
+  }
+  else
+  {
+    count=0
+  }
+  req.session.count=count
+  // let cart=0;
+  // if(cartdata)
     // const categoryData=await category.find({is_active:false})
     const productData=await product.find({isVerified:true})
     const CategoryData=await Category.find({})
-  res.render('userhome',{username:userData.username,products:productData,category:CategoryData,cartdata})
+  res.render('userhome',{username:userData.username,products:productData,category:CategoryData,count})
   
 
 }
@@ -475,7 +489,21 @@ const productdetails=async(req,res)=>{
     const CategoryData=await Category.find({})
     if(productData)
     {
-   res.render('productdetails',{products:productData,username:userdata.username,category:CategoryData})
+      let count=req.session.count
+
+      const cartdata=await Cart.aggregate([{$match:{user_id:req.session.user}},{$unwind:"$cartItems"},{$group:{_id:null,count:{"$sum":"$cartItems.quantity"}}}])
+      console.log(cartdata[0]?.count);
+      
+      if(cartdata.length>0)
+      {
+         count=cartdata[0].count
+      }
+      else
+      {
+        count=0
+      }
+      req.session.count=count
+   res.render('productdetails',{products:productData,username:userdata.username,category:CategoryData,count})
     }
     else{
       res.status(200).json({ message: 'Product is  not inside' });
@@ -521,9 +549,22 @@ const shoppage = async (req, res) => {
 
     const userdata=await user.findOne({_id:userId})
 
-   const cartdata=await Cart.find({user_id:userId}).countDocuments()
-    
+   //const cartdata=await Cart.find({user_id:userId}).countDocuments()
+   let count=0;
 
+   const cartdata=await Cart.aggregate([{$match:{user_id:req.session.user}},{$unwind:"$cartItems"},{$group:{_id:null,count:{"$sum":"$cartItems.quantity"}}}])
+   console.log(cartdata[0]?.count);
+   
+   if(cartdata.length>0)
+   {
+      count=cartdata[0].count
+   }
+   else
+   {
+     count=0
+   }
+   req.session.count=count
+ 
     // Apply filters
     const totalNumberOfProducts = await product.find(productQuery).countDocuments();
     const totalNumberOfPages = Math.ceil(totalNumberOfProducts / productsPerPage);
@@ -543,7 +584,7 @@ const shoppage = async (req, res) => {
         totalNumberOfPages,
         currentPage: parseInt(page),
         username:userdata.username,
-        cartdata
+        count
       });
     }
   }  catch (error) {
@@ -556,7 +597,7 @@ const applycoupon = async (req, res) => {
   try {
     const { coupon, totalSubtotal } = req.body;
     const userId = req.session.user;
-
+     req.session.coupon=coupon
     // Ensure totalSubtotal is parsed as a number
     const parsedTotalSubtotal = parseFloat(totalSubtotal);
     if (isNaN(parsedTotalSubtotal)) {
@@ -584,19 +625,19 @@ const applycoupon = async (req, res) => {
     if (couponUsage && couponUsage.usageCount >= couponDocument.Usagelimit) {
       return res.status(404).json({ success: false, message: `You have already used this coupon. This coupon can be used only ${couponDocument.Usagelimit} times` });
     }
-
-    
-    if (!couponUsage) {
-      // If the user hasn't used the coupon before, create a new entry
-      userdata.coupons.push({ couponCode: coupon, usageCount: 1 });
-    } else {
-      // If the user has used the coupon before, increment the usage count
-      couponUsage.usageCount++;
-    }
-
+    // if (!couponUsage) {
+    //   // If the user hasn't used the coupon before, create a new entry
+      
+    //   userdata.coupons.push({ couponCode: coupon, usageCount: 1 });
+    // } else {
+    //   // If the user has used the coupon before, increment the usage count
+    //   couponUsage.usageCount++;
+    // }
+  
     // Save the changes to the user document
     await userdata.save();
-
+    
+    
     // Calculate discounted total amount
     let discountedTotal = parsedTotalSubtotal - couponDocument.Amount;
 
@@ -625,15 +666,18 @@ const removeCoupon = async (req, res) => {
     // Find the coupon usage in the user's coupons array
     const couponUsageIndex = userdata.coupons.findIndex(c => c.couponCode === coupon);
 
-    if (couponUsageIndex === -1) {
-      return res.status(404).json({ success: false, message: 'Coupon not found in user data' });
-    }
+    // if (couponUsageIndex === -1) {
+    //   return res.status(404).json({ success: false, message: 'Coupon not found in user data' });
+    // }
 
     // Decrement the usage count if it's greater than 0
-    if (userdata.coupons[couponUsageIndex].usageCount > 0) {
-      userdata.coupons[couponUsageIndex].usageCount--;
-      await userdata.save();
-      return res.status(200).json({ success: true, message: 'Coupon usage count decremented successfully' });
+    // if (userdata.coupons[couponUsageIndex].usageCount > 0) {
+    //   userdata.coupons[couponUsageIndex].usageCount--;
+    //   await userdata.save();
+      if(req.session.coupon)
+      {
+        req.session.coupon=''
+      return res.status(200).json({ success: true, message: 'Coupon has been removed successfully' });
     } else {
       return res.status(400).json({ success: false, message: 'Coupon usage count is already at zero' });
     }

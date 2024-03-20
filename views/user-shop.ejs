@@ -507,7 +507,16 @@
                     text: 'Product has been added to your cart.',
                     icon: 'success',
                     timer: 3000  // Optional: Close the alert after 3 seconds
-                }); 
+                    
+                });
+               
+             var carticon=document.getElementById('cart-count')
+            var cartcount=parseInt(carticon.innerText)
+            console.log(cartcount,"cartcount before")
+             carticon.innerText=cartcount+1
+             //alert(carticon.innerText)
+            console.log(carticon.innerText);
+            
                } else {
                         Swal.fire({
                             title: 'Error!',
