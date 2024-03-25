@@ -257,7 +257,7 @@
                                 <p>Your cart is empty.</p>
                                 <div class="container mt-5">
                                     <div class=" text-center">
-                                        <img src="/assets/imgs/page/download.png" alt="Empty Cart Image">
+                                        <img src="/assets/imgs/page/empty-cart.png" alt="Empty Cart Image">
                                         <p>Uh-oh! Your cart is feeling a bit lonely.</p>
                                         <p>Time to fill it up with amazing finds!</p>
                                         <a href="/shop" class="btn btn-primary">Add something to Cart</a>
@@ -275,28 +275,21 @@
     <script>
    let totalSubtotal=0
         function updateQuantity(productId, cartQuantity, count, productPrice, i, productQuantity) {
-            //alert(productId)
-             //alert(productPrice)
-          //alert(cartQuantity)
-              //alert(count)
-            //  //alert(i)
-            //  //alert(productQuantity)
+           
 
             const abc = document.getElementById("totalabc").value
             console.log(abc, "hi");
             console.log(productId, cartQuantity, count, productPrice, i, productQuantity);
             const cartProductQuantityElement = document.querySelector(`#cartProductQuantity${i}`)
-            //  //alert('quantity')
+            
             console.log(cartProductQuantityElement);
           console.log(cartProductQuantityElement.value);
-             //alert(cartProductQuantityElement.value,'quantity')
+             
             let subtotalElement = document.querySelector(`#subTotal${i}`);
             console.log(subtotalElement,"subbbbbbb");
-             //alert(subtotalElement.innerHTML,"subelm gdfgdgdf")
+             
              console.log(productPrice);
              
-            // const totalElements = document.getElementById('total').innerHTML;
-             //alert(parseInt(subtotalElement.innerHTML)+ parseInt(productPrice)
           
 
             let currentQuantity = parseInt(cartProductQuantityElement.value)
@@ -305,26 +298,26 @@
             let currentSubTotal = parseFloat(subtotalElement.innerText);
 
             console.log("currentSubtotal",currentSubTotal);
-             //alert(currentSubTotal+"sub")
+        
              console.log("hello");
-            //  //alert(currentTotal+"total")
+            
             if(isNaN(currentQuantity))
             {
-                //alert("currentQuantity is not a number")
+               
             }
             else{
-                ////alert("currentQuantity is  a number") 
+                
             }
             const countAsNumber = parseInt(count, 10);
 
       if (isNaN(countAsNumber)) {
-    ////alert("count is not a number");
+   
     } else {
-    //alert("count is a number");
+    
     }
 
 const newQuantity = currentQuantity + countAsNumber;
-//alert(newQuantity)
+
 console.log("cipher",newQuantity);
                 if (newQuantity==0 ) {
                     console.log("jongiliyan");
@@ -335,9 +328,9 @@ console.log("cipher",newQuantity);
             success: (response) => {
                 console.log(response);
                 // Handle any UI updates or reload the page after successful removal
-                //alert("jumbarabar")
+                
                 window.location.href='/cart'
-                // location.reload(); 
+                 
             },
             error: (error) => {
                 console.error(error);
@@ -369,10 +362,10 @@ console.log("cipher",newQuantity);
  // Update subtotal dynamically
  const newSubtotal = newQuantity * productPrice;
         if (count == 1) {
-            //alert('1');
+        
             document.getElementById(`subTotal${i}`).innerText = ` ₹${newSubtotal.toFixed(2)}`;
         } else {
-            //alert('else');
+           
             document.getElementById(`subTotal${i}`).innerText = ` ₹${newSubtotal.toFixed(2)}`;
         }
         console.log("newSubtotal",newSubtotal);
@@ -381,7 +374,7 @@ console.log("cipher",newQuantity);
         totalSubtotal += newSubtotal;
         const totalElements = document.getElementById('total').innerHTML;
         console.log("totalsubtotal",totalSubtotal);
-             //alert('in starting '+newSubtotal)
+             
             $.ajax({
     url: '/updateQuantity',
     method: 'POST',
@@ -391,25 +384,24 @@ console.log("cipher",newQuantity);
     },
     success: (response) => {
         console.log(response,"reSSSS");
-       // alert('success');
-        // location.reload()
+       
 
         currentQuantity = parseInt(cartProductQuantityElement.value);
-        //alert(currentQuantity, 'currQua');
+        
         console.log(currentQuantity, 'currQua');
         currentSubTotal =(subtotalElement.innerText);
-        //alert(subtotalElement.innerText, 'subttl');
+        
         console.log(currentSubTotal, 'subttl');
-        // alert(currentTotal,"ctotal")
+        
         document.getElementById(`cartProductQuantity${i}`).value = currentQuantity + parseInt(count);
 
        
         const newSubtotal = newQuantity * productPrice;
         if (count == 1) {
-           // alert('1');
+           
             document.getElementById(`subTotal${i}`).innerText = ` ₹${newSubtotal.toFixed(2)}`;
         } else {
-            //alert('else');
+            
             document.getElementById(`subTotal${i}`).innerText = ` ₹${newSubtotal.toFixed(2)}`;
         }
         console.log("newSubtotal",newSubtotal);
@@ -420,16 +412,7 @@ console.log("cipher",newQuantity);
         // Update totalSubtotal on the page
          document.getElementById('total').innerHTML=response.tot;
          document.getElementById('totalPrice').innerHTML=response.tot;
-        // document.getElementById('total').innerText = ` ₹${totalSubtotal.toFixed(2)}`;
-
-        //  alert((parseInt(abc) + parseInt(response.totalAmount),"helloooooooooooooooooooo"))
-        // if (response.count == 1) {
-        //     console.log("TOtal Element == >", totalElements);
-        //     document.getElementById(`total`).innerHTML = parseInt(totalElements) + parseInt(response.totalAmount);
-        // } else {
-        //     console.log("TOtal Element == >", totalElements);
-        //     document.getElementById(`total`).innerHTML = parseInt(totalElements) - parseInt(response.totalAmount);
-        // }
+        
     },
     error: (error) => {
         // alert(error)
@@ -462,29 +445,6 @@ function handleDelete(event) {
     });
 }
 </script>
-//      <script>
-//     function updateQuantity(productIndex, change) {
-//         console.log('Updating Quantity:', productIndex, change);
-    
-//         // Send an AJAX/Fetch request to the server with productIndex and change
-//         // Update the quantity and subtotal dynamically on the client side
-//         fetch(`/update-quantity?productIndex=${productIndex}&change=${change}`)
-//             .then(response => response.json())
-//             .then(data => {
-//                 // Update the quantity and subtotal dynamically on the client side
-//                 const quantityElement = document.querySelector(`.qty-val[data-product-index="${productIndex}"]`);
-//                 quantityElement.textContent = data.quantity;
-    
-//                 const subtotalElement = document.querySelector(`.subtotal[data-product-index="${productIndex}"]`);
-//                 subtotalElement.textContent = `₹${data.subtotal}`;
-//                 console.log('Updated Quantity and Subtotal:', data.quantity, data.subtotal);
-//             })
-//             .catch(error => {
-//                 console.error('Error updating quantity:', error);
-//             });
-//     }
-// </script>
-    
     <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
     <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
     <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>

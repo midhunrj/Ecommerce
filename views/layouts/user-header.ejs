@@ -126,15 +126,15 @@
                     <div class="header-action-right">
                         <div class="header-action-2">
                             <div class="header-action-icon-2">
-                                <a href="shop-wishlist.html">
+                                <a href="/wishlist">
                                     <img class="svgInject" alt="Evara" src="assets/imgs/theme/icons/icon-heart.svg">
-                                    <span class="pro-count blue">4</span>
+                                    <span class="pro-count blue" id="wishlist-count"><%=wishcount %></span>
                                 </a>
                             </div>
                             <div class="header-action-icon-2">
                                 <a class="mini-cart-icon" href="/cart">
                                     <img alt="Evara" src="assets/imgs/theme/icons/icon-cart.svg">
-                                    <span class="pro-count blue" id="cart-count"><%= count?count:0 %></span>
+                                    <span class="pro-count blue" id="cart-count"><%= count ? count : 0 %></span>
                                 </a>
                                 <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                     <ul>
@@ -387,7 +387,7 @@
                                   
                                 </li>
                                 <li class="position-static"><a href="#">Mega menu <i class="fi-rs-angle-down"></i></a>
-                                    <ul class="mega-menu">
+                                    <!-- <ul class="mega-menu">
                                         <li class="sub-mega-menu sub-mega-menu-width-22">
                                             <a class="menu-title" href="#">Women's Fashion</a>
                                             <ul>
@@ -442,7 +442,7 @@
                                             </div>
                                         </li>
                                     </ul>
-                                </li>
+                                </li> -->
                                 <!-- <li><a href="blog-category-grid.html">Blog <i class="fi-rs-angle-down"></i></a>
                                     <ul class="sub-menu">
                                         <li><a href="blog-category-grid.html">Blog Category Grid</a></li>

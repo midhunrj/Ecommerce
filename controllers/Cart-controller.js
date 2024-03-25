@@ -15,35 +15,36 @@ const Cartpage=async(req,res)=>{
         const User=req.session.user
         const cartdata=await Cart.findOne({user_id:User})
         const userdata=await user.findOne({_id:User})
-        let count=req.session.count
+        console.log(req.session.count,"cart count in cart page");
+  
+        let count=0
+
+        const cartData=await Cart.aggregate([{$match:{user_id:req.session.user}},{$unwind:"$cartItems"},{$group:{_id:null,count:{"$sum":"$cartItems.quantity"}}}])
+  console.log(cartData[0]?.count);
+  
+  if(cartData.length>0)
+  {
+     count=cartData[0].count
+     console.log(count,'countcart')
+  }
+  else
+  {
+    count=0
+  }
+  req.session.count=count
+        let wishcount=req.session.wishcount
         if(!cartdata)
         {
             let CartIsEmpty="true"
-          return res.status(404).render("cart",{Cart:cartdata,username:userdata.username,count})
+          return res.status(404).render("cart",{Cart:cartdata,username:userdata.username,count,wishcount})
         }
        
         const Cartlist=cartdata.cartItems.map(item=>item.product_id)
         
         const Productitems=await Product.find({_id:{$in:Cartlist}})
-        // console.log(Productitems,"productitems","categ",Productitems[0].Category);
-        // const Categorydata=await Category.findOne({_id:Productitems[0].Category})
-        // console.log("categorydata",Categorydata);
-        // let befrdisco=Productitems[0].price
-        // console.log("cartdata",cartdata);
-        // if(Categorydata.offerAmount>0)
-        // {
-        //    let percentage= Categorydata.offerAmount
-        //     Productitems[0].price= Productitems[0].price - Math.floor(Productitems[0].price * (percentage/ 100) )
-        //     console.log("product after category discount",Productitems[0].price);
-        //     cartdata.cartItems.price=Productitems[0].price
-        //     //await Product.save()
-        // }
-        // else{
-        //   Productitems[0].price=befrdisco
-        // //    await Product.save()
-        // }
-        const cartItems=cartdata.cartItems
-     return res.render('Cart',{products:Productitems,Cart:cartdata,cartdata:cartItems,username:userdata.username,count})
+           const cartItems=cartdata.cartItems
+       
+     return res.render('Cart',{products:Productitems,Cart:cartdata,cartdata:cartItems,username:userdata.username,count,wishcount})
       }
     
     catch (error) {
@@ -89,9 +90,9 @@ const Cartpage=async(req,res)=>{
 
         // Fetch user address data
         const addressData = await Address.findOne({ userid: userId });
-
+        let wishcount=req.session.wishcount
         // Render the checkout page with fetched data
-        res.render('Check-out', { products, Cart: cartData, cartdata: cartItems, userAddress: addressData,username:userdata.username,Coupons:Coupondata,count });
+        res.render('Check-out', { products, Cart: cartData, cartdata: cartItems, userAddress: addressData,username:userdata.username,Coupons:Coupondata,count,wishcount });
 
     } catch (error) {
         console.log(error.message);
@@ -109,6 +110,7 @@ const addToCart = async (req, res) => {
         // Find the user's cart
         let cartData = await Cart.findOne({ user_id: userId });
 
+        
         // Find the product data
         const productData = await Product.findOne({ _id: productId });
         console.log("pro-price",productData.price)
@@ -177,16 +179,31 @@ const addToCart = async (req, res) => {
             {
             await newCart.save();
             res.status(200).json({ success:true,message: 'Product added to cart successfully' });
-            }   
-        }
 
+            }   
+           
+        }
+    
+        const cartdata=await Cart.aggregate([{$match:{user_id:req.session.user}},{$unwind:"$cartItems"},{$group:{_id:null,count:{"$sum":"$cartItems.quantity"}}}])
+        console.log(cartdata[0]?.count);
+        
+        if(cartdata.length>0)
+        {
+           count=cartdata[0].count
+           console.log(count,'countcart in addtocart')
+        }
+        else
+        {
+          count=0
+        }
+        req.session.count=count
         
     } catch (error) {
         console.error(error);
         res.status(500).json({success:false, error: 'Internal Server Error' });
     }
 };
-// const Cart = require('../path-to-your-updated-cart-model');
+
 
 const updateQuantity = async (req, res) => {
     try {
@@ -227,6 +244,9 @@ const updateQuantity = async (req, res) => {
                         if(updatedCart.cartItems.length==0)
         {
             await Cart.deleteOne({user_id:userId})
+            let count=req.session.count
+            count-=1
+            req.session.count=count
         }
                     }
                 console.log("productInCart.quantity", productInCart,productInCart.quantity);
@@ -296,12 +316,15 @@ const DeleteCart = async (req, res) => {
         if(updatedCart.cartItems.length==0)
         {
             await Cart.deleteOne({user_id:userId})
+            let count=req.session.count
+            count-=1
+            req.session.count=count
         }
         res.status(200).json({ success: true, message: 'Item removed from cart', });
         if(updatedCart&updatedCart.cartItems.length==0)
         {
             let CartIsEmpty="true"
-            res.render('Cart',{CartIsEmpty})
+            res.render('Cart',{CartIsEmpty,count})
         }
         // res.redirect('/cart');
     } catch (error) {

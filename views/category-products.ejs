@@ -344,7 +344,7 @@ function editCatvalidate(event) {
 
 
 async function addOffer(categoryId) {
-    // alert("here")
+    
     const { value: amount } = await Swal.fire({
         title: 'Offer in percentage',
         input: 'number',
@@ -374,7 +374,7 @@ async function addOffer(categoryId) {
 }
 
 function removeOffer(categoryId) {
-    // alert(categoryId)
+    
     try {
         Swal.fire({
             title: 'Remove Offer',
@@ -421,6 +421,40 @@ function removeOffer(categoryId) {
 
 
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get the current URL
+        const currentUrl = window.location.pathname;
+       
+        // Define an array of menu items with their corresponding URLs
+        const menuItems = [
+            { url: "/admin_home", id: "dashboard" },
+            { url: "/admin/users", id: "users" },
+            { url: "/products-list", id: "products" },
+            { url: "/admin-orderlist", id: "orders" },
+            { url: "/Add-product", id: "add-product" },
+            { url: "/new-coupon", id: "coupons" },
+            {url:"/admin/categories",id:"categories"}
+            // Add more menu items as needed
+        ];
+    
+        // Find the active menu item based on the current URL
+        const activeMenuItem = menuItems.find(item => item.url.includes(currentUrl));
+    
+    
+        if (activeMenuItem) {
+            // Highlight the active menu item
+            const activeMenuLink = document.querySelector(`.menu-item#${activeMenuItem.id}`);
+           
+            if (activeMenuLink) {
+                activeMenuLink.classList.add("active");
+            }
+    
+            // Store the ID of the active menu item in local storage
+            localStorage.setItem("activeMenuItem", activeMenuItem.id);
+        }
+    });
+    </script>
 
 </body>
 </html>

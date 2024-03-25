@@ -90,10 +90,7 @@ console.log(categorylist,"categorylidt")
         if (existingproducts)
          {
            res.render("category-products", {message: "Category already exists",category:categorylist});
-          // req.session.message="Category Already Exists"
-          // res.redirect("/admin/categories");
-          //res.status(200).json({message: "Category already exists",category:categorylist})
-        }
+           }
         
      else{   
       req.session.message=''

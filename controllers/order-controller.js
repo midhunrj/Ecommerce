@@ -6,8 +6,8 @@ const Order=require('../models/ordermodel');
 const Razorpay=require("razorpay")
 const crypto=require("crypto")
 const instance=new Razorpay({
-    key_id:"rzp_test_3oY2qxkce538eY",
-    key_secret:"7DeliWImbPufhg7KdSXW0cI6",
+    key_id:process.env.RAZORPAY_ID_KEY,
+    key_secret:process.env.Razorsecret_key
 })
 
 console.log(instance.key_secret,"key_secret");
@@ -32,10 +32,6 @@ const userCart = await Cart.findOne({ user_id: userId });
  
 
 if (userCart) {
-    // Calculate total price from cart items
-    // const totalprice = userCart.cartItems.reduce((total, item) => {
-    //     return total + item.quantity * item.price;
-    // }, 0);
 
     // Extract relevant information from the user's cart
     const products = userCart.cartItems.map(item => ({
@@ -58,8 +54,7 @@ if (userCart) {
                     console.log("updated product details",productdata);
                 }
     }
-//    console.log("products data",products);
-//    console.log("product id",products.product);
+
     // Additional information (you may need to adjust based on your requirements)
 
     const selectedAddressDetails = await Address.findOne({ 'userid': userId, 'Address._id': addressId });
@@ -175,7 +170,7 @@ if (userCart) {
 
             if (deletecart) {
                 res.status(200).json({razorpayorder:generatedOrder ,method:"Online" ,success:true ,razorId:process.env.RAZORPAY_ID_KEY})
-                //res.status(200).json({ success: true,method:"Online",razorId:process.env.RAZORPAY_ID_KEY,razorpayorder:generatedOrder,orderid:newOrder._id,amount:newOrder.Totalprice, message: 'Order placed successfully' });
+               
             }
     }
             

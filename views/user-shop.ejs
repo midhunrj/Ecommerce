@@ -42,12 +42,7 @@
                     <nav>
                         <ul class="mobile-menu">
                             <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/home">Home</a>
-                                <!-- <ul class="dropdown">
-                                    <li><a href="index.html">Home 1</a></li>
-                                    <li><a href="index-2.html">Home 2</a></li>
-                                    <li><a href="index-3.html">Home 3</a></li>
-                                    <li><a href="index-4.html">Home 4</a></li>
-                                </ul> -->
+                               
                             </li>
                             <li class="menu-item-has-children"><span class="menu-expand"></span>shop
                                 
@@ -278,9 +273,9 @@
                                     <div class="product-action-1">
                                       <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal"
                                          data-bs-target="#quickViewModal"><i class="fi-rs-search"></i></a>
-                                      <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i
-                                          class="fi-rs-heart"></i></a>
-                                      <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i
+                                      <a aria-label="Add To Wishlist" class="action-btn hover-up"  onclick="addToWishlist('<%= products[i]._id %>')">
+                                        <i class="fi-rs-heart"></i></a>
+                                      <a aria-label="Compare" class="action-btn hover-up" href="#"><i
                                           class="fi-rs-shuffle"></i></a>
                                     </div>
                                     <div class="product-badges product-badges-position product-badges-mrg">
@@ -489,11 +484,7 @@
 <script>
     function addToCart(productId) {
         console.log("Product ID:", productId);
-    // if (!productId || productId === "undefined") {
-    //     console.error("Invalid productId");
-    //     return;
-    // }
-
+   
         $.ajax({
             url: '/Add-cart',
             method: 'POST',
@@ -582,7 +573,50 @@
       applyFilters();
     });
   </script>
+<script>
+    function addToWishlist(productId)
+    {
+        $.ajax({
+            url:'/addtowishlist',
+            method:"POST",
+            data:{productId},
+            success:(response)=>{
+                console.log(response);
+                if (response.green)
+                {
+                Swal.fire({
+            title:'Added to Wishlist',
+            text:'product has been already added to wishlist',
+            icon: 'success',
+            timer: 3000 
+             }) 
+             var wishicon=document.getElementById('wishlist-count')
+            var wishcount=parseInt(wishicon.innerText)
+             wishicon.innerText=wishcount+1
+            }
+            else if(response.red)
+            {
+                Swal.fire({
+                        title: 'Error!',
+                        text: response.message ||'product is already added to wishlist',
+                        icon: 'error',
+                        timer: 3000
+                    });
+            }
+            },
+            error: function (error) {
+                console.error("AJAX error:", error);
 
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to add product to wishlist.',
+                    icon: 'error',
+                    timer: 3000
+                });
+            }
+        })
+    }
+</script>
 
     <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
     <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>

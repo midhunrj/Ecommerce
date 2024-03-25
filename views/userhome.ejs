@@ -270,9 +270,9 @@ header-top header-top-ptb-1 d-none d-lg-block {
                         <div class="header-action-right">
                             <div class="header-action-2">
                                 <div class="header-action-icon-2">
-                                    <a href="shop-wishlist.html">
+                                    <a href="/wishlist">
                                         <img class="svgInject" alt="Evara" src="assets/imgs/theme/icons/icon-heart.svg">
-                                        <span class="pro-count blue">4</span>
+                                        <span class="pro-count blue" id="wishlist-count"><%= wishcount %></span>
                                     </a>
                                 </div>
                                 <div class="header-action-icon-2">
@@ -587,21 +587,6 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                             </li>
                                         </ul>
                                     </li>
-                                    <!-- <li><a href="blog-category-grid.html">Blog <i class="fi-rs-angle-down"></i></a>
-                                        <ul class="sub-menu">
-                                            <li><a href="blog-category-grid.html">Blog Category Grid</a></li>
-                                            <li><a href="blog-category-list.html">Blog Category List</a></li>
-                                            <li><a href="blog-category-big.html">Blog Category Big</a></li>
-                                            <li><a href="blog-category-fullwidth.html">Blog Category Wide</a></li>
-                                            <li><a href="#">Single Post <i class="fi-rs-angle-right"></i></a>
-                                                <ul class="level-menu level-menu-modify">
-                                                    <li><a href="blog-post-left.html">Left Sidebar</a></li>
-                                                    <li><a href="blog-post-right.html">Right Sidebar</a></li>
-                                                    <li><a href="blog-post-fullwidth.html">No Sidebar</a></li>
-                                                </ul>
-                                            </li> -->
-                                        <!-- </ul>
-                                    </li> -->
                                     <li><a href="#">Pages <i class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
                                             <li><a href="page-about.html">About Us</a></li>
@@ -963,7 +948,7 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                                 </div>
                                                 <div class="product-action-1">
                                                     <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
-                                                    <a aria-label="Add To Wishlist" class="action-btn hover-up" onclick="addToWishlist('/addwishlist?id=<%= products[i]._id %>')"><i class="fi-rs-heart"></i></a>
+                                                    <a aria-label="Add To Wishlist" class="action-btn hover-up" onclick="addToWishlist('<%= products[i]._id %>')"><i class="fi-rs-heart"></i></a>
                                                     <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
                                                 </div>
                                                 <div class="product-badges product-badges-position product-badges-mrg">
@@ -1328,15 +1313,54 @@ header-top header-top-ptb-1 d-none d-lg-block {
     <!-- Vendor JS-->
     <!-- Include SweetAlert library -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function addToWishlist(productId)
+    {
+        $.ajax({
+            url:'/addtowishlist',
+            method:"POST",
+            data:{productId},
+            success:(response)=>{
+                console.log(response);
+                if (response.green)
+                {
+                Swal.fire({
+            title:'Added to Wishlist',
+            text:'product has been already added to wishlist',
+            icon: 'success',
+            timer: 3000 
+             }) 
+             var wishicon=document.getElementById('wishlist-count')
+            var wishcount=parseInt(wishicon.innerText)
+             wishicon.innerText=wishcount+1
+            }
+            else if(response.red)
+            {
+                Swal.fire({
+                        title: 'Error!',
+                        text: response.message ||'product is already added to wishlist',
+                        icon: 'error',
+                        timer: 3000
+                    });
+            }
+            },
+            error: function (error) {
+                console.error("AJAX error:", error);
 
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to add product to wishlist.',
+                    icon: 'error',
+                    timer: 3000
+                });
+            }
+        })
+    }
+</script>
 <!-- Your script handling the AJAX success callback -->
 <script>
 function addToCart(productId) {
     console.log("Product ID:", productId);
-// if (!productId || productId === "undefined") {
-//     console.error("Invalid productId");
-//     return;
-// }
 
     $.ajax({
         url: '/Add-cart',

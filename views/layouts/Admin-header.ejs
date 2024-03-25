@@ -85,12 +85,12 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item active">
+                <li class="menu-item" id="home">
                     <a class="menu-link" href="/admin_home"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li class="menu-item has-submenu">
+                <li class="menu-item has-submenu" id="users">
                     <a class="menu-link" href="page-form-product-1.html"> <i class="icon material-icons md-add_box"></i>
                         <span class="text">Users</span>
                     </a>
@@ -98,18 +98,25 @@
                         <a href="/admin/users">users</a>
                     </div>
                 </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="page-products-list.html"> <i class="icon material-icons md-shopping_bag"></i>
+                <li class="menu-item has-submenu" id="products">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
                     </a>
                     <div class="submenu">
-                        <a href="/products-list">Product List</a>
-                        <!-- <a href="page-products-grid.html">Product grid</a>
-                        <a href="page-products-grid-2.html">Product grid 2</a> -->
-                        <a href="/admin/categories">Categories</a>
+                        <a href="/products-list" id="products">Product List</a>
+                    
                     </div>
                 </li>
-                <li class="menu-item has-submenu">
+                <li class="menu-item has-submenu" id="categories">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">categories</span>
+                    </a>
+                    <div class="submenu">
+                    
+                        <a href="/admin/categories" id="categories">Category list </a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu" id="orders">
                     <a class="menu-link" href="/admin-orderlist"> <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Orders</span>
                     </a>
@@ -119,17 +126,14 @@
                     </div>
                 </li>
                 
-                <li class="menu-item">
+                <li class="menu-item" id="add-product">
                     <a class="menu-link" href="/Add-product"> <i class="icon material-icons md-add_box"></i>
                         <span class="text">Add product</span>
                     </a>
-                    <!-- <div class="submenu">
-                        <a href="/Add-product">Add product 1</a>
-                        
-                    </div> -->
+                   
                 </li>
                  
-                <li class="menu-item has-submenu">
+                <li class="menu-item has-submenu" id="coupons">
                     <a class="menu-link" href="#"> <i class="icon material-icons md-stars"></i>
                         <span class="text">Coupons</span>
                     </a>
@@ -142,10 +146,6 @@
                 </li>
 
                 
-                <!-- <li class="menu-item">
-                    <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
-                        <span class="text">Brands</span> </a>
-                </li> -->
             </ul>
             <br>
             <br>

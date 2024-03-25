@@ -403,7 +403,40 @@ const name = document.getElementById('productname');
    return true;
 }
     </script>
-    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Get the current URL
+            const currentUrl = window.location.pathname;
+           
+            // Define an array of menu items with their corresponding URLs
+            const menuItems = [
+                { url: "/admin_home", id: "dashboard" },
+                { url: "/admin/users", id: "users" },
+                { url: "/products-list", id: "products" },
+                { url: "/admin-orderlist", id: "orders" },
+                { url: "/Add-product", id: "add-product" },
+                { url: "/new-coupon", id: "coupons" },
+                {url:"/admin/categories",id:"categories"}
+                // Add more menu items as needed
+            ];
+        
+            // Find the active menu item based on the current URL
+            const activeMenuItem = menuItems.find(item => item.url.includes(currentUrl));
+        
+        
+            if (activeMenuItem) {
+                // Highlight the active menu item
+                const activeMenuLink = document.querySelector(`.menu-item#${activeMenuItem.id}`);
+               
+                if (activeMenuLink) {
+                    activeMenuLink.classList.add("active");
+                }
+        
+                // Store the ID of the active menu item in local storage
+                localStorage.setItem("activeMenuItem", activeMenuItem.id);
+            }
+        });
+        </script>
     <script src="Admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="Admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="Admin-assets/js/vendors/select2.min.js"></script>

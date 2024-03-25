@@ -17,8 +17,8 @@ const getprofilepage=async(req,res)=>{
     
     const Orderdata=await Order.find({userId:Id})
     let count=req.session.count
-
-    res.render('user-profile',{message:'',users:userdata,userAddress:Addressdata,orders:Orderdata,username:userdata.username,count})
+    let wishcount=req.session.wishcount
+    res.render('user-profile',{message:'',users:userdata,userAddress:Addressdata,orders:Orderdata,username:userdata.username,count,wishcount})
 }
 catch(error)
 {
@@ -46,7 +46,8 @@ const editpassword=async(req,res)=>{
         if(userdata)
         {
             let count=req.session.count
-            res.render("edit-password",{message1:'',message:"",users:userdata,username:userdata.username,count})
+            let wishcount=req.session.wishcount
+            res.render("edit-password",{message1:'',message:"",users:userdata,username:userdata.username,count,wishcount})
         }
         console.log("user id",userdata._id);
     }
@@ -66,19 +67,20 @@ const changepassword = async (req, res) => {
         const userdata = await User.findOne({_id:Userid});
    console.log("userdata",userdata);
        console.log(data,"passwords");
+       let wishcount=req.session.wishcount
             if(data.password!==userdata.password)
             {
-            res.render("edit-password", {message:'', message1: "Your current password is wrong",users:userdata,count });
+            res.render("edit-password", {message:'', message1: "Your current password is wrong",users:userdata,count,wishcount });
             }
             else{
             if (data.newpassword !== data.confirmpassword) {
-                res.render("edit-password", {message1:'', message: "Your new and confirm password do not match",users:userdata,count });
+                res.render("edit-password", {message1:'', message: "Your new and confirm password do not match",users:userdata,count,wishcount });
             }
             else if (data.newpassword.length<8) {
-                res.render("edit-password", {message1:'', message: "Your password is weak it should contain atleast 8 characters",users:userdata,count });
+                res.render("edit-password", {message1:'', message: "Your password is weak it should contain atleast 8 characters",users:userdata,count,wishcount });
             }  else if(newpassword==confirmpassword) {
                 await User.updateOne({ _id: Userid }, { $set: { password: newpassword } });
-                res.render("edit-password", { message1:'',message: "Your password has been updated successfully",users:userdata,username:userdata.username,count });
+                res.render("edit-password", { message1:'',message: "Your password has been updated successfully",users:userdata,username:userdata.username,count,wishcount });
             }
             }
     } catch (error) {
@@ -241,7 +243,7 @@ catch(error)
           const orderid=req.query.id
           const Id=req.session.user
 
-        
+          let wishcount=req.session.wishcount
       
           const Addressdata=await Address.findOne({userid:Id})
           const orderData=await Order.findById(orderid)
@@ -250,7 +252,7 @@ catch(error)
           const productIds = orderData.products.map(product => product.product);
           const productdata = await Product.find({ _id: { $in: productIds } });
           let count=req.session.count
-          res.render('user-orderdetails',{users:userdata,username:Userpro.username,orders:orderData,products:productdata,userAddress:Addressdata,count})
+          res.render('user-orderdetails',{users:userdata,username:Userpro.username,orders:orderData,products:productdata,userAddress:Addressdata,count,wishcount})
           console.log("productdata",productdata);
           
         }
@@ -282,10 +284,15 @@ catch(error)
             const updatedOrder = await Order.findOneAndUpdate({ _id: orderID }, { Status: newStatus }, { new: true });
     
             
-            if (newStatus === 'Cancelled' && updatedOrder) {
-                if(updatedOrder.payment=="online")
+            if (newStatus === 'Cancelled') {
+                if(updatedOrder.payment=="Online")
                 {
-                  userdata.wallet+=updatedOrder.price
+                    console.log("hello it is userdata from refunding",userdata);
+                    console.log("hello it is updatedorder data from refunding",updatedOrder);
+                  userdata.wallet+=updatedOrder.Totalprice
+                  updatedOrder.paymentstatus="refunded"
+                  updatedOrder.save()
+                  userdata.save()
                 }
                 await Order.findOneAndUpdate({_id:orderID},{$set:{Order_verified:false}})
 
@@ -324,26 +331,6 @@ catch(error)
                 return res.status(404).send('Order not found');
             }
     
-            // Construct the invoice data
-    //         const invoiceData = {
-    //             documentTitle: 'Order Invoice', // Title of the invoice
-    //             currency: 'INR', // Currency of the invoice
-    //             taxNotation: 'gst', // Tax notation (can be gst or vat)
-    //             tax: 0, // Tax amount (optional)
-    //             shipping: 0, // Shipping cost (optional)
-    //             items: [
-    //                 {
-    //                     name:order.Address[0].name,
-    //                     quantity: order.products.quantity,
-    //                     description: 'Order',
-    //                     price: order.Totalprice,
-    //                     Paymentmethod: order.paymentstatus,
-    //      Status: order.Status,
-    // // Total price of the order
-                        
-    //                 }
-    //             ]
-    //         };
     var data = {
         apiKey: "free", // Please register to receive a production apiKey: https://app.budgetinvoice.com/register
         mode: "development", // Production or development, defaults to production   
@@ -360,10 +347,7 @@ catch(error)
             zip: "1234 AB",
             city: "Sampletown",
             country: "Samplecountry"
-            // custom1: "custom value 1",
-            // custom2: "custom value 2",
-            // custom3: "custom value 3"
-        },
+                    },
         // Your recipient
         client: {
             company: order.Address[0].name,
@@ -371,9 +355,7 @@ catch(error)
             zip: order.Address[0].pincode,
             city: order.Address[0].city,
             country: order.Address[0].country
-            // custom1: "custom value 1",
-            // custom2: "custom value 2",
-            // custom3: "custom value 3"
+           
         },
         information: {
             // Invoice number
@@ -392,47 +374,18 @@ catch(error)
                 price: order.products[0].price,
                 Totalprice:order.products.Totalprice
             },
-            // {
-            //     quantity: 4.1,
-            //     description: "Product 2",
-            //     taxRate: 6,
-            //     price: 12.34
-            // },
-            // {
-            //     quantity: 4.5678,
-            //     description: "Product 3",
-            //     taxRate: 21,
-            //     price: 6324.453456
-            // }
+            
         ],
         // The message you would like to display on the bottom of your invoice
         bottomNotice: "Kindly pay your invoice within 15 days.",
         // Settings to customize your invoice
         settings: {
             currency: "INR", // See documentation 'Locales and Currency' for more info. Leave empty for no currency.
-            // locale: "nl-NL", // Defaults to en-US, used for number formatting (See documentation 'Locales and Currency')        
-            // marginTop: 25, // Defaults to '25'
-            // marginRight: 25, // Defaults to '25'
-            // marginLeft: 25, // Defaults to '25'
-            // marginBottom: 25, // Defaults to '25'
-            // format: "A4", // Defaults to A4, options: A3, A4, A5, Legal, Letter, Tabloid
-            // height: "1000px", // allowed units: mm, cm, in, px
-            // width: "500px", // allowed units: mm, cm, in, px
-            // orientation: "landscape" // portrait or landscape, defaults to portrait
+                 
         },
         // Translate your invoice to your preferred language
         translate: {
-            // invoice: "FACTUUR",  // Default to 'INVOICE'
-            // number: "Nummer", // Defaults to 'Number'
-            // date: "Datum", // Default to 'Date'
-            // dueDate: "Verloopdatum", // Defaults to 'Due Date'
-            // subtotal: "Subtotaal", // Defaults to 'Subtotal'
-            // products: "Producten", // Defaults to 'Products'
-            // quantity: "Aantal", // Default to 'Quantity'
-            // price: "Prijs", // Defaults to 'Price'
-            // productTotal: "Totaal", // Defaults to 'Total'
-            // total: "Totaal", // Defaults to 'Total'
-            // taxNotation: "btw" // Defaults to 'vat'
+           
         },
     
         // Customize enables you to provide your own templates
@@ -446,14 +399,7 @@ catch(error)
             // Generate the invoice PDF
             const pdfBuffer = await easyinvoice.createInvoice(data);
     
-            //console.log('PDF Buffer:', pdfBuffer); // Log the PDF buffer
-    
-            // Set response headers for PDF file
-            // res.setHeader('Content-Type', 'application/pdf');
-            // res.setHeader('Content-Disposition', `attachment; filename="order-${order._id}-invoice.pdf"`);
-    
-            // Send the generated PDF file as response
-            res.status(200).json(pdfBuffer);
+                        res.status(200).json(pdfBuffer);
         } 
         catch (error) {
             console.error('Error generating invoice:', error);

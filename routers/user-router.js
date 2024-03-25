@@ -40,6 +40,8 @@ user_route.get('/forget-password',userController.Forgetload)
 user_route.post('/forget-password',userController.Forget)
 user_route.get('/forget-password-load',userController.forgetpasswordload)
 user_route.post('/reset-password',userController.resetpassword)
+
+
 // user_route.get('/login',userController.Loginload);
 console.log("giraffe");
 
@@ -73,4 +75,8 @@ user_route.post('/update-order-status',auth.isLogin,auth.isUserBlocked,ProfileCo
 user_route.post('/Add-money-to-Wallet',auth.isLogin,auth.isUserBlocked,ProfileController.Addwallet)
 user_route.post('/applyCoupon',auth.isLogin,auth.isUserBlocked,userController.applycoupon)
 user_route.post('/removeCoupon',auth.isLogin,auth.isUserBlocked,userController.removeCoupon)
+
+user_route.get('/wishlist',auth.isLogin,userController.wishlistpage)
+user_route.post('/addtowishlist',auth.isLogin,userController.addtoWishlist)
+user_route.get('/removewishlist/:pro',auth.isLogin,userController.removewishlist)
 module.exports=user_route

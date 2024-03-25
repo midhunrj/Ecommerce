@@ -553,12 +553,12 @@
 
     // Function to apply coupon code asynchronously
     async function applyCoupon() {
-        //alert('hh')
+        
         event.preventDefault();
         const couponCode = document.getElementById('coupon').value;
-        //alert(couponCode)
+    
         const totalSubtotalElement = document.querySelector('.product-subtotal span');
-        //alert(totalSubtotalElement)
+        
         if (totalSubtotalElement) {
             const totalSubtotalText = totalSubtotalElement.innerText;
             const totalSubtotal = parseFloat(totalSubtotalText.replace('₹', ''));
@@ -662,16 +662,8 @@
     <script>
         function placeorder()
         {
-            // console.log("cartid",CartId);
-           
-    // if (!CartId || CartId === "undefined") {
-    //    console.error("Invalid CartId");
-    //     return;
-    //  }
-      // Confirm the order with a warnining
-    
-        // Confirm the order with a warning
-        Swal.fire({
+            
+            Swal.fire({
             title: "Are you sure?",
             text: "Are you Sure You Want Place The Order!",
             icon: "warning",
@@ -686,8 +678,8 @@
      const subtotal=document.querySelector('.product-subtotal').textContent
      const numericvalue=parseInt(subtotal.replace(/[^\d.]/g, ''))
      console.log("subtotal value",numericvalue);
-    // alert("stop it")
-            // Check if an address and payment option are selected
+    
+     // Check if an address and payment option are selected
             if (selectedAddressId) {
                 console.log("selectedAddress", selectedAddressId);
 
@@ -739,13 +731,12 @@ var options = {
     }
 };
 
-        //alert(response.razorpayorder.amount);
-        //alert(response.razorpayorder.receipt);
+        
 console.log("mera rakshakan",options);
 var rzp1 = new Razorpay(options);
 
     rzp1.open();
-    //verifypayment(response.razorpayorder.id,response.razorpayorder.status,response.razorpayorder);
+   
                             }
                            
                             else if(response.status == 400 &&response.jibo=="ben"&&response.method=="Wallet")

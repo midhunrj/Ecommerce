@@ -32,31 +32,41 @@
         <nav>
             <ul class="menu-aside">
                 <li class="menu-item active">
-                    <a class="menu-link" href="/admin_home"> <i class="icon material-icons md-home"></i>
+                    <a class="menu-link" id="dashboard" href="/admin_home"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="page-form-product-1.html"> <i class="icon material-icons md-add_box"></i>
+                <li class="menu-item has-submenu" id="users">
+                    <a class="menu-link"  id="users" href="page-form-product-1.html"> <i class="icon material-icons md-add_box"></i>
                         <span class="text">Users</span>
                     </a>
                     <div class="submenu">
                         <a href="/admin/users">users</a>
                     </div>
                 </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="page-products-list.html"> <i class="icon material-icons md-shopping_bag"></i>
+                <li class="menu-item has-submenu" id="products">
+                    <a class="menu-link"  href="page-products-list.html"> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
                     </a>
                     <div class="submenu">
-                        <a href="/products-list">Product List</a>
-                        <!-- <a href="page-products-grid.html">Product grid</a>
-                        <a href="page-products-grid-2.html">Product grid 2</a> -->
-                        <a href="/admin/categories">Categories</a>
+                        <a href="/products-list" id="products">Product List</a>
+
+                        
                     </div>
                 </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="/admin-orderlist"> <i class="icon material-icons md-shopping_cart"></i>
+                <li class="menu-item has-submenu" id="categories">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">categories</span>
+                    </a>
+                    <div class="submenu">
+                    
+                        <!-- <a href="page-products-grid.html">Product grid</a>
+                        <a href="page-products-grid-2.html">Product grid 2</a> -->
+                        <a href="/admin/categories" id="categories">Category list </a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu" id="orders">
+                    <a class="menu-link" id="orders" href="/admin-orderlist"> <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Orders</span>
                     </a>
                     <div class="submenu">
@@ -65,17 +75,13 @@
                     </div>
                 </li>
                 
-                <li class="menu-item">
-                    <a class="menu-link" href="/Add-product"> <i class="icon material-icons md-add_box"></i>
+                <li class="menu-item" id="add-product">
+                    <a class="menu-link"id="add-product" href="/Add-product"> <i class="icon material-icons md-add_box"></i>
                         <span class="text">Add product</span>
                     </a>
-                    <!-- <div class="submenu">
-                        <a href="/Add-product">Add product 1</a>
-                        
-                    </div> -->
-                </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="/Admin/Coupons"> <i class="icon material-icons md-stars"></i>
+                                    </li>
+                <li class="menu-item has-submenu" id="coupons">
+                    <a class="menu-link"  id="coupons" href="/Admin/Coupons"> <i class="icon material-icons md-stars"></i>
                         <span class="text">Coupons</span>
                     </a>
                     <div class="submenu">
@@ -87,11 +93,7 @@
                 </li>
                 
                
-                <!-- <li class="menu-item">
-                    <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
-                        <span class="text">Brands</span> </a>
-                </li>  -->
-            </ul>
+                           </ul>
             <br>
             <br>
         </nav>
@@ -137,7 +139,7 @@
                         </div>
                     </li>
                     <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="assets/imgs/people/avatar2.jpg" alt="User"></a>
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false">Admin</a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
                             <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
                             <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
@@ -375,40 +377,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="col-xl-4 col-lg-12">
-                    <div class="card mb-4">
-                        <article class="card-body">
-                            <h5 class="card-title">Revenue Base on Area</h5>
-                            <canvas id="myChart2" height="217"></canvas>
-                        </article>
-                    </div>
-                    <div class="card mb-4">
-                        <article class="card-body">
-                            <h5 class="card-title">Marketing Chanel</h5>
-                            <span class="text-muted font-xs">Facebook</span>
-                            <div class="progress mb-3">
-                                <div class="progress-bar" role="progressbar" style="width: 15%">15%</div>
-                            </div>
-                            <span class="text-muted font-xs">Instagram</span>
-                            <div class="progress mb-3">
-                                <div class="progress-bar" role="progressbar" style="width: 65%">65% </div>
-                            </div>
-                            <span class="text-muted font-xs">Google</span>
-                            <div class="progress mb-3">
-                                <div class="progress-bar" role="progressbar" style="width: 51%"> 51% </div>
-                            </div>
-                            <span class="text-muted font-xs">Twitter</span>
-                            <div class="progress mb-3">
-                                <div class="progress-bar" role="progressbar" style="width: 80%"> 80%</div>
-                            </div>
-                            <span class="text-muted font-xs">Other</span>
-                            <div class="progress mb-3">
-                                <div class="progress-bar" role="progressbar" style="width: 80%"> 80%</div>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-            </div> -->
+                
             <div class="card mb-4">
                 <header class="card-header">
                     <h4 class="card-title">Latest orders</h4>
@@ -630,37 +599,43 @@
         }
     });
 </script>
-    <!-- <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                fetch('/sales-chart')
-                    .then(response => response.json())
-                    .then(data => {
-                        const ctx = document.getElementById('myChart').getContext('2d');
+        
+            <script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Get the current URL
+    const currentUrl = window.location.pathname;
     
-                        new Chart(ctx, {
-                            type: 'line', // Change chart type to 'pie' for pie chart
-                            data: {
-                                labels: ['Current Week Sales', 'Week 1 to Now Sales', 'Jan to Current Month Sales'],
-                                datasets: [{
-                                    label: 'Sales',
-                                    backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 205, 86)'],
-                                    data: [data.currentWeekSales, data.week1ToNowSales, data.janToCurrentMonthSales]
-                                }]
-                            },
-                            options: {
-                                plugins: {
-                                    legend: {
-                                        labels: {
-                                            usePointStyle: true,
-                                        },
-                                    },
-                                },
-                            },
-                        });
-                    })
-                    .catch(error => console.error('Error fetching sales data:', error));
-            });
-        </script> -->
+    // Define an array of menu items with their corresponding URLs
+    const menuItems = [
+        { url: "/admin_home", id: "dashboard" },
+        { url: "/admin/users", id: "users" },
+        { url: "/products-list", id: "products" },
+        { url: "/admin-orderlist", id: "orders" },
+        { url: "/Add-product", id: "add-product" },
+        { url: "/new-coupon", id: "coupons" },
+        {url:"/admin/categories",id:"categories"}
+        // Add more menu items as needed
+    ];
+
+    // Find the active menu item based on the current URL
+    const activeMenuItem = menuItems.find(item => item.url.includes(currentUrl));
+
+
+    if (activeMenuItem) {
+        // Highlight the active menu item
+        const activeMenuLink = document.querySelector(`.menu-item#${activeMenuItem.id}`);
+        
+        if (activeMenuLink) {
+            activeMenuLink.classList.add("active");
+        }
+
+        // Store the ID of the active menu item in local storage
+        localStorage.setItem("activeMenuItem", activeMenuItem.id);
+    }
+});
+</script>
+
+        
 </body>
 
 </html>

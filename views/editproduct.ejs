@@ -237,62 +237,6 @@
     deleteSingleImage(productId, filename);
   });
 </script>
-<!-- <script>
-    function deleteSingleImage(productId, imageName) {
-        // Your logic to delete the image on the server (possibly using AJAX)
-        
-        // Remove the image container from the DOM
-        const container = document.querySelector(`[data-filename="${imageName}"]`);
-        container.remove();
-
-        // Update the input field value with the remaining image names
-        const remainingImages = Array.from(document.querySelectorAll('.image-container')).map(container => container.dataset.filename);
-        document.getElementById('imageInput').value = remainingImages.join(',');
-    }
-    function displayImagePreview() {
-        const input = document.getElementById('imageInput');
-        const newImagesContainer = document.getElementById('newImagesContainer');
-
-        // Clear the container before adding new images
-        newImagesContainer.innerHTML = '';
-
-        // Display preview for newly selected images
-        for (const file of input.files) {
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                const preview = document.createElement('img');
-                preview.src = e.target.result;
-                preview.alt = 'New Image Preview';
-                preview.style.maxWidth = '100px';
-                preview.style.maxHeight = '100px';
-
-                newImagesContainer.appendChild(preview);
-            };
-
-            reader.readAsDataURL(file);
-        }
-
-        // Update the input field value with all selected images
-        updateInputFieldValue();
-    }
-
-    function updateInputFieldValue() {
-        const existingImageNames = Array.from(document.querySelectorAll('.image-container')).map(container => container.dataset.filename);
-        const newImageNames = Array.from(document.getElementById('newImagesContainer').querySelectorAll('img')).map(img => img.alt);
-
-        const allImageNames = existingImageNames.concat(newImageNames);
-        document.getElementById('imageInput').value = allImageNames.join(',');
-    }
-    
-    document.addEventListener('DOMContentLoaded', function () {
-        // Initialize imageInput value with existing image names
-        const existingImageNames = Array.from(document.querySelectorAll('.image-container')).map(container => container.dataset.filename);
-        document.getElementById('imageInput').value = existingImageNames.join(',');
-    });
-
-
-</script> -->
 <script>
     document.getElementById("imageInput").addEventListener("change", handleFileSelect);
       
@@ -355,45 +299,6 @@
         inputField.value = fileNames.join(", ");
       }
     </script>
-<script>
-    // document.addEventListener('DOMContentLoaded', function () {
-    //     // Initialize imageInput value with existing image names
-    //     const existingImageNames = Array.from(document.querySelectorAll('.image-container')).map(container => container.dataset.filename);
-    //     document.getElementById('imageInput').value = existingImageNames.join(',');
-    // });
-
-    // Function to dynamically display selected image names
-//     function displayImagePreview() {
-//         const input = document.getElementById('imageInput');
-//         const addedImagesContainer = document.getElementById('addedImagesContainer');
-
-//         // Clear the container before adding new images
-//         addedImagesContainer.innerHTML = '';
-
-//         // Display preview for newly selected images
-//         for (const file of input.files) {
-//             const preview = document.createElement('div');
-//             preview.textContent = file.name;
-//             addedImagesContainer.appendChild(preview);
-//         }
-//     }
-
-//     // Function to handle image deletion
-//     function deleteSingleImage(productId, imageName) {
-//         // Your logic to delete the image on the server (possibly using AJAX)
-        
-//         // Remove the image container from the DOM
-//         const container = document.querySelector(`[data-filename="${imageName}"]`);
-//         container.remove();
-
-//         // Update the input field value with the remaining image names
-//         const remainingImages = Array.from(document.querySelectorAll('.image-container')).map(container => container.dataset.filename);
-//         document.getElementById('imageInput').value = remainingImages.join(',');
-
-//         // Update the displayed image names in the addedImagesContainer
-//         displayImagePreview();
-//     }
-// </script>
 <script>
     function displayError(element, message) {
           const errorElement = document.getElementById(`${element.id}Error`);
@@ -506,18 +411,10 @@
             return false;
         }
 
-        // Image field
-        // if (image.value.trim() === '') {
-        //     imageError.innerHTML = 'Upload at least one image';
-        //     setTimeout(() => {
-        //         imageError.innerHTML = '';
-        //     }, 5000);
-        //     return false;
-        // }
-
+      
         const remainingImages = document.querySelectorAll('.image-container');
         const imageInput = document.getElementById('imageInput');
-        //const imageError = document.getElementById('imageError');
+        
 
         if (remainingImages.length === 0 && imageInput.files.length === 0) {
             // If no images are uploaded and no new images are selected, show error message

@@ -49,21 +49,6 @@
         </div>
     </div>
 </div>
-<!-- <div class="col-md-2 col-6">
-    <div class="custom_select">
-        <select id="statusFilter" class="form-select select-nice">
-            <option selected>Status</option>
-            <option>All</option>
-            <option>Paid</option>
-            <option>Chargeback</option>
-            <option>Refund</option>
-        </select>
-    </div>
-</div> -->
-<!-- <div class="col-md-2 col-6">
-    <button id="fetchDataButton" class="btn btn-primary">Fetch Data</button>
-</div>
-</div> -->
 </header>
 <div class="card-body">
 <div class="table-responsive">
@@ -155,8 +140,6 @@
 });
 function fetchFilteredOrders() {
   const timeRange = document.getElementById('timeRangeFilter').value;
-//   const statusFilter = document.getElementById('statusFilter').value;
-// alert("yhujhjh")
   console.log("Time range selected:", timeRange);
 
   fetch(`/sales/${timeRange}`)

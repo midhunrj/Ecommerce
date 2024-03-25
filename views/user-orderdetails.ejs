@@ -219,20 +219,10 @@
         $.ajax({
             url: `/download-invoice/${orderId}`,
             method: 'GET',
-            // xhrFields: {
-            //     responseType: 'blob' // Set response type to blob
-            // },
+            
             success: async function(response) {
                 console.log(response);
-                // Create a temporary link element to trigger the download
-                // var url = window.URL.createObjectURL(response);
-                // var link = document.createElement('a');
-                // link.href = url;
-                // link.download = `order-${orderId}-invoice.pdf`;
-                // document.body.appendChild(link);
-                // link.click();
-                // document.body.removeChild(link);
-                // window.URL.revokeObjectURL(url);
+               
               await  easyinvoice.download(`order-invoice-${orderId}`, response.pdf);
             },
             error: function(error) {

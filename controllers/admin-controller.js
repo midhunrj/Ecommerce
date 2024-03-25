@@ -59,17 +59,15 @@ const verifyLogin = async (req, res) => {
         req.session.admin = userdata._id
         console.log("admin id",req.session.admin);
         console.log("hi")
-        // res.render("home",{userData:userdata})
-        res.redirect('/admin_home')// res.render('home',{username:"welcome",username})
+        
+        res.redirect('/admin_home')
         console.log('jk')
       }
       else if (password !== userdata.password) {
 
         res.render('login', { alert: "invalid passsword" })
       }
-      // else if (username !== userdata.username && password === userdata.password) {
-      //   res.render('login', { alert: "invalid username" })
-      // }
+     
     }
       else {
         res.render('login', { alert: "invalid user details" })
@@ -217,9 +215,9 @@ const blockUser = async (req, res) => {
     const userData = await user.findOne({ _id: userId });
 
     if (userData) {
-      // userData.is_blocked = !userData.is_blocked; // Toggle is_block status
+      
       userData.is_blocked = 1
-      // res.render('users-list',{users:userData,message:"user has been blocked"})
+      
       res.redirect("/admin/users")
       await userData.save();
     } else {
@@ -228,7 +226,7 @@ const blockUser = async (req, res) => {
     }
   } catch (error) {
     console.error("Error in blockUser:", error.message);
-    // res.status(500).send("Internal Server Error");
+    
   }
 };
 
@@ -240,9 +238,9 @@ const unblockUser = async (req, res) => {
     const userData = await user.findOne({ _id: userId });
 
     if (userData) {
-      // userData.is_blocked = !userData.is_blocked; // Toggle is_block status
+      
       userData.is_blocked = 0
-      // res.render('users-list',{users:userData,message:"user has been unblocked"})
+      
       res.redirect('/admin/users')
       await userData.save();
     } else {
@@ -365,14 +363,7 @@ const deleteProduct = async (req, res) => {
 
    res.redirect('/products-list')
 
-    // if (result.deletedCount === 0) {
-    //   console.log("Product not found for deletion");
-    //   return res.status(404).json({ error: "Product not found" });
-    // }
-
-    // res.status(200).json({ message: "Product deleted successfully" });
-
-
+    
   } catch (error) {
     handleServerError(res, error, "Error deleting product");
   }
@@ -384,7 +375,7 @@ const updateProducts = async (req, res) => {
     console.log(req.file);
     console.log("Entering updateProducts");
     const _id = req.body.id;
-    // const id = req.query.id;
+    
 
     console.log("Product ID:", _id);
 
@@ -411,7 +402,7 @@ const updateProducts = async (req, res) => {
     }
 
     const existingProduct = await product.findById(_id);
-    // const updatedImages=[...existingProduct.image,...imageArray]
+   
 
     const updatedImages = [...existingProduct.image, ...imageArray];
     console.log("Updated Images:", updatedImages);
@@ -831,94 +822,6 @@ const saleschart = async (req, res) => {
 }
 
 
-// Function to calculate sales for the current week
-// async function calculateSalesForCurrentWeek() {
-//     const startOfWeek = moment().startOf('week').toDate();
-//     const endOfWeek = moment().endOf('week').toDate();
-//     const salesDataCurrentWeek = await Order.aggregate([
-//         {
-//             $match: {
-//                 placedon: {
-//                     $gte: startOfWeek,
-//                     $lte: endOfWeek
-//                 }
-//             }
-//         },
-//         {
-//             $group: {
-//                 _id: null,
-//                 totalSales: { $sum: 1 }
-//             }
-//         }
-//     ]);
-//     return salesDataCurrentWeek[0] ? salesDataCurrentWeek[0].totalSales : 0;
-// }
-
-// // Function to calculate sales from week 1 to the current week
-// async function calculateSalesForWeek1ToNow() {
-//     const startOfYear = moment().startOf('year').toDate();
-//     const startOfThisWeek = moment().startOf('week').toDate();
-//     const salesDataWeek1ToNow = await Order.aggregate([
-//         {
-//             $match: {
-//                 placedon: {
-//                     $gte: startOfYear,
-//                     $lte: startOfThisWeek
-//                 }
-//             }
-//         },
-//         {
-//             $group: {
-//                 _id: null,
-//                 totalSales: { $sum: 1 }
-//             }
-//         }
-//     ]);
-//     return salesDataWeek1ToNow[0] ? salesDataWeek1ToNow[0].totalSales : 0;
-// }
-
-// // Function to calculate sales from January to the current month
-// async function calculateSalesForJanToCurrentMonth() {
-//     const startOfYear = moment().startOf('year').toDate();
-//     const startOfMonth = moment().startOf('month').toDate();
-//     console.log("drrtdfydf");
-//     const salesDataJanToNow = await Order.aggregate([
-//         {
-//             $match: {
-//                 placedon: {
-//                     $gte: startOfYear,
-//                     $lte: startOfMonth
-//                 }
-//             }
-//         },
-//         {
-//             $group: {
-//                 _id: null,
-//                 totalSales: { $sum: 1 }
-//             }
-//         }
-//     ]);
-//     return salesDataJanToNow[0] ? salesDataJanToNow[0].totalSales : 0;
-// }
-
-// // Route to fetch sales data
-// const saleschart= async (req, res) => {
-//     try {
-//       console.log("fggugujg");
-//         const currentWeekSales = await calculateSalesForCurrentWeek();
-//         const week1ToNowSales = await calculateSalesForWeek1ToNow();
-//         const janToCurrentMonthSales = await calculateSalesForJanToCurrentMonth();
-// console.log("fghgvghkhjkjh");
-//         res.json({
-//             currentWeekSales,
-//             week1ToNowSales,
-//             janToCurrentMonthSales
-//         });
-//     } catch (error) {
-//         console.error('Error fetching sales data:', error);
-//         res.status(500).json({ error: 'Failed to fetch sales data' });
-//     }
-// };
 
 const couponpage=async(req,res)=>{
   try{
@@ -1021,45 +924,6 @@ const couponupdate=async(req,res)=>{
     console.log(error.message);
   }
 }
-
-
-// Controller function to apply coupon code
-// const applycoupon = async (req, res) => {
-//     try {
-//       console.log("hello");
-//         const {coupon, totalSubtotal } = req.body; // Get the coupon code and total subtotal from the request body
-//       console.log(coupon,totalSubtotal);
-//         // Query the database to find the coupon by code
-//         const couponDocument = await Coupon.findOne({Couponcode: coupon });
-
-//         if (!couponDocument) {
-//             // If coupon code is not found, return error response
-//             return res.status(404).json({ error: 'Coupon code not found' });
-//         }
-
-//         // Calculate discounted total amount
-//         let discountedTotal = totalSubtotal;
-//         console.log("discounted total",discountedTotal);
-//         // if (totalSubtotal >= couponDocument.Minimumpurchase) { // Assuming you have a minimum purchase criteria for the coupon
-//             // if (couponDocument.Coupontype === 'Fixed') {
-//                 // If coupon type is fixed amount, subtract the fixed amount from total
-//                 discountedTotal -= couponDocument.Amount;
-//             // } else if (couponDocument.Coupontype === 'Percentage') {
-//             //     // If coupon type is percentage, calculate the percentage discount
-//             //     discountedTotal -= (totalSubtotal * couponDocument.Amount) / 100;
-//             // }
-//         // }
-// console.log(discountedTotal);
-//         // Return success response with discounted total amount
-//         return res.status(200).json({ 
-//             discountedTotal,
-//             // message: `Coupon code "${coupon}" applied successfully! Discounted total amount: ₹${discountedTotal}`
-//         });
-//     } catch (error) {
-//         console.error('Error applying coupon:', error);
-//         res.status(500).json({ error: 'Failed to apply coupon. Please try again.' });
-//     }
-// }
 
 const downloadpdf = async (req, res) => {
   try {
@@ -1203,9 +1067,6 @@ module.exports = {
   loadhomepage,
   logout,
   adminDashboard,
-  // newUserLoad,
-  // addUser,
-  // editUserLoad,
   blockUser,
   unblockUser,
   Addproducts,
@@ -1214,9 +1075,6 @@ module.exports = {
   loadEditProduct,
   deleteProduct,
   updateProducts,
-  // unblockUsers,
-  // deleteUsers,
-  // securePassword,
   securepassword,
   deleteSingleImage,
   Orderlistpage,
