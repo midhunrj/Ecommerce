@@ -1,5 +1,5 @@
-const mongoose=require("mongoose")
-mongoose.connect("mongodb://localhost:27017/E-Commerce")
+ const mongoose=require("mongoose")
+// mongoose.connect("mongodb://localhost:27017/E-Commerce")
 
 const AddressSchema = new mongoose.Schema({
 userid:{
