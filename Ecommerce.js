@@ -4,7 +4,11 @@ var bodyParser = require('body-parser')
 const port = 5000;
 const mongoose=require("mongoose")
 require('dotenv').config();
-mongoose.connect(process.env.atlas||"mongodb://localhost:27017/E-Commerce")
+mongoose.connect(process.env.atlas).then(()=>{
+  console.log('Connected');
+}).catch((error)=>{
+  console.log(error,'EROOOR');
+})
 const sharp=require("sharp")
 const nocache = require("nocache");
 const flash=require("connect-flash")
