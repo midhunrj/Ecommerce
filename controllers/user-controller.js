@@ -24,8 +24,8 @@ const generateResetToken = (email) => {
 
 
 const transporter = nodemailer.createTransport({
-    service:'smtp.gmail.com',
-    secure:true,
+    service:'gmail',
+    secure:false,
     auth: {
       user: process.env.USER,
       pass: process.env.PASS,
