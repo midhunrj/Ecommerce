@@ -27,8 +27,9 @@ app.use('/', userRoute);
 //admin route
 const adminRoute=require('./routers/admin-router');
 app.use('/',adminRoute);
-
+ 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
 
+    
