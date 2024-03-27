@@ -359,3 +359,92 @@ body {
  {
   color:#e65b00;
  }
+
+ @media only screen and (max-width: 768px) {
+  .container {
+      width: 90%;
+      padding: 10px;
+  }
+
+  h2 {
+      font-size: 1.5rem;
+  }
+
+  label {
+      width: auto;
+      margin-right: 5px;
+  }
+
+  input {
+      font-size: 14px;
+      padding: 10px;
+      width: 90%; /* Adjusted width for input fields */
+      margin: 5px 0; /* Adjusted margin */
+  }
+  #name:focus,#password:focus,#email:focus,#phone:focus,#confirmPassword:focus{
+    width: 15rem;
+    animation-name: colorchange;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+  }
+
+  button {
+      font-size: 14px;
+      padding: 12px 24px;
+  }
+
+  .Error {
+      font-size: 14px;
+  }
+
+  span {
+      font-size: 14px;
+  }
+
+  a {
+      font-size: 14px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .ginger {
+      padding: 20px;
+      max-width: 90%;
+      text-align: center; /* Center align content */
+  }
+
+  .otp-input-container {
+      margin-bottom: 15px;
+  }
+
+  #countdownText {
+      font-size: 14px;
+      margin-bottom: 10px; /* Add bottom margin */
+  }
+
+  #resendBtn {
+      font-size: 14px;
+      padding: 10px 20px;
+      margin-bottom: 20px; /* Add bottom margin */
+  }
+
+  input[type="text"] {
+      width: 100%;
+      margin-bottom: 15px; /* Add bottom margin */
+  }
+
+  h4 {
+      font-size: 1.2rem;
+      margin-bottom: 15px; /* Add bottom margin */
+  }
+
+  h5 {
+      font-size: 14px;
+      margin-bottom: 10px; /* Add bottom margin */
+  }
+
+  button[type="submit"] {
+      padding: 12px 24px;
+      font-size: 14px;
+  }
+}
