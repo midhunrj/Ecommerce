@@ -134,8 +134,8 @@
                                             </div>
                                             <a href="/address-page">Add address</a>
                                             <div class="card-body">
-                                                <p>Already have an account? <a href="page-login-register.html">Log in instead!</a></p>
-                                                <form method="post" name="enq" action="/edit-userdetails?id=<%=users._id %>">
+                                                <form method="post" name="enq" action="/edit-userdetails?id=<%=users._id %>" enctype="multipart/form-data" id="userProfileForm">
+
                                                     <div>
                                                         <label class="form-label">Profile Picture</label>
                                                         <input type="file" id="profile-pic-upload" accept="image/*">
@@ -174,9 +174,9 @@
                                                 <h3 class="mb-0">Wallet</h3>
                                             </div>
                                             <div class="card-body">
-                                                <!-- Display wallet balance -->
+                                                
                                                 <p>Wallet Balance: <span id="balance"><%= users.wallet %></span></p>
-                                                <!-- Add form to add funds to the wallet -->
+                                                
                                                 <form id="addFundsForm">
                                                     <div class="mb-3">
                                                         <label for="amount" class="form-label">Amount</label>
@@ -497,16 +497,10 @@
                 // Convert canvas to blob
                 croppedCanvas.toBlob(blob => {
                     // Create a new FormData object
-                    const formData = new FormData();
+                    const formData = new FormData(document.getElementById("userProfileForm"));
     
                     // Append the cropped blob to FormData
                     formData.append('croppedProfileImageData', blob, 'cropped-profile-image.png');
-    
-                    // Append other form data to FormData
-                    formData.append('name', document.querySelector('input[name="name"]').value);
-                    formData.append('email', document.querySelector('input[name="email"]').value);
-                    formData.append('mobile', document.querySelector('input[name="mobile"]').value);
-                    // Add more form fields as needed
     
                     // Now, you can send this formData to the server using Fetch or XMLHttpRequest
                     // Example using Fetch:
@@ -525,8 +519,8 @@
                 });
             }
         });
-    </script> 
-             <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+    </script>
+                 <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
     <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
     <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
     <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>

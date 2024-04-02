@@ -25,16 +25,17 @@ catch(error)
     console.log(error.message)
 }}
 
- const edituserprofile=async(req,res)=>{
+const edituserprofile = async (req, res) => {
     try {
         // Extract user ID from query parameters
         const userId = req.query.id;
 
-        // Extract cropped profile image data from the request
-        const croppedProfileImageData = req.file;
-
         // Extract other user details from the request body
         const { name, email, mobile } = req.body;
+
+        // Extract cropped profile image data from the request file upload
+        const croppedProfileImageData = req.file;
+        console.log("=====>",croppedProfileImageData)
 
         // Update user details in the database
         await User.findByIdAndUpdate(userId, {
@@ -42,16 +43,16 @@ catch(error)
             email: email,
             phone: mobile,
             // Update profile picture if available
-            ...(croppedProfileImageData && { profilePicture: croppedProfileImageData.buffer })
+            ...(croppedProfileImageData && { profilePicture: croppedProfileImageData.filename })
         });
 
         // Redirect or send response as needed
-        res.redirect('/profile')
+        res.redirect('/profile');
+    } catch (error) {
+        console.error('Error updating user profile:', error);
+        res.status(500).json({ error: 'Failed to update user profile' });
     }
-    catch(error)
-{
-    console.log(error.message)
-}}
+};
 const editpassword=async(req,res)=>{
     try{
         const Userid=req.session.user
