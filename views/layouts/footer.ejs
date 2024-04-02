@@ -125,6 +125,40 @@
     </div>
 </div>
 <!-- Vendor JS-->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get the current URL
+        const currentUrl = window.location.pathname;
+       
+        // Define an array of menu items with their corresponding URLs
+        const menuItems = [
+            { url: "/home", id: "home" },
+            { url: "/shop", id: "shop" },
+            { url: "/cart", id: "cart" },
+            { url: "/profile", id: "profile" },
+            { url: "/checkout", id: "checkout" },
+            { url: "/wishlist", id: "wishlist" },
+            {url:"/productDetails",id:"productdetails"}
+            // Add more menu items as needed
+        ];
+    
+        // Find the active menu item based on the current URL
+        const activeMenuItem = menuItems.find(item => item.url.includes(currentUrl));
+    
+           if (activeMenuItem) {
+            // Highlight the active menu item
+            const activeMenuLink = document.querySelector(`.menu-item#${activeMenuItem.id}`);
+            
+            if (activeMenuLink) {
+                activeMenuLink.classList.add("active");
+            }
+    
+            // Store the ID of the active menu item in local storage
+            localStorage.setItem("activeMenuItem", activeMenuItem.id);
+        }
+    });
+    </script>
 <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
 <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
 <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>

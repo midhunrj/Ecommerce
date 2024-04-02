@@ -136,26 +136,33 @@
                                             <div class="card-body">
                                                 <p>Already have an account? <a href="page-login-register.html">Log in instead!</a></p>
                                                 <form method="post" name="enq" action="/edit-userdetails?id=<%=users._id %>">
-                                                    <div class="row">
-                                                        <div class="form-group col-md-6">
-                                                            <label>Name:<span class="required">*</span></label>
-                                                            <input required="" value="<%= users.username %>" class="form-control square" name="name" type="text">
+                                                    <div>
+                                                        <label class="form-label">Profile Picture</label>
+                                                        <input type="file" id="profile-pic-upload" accept="image/*">
+                                                        <div id="profile-pic-preview-container">
+                                                            <img id="profile-pic-preview" src="" alt="Profile Picture">
                                                         </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Email Address <span class="required">*</span></label>
-                                                            <input required="" value="<%= users.email %>" class="form-control square" name="email" type="email">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Mobile Number <span class="required">*</span></label>
-                                                            <input required="" value="<%= users.phone %>" class="form-control square" name="mobile" type="tel">
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <a href="/change-password?id=<%= users._id %>" id="changePasswordLink">Change Password</a>
-                                                        </div>
-                                                        <span style="color:red;"><%= message %></span>
-                                                        <div class="col-md-12">
-                                                            <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
-                                                        </div>
+                                                    </div>
+                                                    <button id="cropButton" class="btn btn-primary">Crop Image</button>
+                                                    <input type="hidden" name="croppedProfileImageData" id="croppedProfileImageData"> 
+                                                    <div class="form-group col-md-6">
+                                                        <label>Name:<span class="required">*</span></label>
+                                                        <input required="" value="<%= users.username %>" class="form-control square" name="name" type="text">
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label>Email Address <span class="required">*</span></label>
+                                                        <input required="" value="<%= users.email %>" class="form-control square" name="email" type="email">
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label>Mobile Number <span class="required">*</span></label>
+                                                        <input required="" value="<%= users.phone %>" class="form-control square" name="mobile" type="tel">
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <a href="/change-password?id=<%= users._id %>" id="changePasswordLink">Change Password</a>
+                                                    </div>
+                                                    <span style="color:red;"><%= message %></span>
+                                                    <div class="col-md-12">
+                                                        <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -440,8 +447,86 @@
             });
         });
     </script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+     -->
+     <script src="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.js"></script>
+     <script>
+        let cropper;
     
-    <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+        document.getElementById("profile-pic-upload").addEventListener("change", handleFileSelect);
+    
+        function handleFileSelect(event) {
+            event.preventDefault();
+    
+            const file = event.target.files[0];
+            const reader = new FileReader();
+    
+            reader.onload = function (e) {
+                const image = document.getElementById("profile-pic-preview");
+                image.src = e.target.result;
+    
+                if (cropper) {
+                    cropper.destroy(); // Destroy previous Cropper instance if exists
+                }
+    
+                cropper = new Cropper(image, {
+                    aspectRatio: 1, // Set aspect ratio as 1:1 for square cropping
+                    viewMode: 1, // Set view mode to 1: fit the container
+                    dragMode: 'move', // Enable drag mode for easier selection
+                    autoCropArea: 1, // Show the whole image by default
+                    checkOrientation: false, // Disable image orientation checking
+                    guides: true, // Show crop guides
+                    center: true, // Center the crop box
+                    highlight: true, // Highlight the crop box
+                    cropBoxMovable: true, // Allow the crop box to be moved
+                    cropBoxResizable: true, // Allow the crop box to be resized
+                    minCropBoxWidth: 100, // Minimum width of the crop box
+                    minCropBoxHeight: 100 // Minimum height of the crop box
+                });
+            };
+    
+            reader.readAsDataURL(file);
+        }
+    
+        document.getElementById("cropButton").addEventListener("click", function () {
+            if (cropper) {
+                // Get cropped canvas
+                const croppedCanvas = cropper.getCroppedCanvas();
+    
+                // Convert canvas to blob
+                croppedCanvas.toBlob(blob => {
+                    // Create a new FormData object
+                    const formData = new FormData();
+    
+                    // Append the cropped blob to FormData
+                    formData.append('croppedProfileImageData', blob, 'cropped-profile-image.png');
+    
+                    // Append other form data to FormData
+                    formData.append('name', document.querySelector('input[name="name"]').value);
+                    formData.append('email', document.querySelector('input[name="email"]').value);
+                    formData.append('mobile', document.querySelector('input[name="mobile"]').value);
+                    // Add more form fields as needed
+    
+                    // Now, you can send this formData to the server using Fetch or XMLHttpRequest
+                    // Example using Fetch:
+                    fetch('/edit-userdetails?id=<%= users._id %>', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        // Handle response
+                        console.log(response);
+                    })
+                    .catch(error => {
+                        // Handle error
+                        console.error('Error uploading cropped profile image:', error);
+                    });
+                });
+            }
+        });
+    </script> 
+             <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
     <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
     <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
     <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>

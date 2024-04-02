@@ -199,10 +199,7 @@ header-top header-top-ptb-1 d-none d-lg-block {
                 <div class="row align-items-center">
                     <div class="col-xl-3 col-lg-4">
                         <div class="header-info">
-                            <ul>
-                                <li><i class="fi-rs-smartphone"></i> <a href="#">(+01) - 2345 - 6789</a></li>
-                                <li><i class="fi-rs-marker"></i><a  href="page-contact.html">Our location</a></li>
-                            </ul>
+                            
                         </div>
                     </div>
                     <div class="col-xl-6 col-lg-4">
@@ -221,16 +218,12 @@ header-top header-top-ptb-1 d-none d-lg-block {
                             <ul>
                                 <li>
                                     <a class="language-dropdown-active" href="#"> <i class="fi-rs-world"></i> English <i class="fi-rs-angle-small-down"></i></a>
-                                    <ul class="language-dropdown">
-                                        <li><a href="#"><img src="assets/imgs/theme/flag-fr.png" alt="">Français</a></li>
-                                        <li><a href="#"><img src="assets/imgs/theme/flag-dt.png" alt="">Deutsch</a></li>
-                                        <li><a href="#"><img src="assets/imgs/theme/flag-ru.png" alt="">Pусский</a></li>
-                                    </ul>
+                                   
                                 </li>
                                 <li class="dropdown nav-item">
                                     <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"><%= username %></a>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                                        <a class="dropdown-item" href="/profile"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                                        <a class="dropdown-item" href="/profile" id="profile"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
                                        
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item text-danger" href="/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
@@ -276,44 +269,38 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                     </a>
                                 </div>
                                 <div class="header-action-icon-2">
-                                    <a class="mini-cart-icon" href="/cart">
+                                    <a class="mini-cart-icon" href="/cart" id="cart">
                                         <img alt="Evara" src="assets/imgs/theme/icons/icon-cart.svg">
                                         <span class="pro-count blue" id="cart-count"><%= count?count:0 %></span>
                                     </a>
                                     <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                         <ul>
+                                            <% console.log(cart[0].cartItems[0].product_id.productname,"cartedssg") %>
+                                            <% if(cart.length>0){ %>
+                                                <% cart.forEach(carts => { %>
+                                                    <% carts.cartItems.forEach(cartItem => { %>
                                             <li>
                                                 <div class="shopping-cart-img">
-                                                    <a href="shop-product-right.html"><img alt="Evara" src="assets/imgs/shop/thumbnail-3.jpg"></a>
+                                                    <a href="/cart" id="cart"><img alt="Evara" src="assets/imgs/shop/thumbnail-3.jpg"></a>
                                                 </div>
                                                 <div class="shopping-cart-title">
-                                                    <h4><a href="shop-product-right.html">Daisy Casual Bag</a></h4>
-                                                    <h4><span>1 × </span>$800.00</h4>
+                                                    <h4><a href="shop-product-right.html"><%= cartItem.product_id.productname %></a></h4>
+                                                    <h4><span><%= cartItem.quantity  %></span><%= cartItem.product_id.price  %></h4>
                                                 </div>
                                                 <div class="shopping-cart-delete">
                                                     <a href="#"><i class="fi-rs-cross-small"></i></a>
                                                 </div>
                                             </li>
-                                            <li>
-                                                <div class="shopping-cart-img">
-                                                    <a href="shop-product-right.html"><img alt="Evara" src="assets/imgs/shop/thumbnail-2.jpg"></a>
-                                                </div>
-                                                <div class="shopping-cart-title">
-                                                    <h4><a href="shop-product-right.html">Corduroy Shirts</a></h4>
-                                                    <h4><span>1 × </span>$3200.00</h4>
-                                                </div>
-                                                <div class="shopping-cart-delete">
-                                                    <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                                </div>
-                                            </li>
+                                            <% }) }) } %>
+                                            
                                         </ul>
                                         <div class="shopping-cart-footer">
                                             <div class="shopping-cart-total">
                                                 <h4>Total <span>$4000.00</span></h4>
                                             </div>
                                             <div class="shopping-cart-button">
-                                                <a href="shop-cart.html" class="outline">View cart</a>
-                                                <a href="shop-checkout.html">Checkout</a>
+                                                <a href="/cart" id="cart" class="outline">View cart</a>
+                                                <a href="/checkout">Checkout</a>
                                             </div>
                                         </div>
                                     </div>
@@ -515,7 +502,7 @@ header-top header-top-ptb-1 d-none d-lg-block {
                         <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block">
                             <nav>
                                 <ul>
-                                    <li><a class="active" href="/home">Home </a>
+                                    <li><a class="active" href="/home" id="home">Home </a>
                                         <!-- <i class="fi-rs-angle-down"></i> -->
                                         <!-- <ul class="sub-menu">
                                             <li><a href="index.html">Home 1</a></li>
@@ -527,10 +514,10 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                     <li>
                                         <a href="page-about.html">About</a>
                                     </li>
-                                    <li><a href="/shop">Shop</a>
+                                    <li><a href="/shop" id="shop">Shop</a>
                                       
                                     </li>
-                                    <li class="position-static"><a href="#">Mega menu <i class="fi-rs-angle-down"></i></a>
+                                    <!-- <li class="position-static"><a href="#">Mega menu <i class="fi-rs-angle-down"></i></a>
                                         <ul class="mega-menu">
                                             <li class="sub-mega-menu sub-mega-menu-width-22">
                                                 <a class="menu-title" href="#">Women's Fashion</a>
@@ -602,26 +589,26 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                     <li>
                                         <a href="page-contact.html">Contact</a>
                                     </li>
-                                </ul>
+                                </ul> -->
                             </nav>
                         </div>
                     </div>
-                    <div class="hotline d-none d-lg-block">
+                    <!-- <div class="hotline d-none d-lg-block">
                         <p><i class="fi-rs-headset"></i><span>Hotline</span> 1900 - 888 </p>
-                    </div>
+                    </div> -->
                     <p class="mobile-promotion">Happy <span class="text-brand">Mother's Day</span>. Big Sale Up to 40%</p>
                     <div class="header-action-right d-block d-lg-none">
                         <div class="header-action-2">
                             <div class="header-action-icon-2">
-                                <a href="shop-wishlist.html">
+                                <a href="/wishlist" id="wishlist">
                                     <img alt="Evara" src="assets/imgs/theme/icons/icon-heart.svg">
-                                    <span class="pro-count white">4</span>
+                                    <span class="pro-count white"><%= wishcount %></span>
                                 </a>
                             </div>
                             <div class="header-action-icon-2">
-                                <a class="mini-cart-icon" href="shop-cart.html">
+                                <a class="mini-cart-icon" href="/cart" id="cart">
                                     <img alt="Evara" src="assets/imgs/theme/icons/icon-cart.svg">
-                                    <span class="pro-count white">2</span>
+                                    <span class="pro-count white"><%= count?count:0  %></span>
                                 </a>
                                 <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                     <ul>
@@ -655,8 +642,8 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                             <h4>Total <span>$383.00</span></h4>
                                         </div>
                                         <div class="shopping-cart-button">
-                                            <a href="/cart">View cart</a>
-                                            <a href="shop-checkout.html">Checkout</a>
+                                            <a href="/cart" id="cart">View cart</a>
+                                            <a href="/checkout" id="checkout">Checkout</a>
                                         </div>
                                     </div>
                                 </div>
@@ -780,7 +767,7 @@ header-top header-top-ptb-1 d-none d-lg-block {
                         <a  href="page-contact.html"> Our location </a>
                     </div>
                     <div class="single-mobile-header-info">
-                        <a href="page-login-register.html">Log In / Sign Up </a>
+                        <a href="/logout">Logout </a>
                     </div>
                     <div class="single-mobile-header-info">
                         <a href="#">(+01) - 2345 - 6789 </a>
@@ -941,7 +928,7 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                         <div class="product-cart-wrap mb-30">
                                             <div class="product-img-action-wrap">
                                                 <div class="product-img product-img-zoom">
-                                                    <a href="/productDetails?id=<%= products[i]._id %>">
+                                                    <a href="/productDetails?id=<%= products[i]._id %>" id="productdetails">
                                                         <img class="default-img" src="./productImage/<%=products[i].image[0] %>" style="height: 200px;" alt="product">
                                                        
                                                     </a>
@@ -1021,9 +1008,196 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                   <!-- xxxsssssdax--> 
                                 </div>
                                 <!--End product-grid-4-->
-                            </div>
+                                </div>
+                                          <div class="tab-pane fade" id="tab-two" role="tabpanel" aria-labelledby="tab-two">
+                                    <div class="row product-grid-4">
+                                        <% if(products&&products.length>0) %>
+                                        <% for(let i=0;i<products.length;i++){ %>
+                                        <% if (products[i]&&products[i]._id) { %>
+            
+                                      <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                                            
+                        
+                                            
+                                            <div class="product-cart-wrap mb-30">
+                                                <div class="product-img-action-wrap">
+                                                    <div class="product-img product-img-zoom">
+                                                        <a href="/productDetails?id=<%= products[i]._id %>" id="productdetails">
+                                                            <img class="default-img" src="./productImage/<%=products[i].image[0] %>" style="height: 200px;" alt="product">
+                                                           
+                                                        </a>
+                                                    </div>
+                                                    <div class="product-action-1">
+                                                        <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
+                                                        <a aria-label="Add To Wishlist" class="action-btn hover-up" onclick="addToWishlist('<%= products[i]._id %>')"><i class="fi-rs-heart"></i></a>
+                                                        <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                                    </div>
+                                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                                        <span class="hot">Hot</span>
+                                                    </div>
+                                                </div>
+                                                <div class="product-content-wrap">
+                                                    
+                                                    <div class="product-category">
+                                                        <a href="shop-grid-right.html"><%= products[i].Brand %></a>
+                                                    </div>
+                                                    <h2><a href="shop-product-right.html"><%= products[i].productname %></a></h2>
+                                                    <div class="rating-result" title="90%">
+                                                        <span>
+                                                            <span>90%</span>
+                                                        </span>
+                                                    </div>
+                                                    <div class="product-price">
+                                                        <% if(category&&category.length>0){ %>
+                                                            <% for(let j=0; j<category.length; j++){ %>
+                                                                <% console.log(category[j]._id); %>
+                                                                <% if(products[i].Category.toString() === category[j]._id.toString()){ %>
+                                                                    <% console.log("before offer discounted", category[j].offer); %>
+                                                    <% let productprice=products[i].price %>
+                                                    <% let productoffer=products[i].offer %>
+                                                    <% let categoryoffer=category[j].offer %>
+                                                    <% if(category[j].offer > 0|| products[i].offer>0){ %>
+                                                        <% let originalPrice = Math.floor(productprice / (1 - categoryoffer+productoffer / 100)); %>
+    
+                                                        <% console.log("original price", originalPrice); %>
+                                                        <div class="price mb-2">
+                                                            <span>&#8377;<%= products[i].price %></span>
+                                                            <span class="old-price">&#8377;<%= products[i].originalprice %></span>
+                                                            <span class="text-danger"><%= categoryoffer+productoffer %>% off</span>
+                                                        </div>
+    
+                                                                    <% } else { %>
+                                                                        <div class="price mb-2">
+                                                                            &#8377;<%= products[i].price %>
+                                                                        </div>
+                                                                    <% } %>
+                                                                <% } %>
+                                                            <% }} %>
+                                                    </div>
+                                                    <div class="product-action-1 show">
+                                                        <a aria-label="Add To Cart" class="action-btn hover-up" onclick="addToCart('<%= products[i]._id %>')">
+                                                            <i class="fi-rs-shopping-bag-add"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                           
+                                            
+                                           
+                                            </div>
+            
+            
+            
+                                           
+                                        
+                                        </div>
+                                        <% } else { %>
+                                            <!-- Handle the case when products[i] or products[i]._id is undefined or null -->
+                                            <!-- You can provide a placeholder image or an alternative content -->
+                                            <span>No product available</span>
+                                        <% } %>
+                                        <%} %>
+                                        
+                                        
+                                       
+                                      <!-- xxxsssssdax--> 
+                                    </div>
+                                    <!--End product-grid-4-->
+                                    </div>
                         <!--End product-grid-4-->
-                    </div>
+                         <div class="tab-pane fade" id="tab-three" role="tabpanel" aria-labelledby="tab-three">
+                            <div class="row product-grid-4">
+                                <% if(products&&products.length>0) %>
+                                <% for(let i=products.length-1;i>=0;i--){ %>
+                                <% if (products[i]&&products[i]._id) { %>
+    
+                              <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                                    
+                
+                                    
+                                    <div class="product-cart-wrap mb-30">
+                                        <div class="product-img-action-wrap">
+                                            <div class="product-img product-img-zoom">
+                                                <a href="/productDetails?id=<%= products[i]._id %>" id="productdetails">
+                                                    <img class="default-img" src="./productImage/<%=products[i].image[0] %>" style="height: 200px;" alt="product">
+                                                   
+                                                </a>
+                                            </div>
+                                            <div class="product-action-1">
+                                                <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
+                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" onclick="addToWishlist('<%= products[i]._id %>')"><i class="fi-rs-heart"></i></a>
+                                                <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                            </div>
+                                            <div class="product-badges product-badges-position product-badges-mrg">
+                                                <span class="hot">Hot</span>
+                                            </div>
+                                        </div>
+                                        <div class="product-content-wrap">
+                                            
+                                            <div class="product-category">
+                                                <a href="shop-grid-right.html"><%= products[i].Brand %></a>
+                                            </div>
+                                            <h2><a href="shop-product-right.html"><%= products[i].productname %></a></h2>
+                                            <div class="rating-result" title="90%">
+                                                <span>
+                                                    <span>90%</span>
+                                                </span>
+                                            </div>
+                                            <div class="product-price">
+                                                <% if(category&&category.length>0){ %>
+                                                    <% for(let j=0; j<category.length; j++){ %>
+                                                        <% console.log(category[j]._id); %>
+                                                        <% if(products[i].Category.toString() === category[j]._id.toString()){ %>
+                                                            <% console.log("before offer discounted", category[j].offer); %>
+                                            <% let productprice=products[i].price %>
+                                            <% let productoffer=products[i].offer %>
+                                            <% let categoryoffer=category[j].offer %>
+                                            <% if(category[j].offer > 0|| products[i].offer>0){ %>
+                                                <% let originalPrice = Math.floor(productprice / (1 - categoryoffer+productoffer / 100)); %>
+
+                                                <% console.log("original price", originalPrice); %>
+                                                <div class="price mb-2">
+                                                    <span>&#8377;<%= products[i].price %></span>
+                                                    <span class="old-price">&#8377;<%= products[i].originalprice %></span>
+                                                    <span class="text-danger"><%= categoryoffer+productoffer %>% off</span>
+                                                </div>
+
+                                                            <% } else { %>
+                                                                <div class="price mb-2">
+                                                                    &#8377;<%= products[i].price %>
+                                                                </div>
+                                                            <% } %>
+                                                        <% } %>
+                                                    <% }} %>
+                                            </div>
+                                            <div class="product-action-1 show">
+                                                <a aria-label="Add To Cart" class="action-btn hover-up" onclick="addToCart('<%= products[i]._id %>')">
+                                                    <i class="fi-rs-shopping-bag-add"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                   
+                                    
+                                   
+                                    </div>
+    
+    
+    
+                                   
+                                
+                                </div>
+                                <% } else { %>
+                                    <!-- Handle the case when products[i] or products[i]._id is undefined or null -->
+                                    <!-- You can provide a placeholder image or an alternative content -->
+                                    <span>No product available</span>
+                                <% } %>
+                                <%} %>
+                                
+                                
+                               
+                              <!-- xxxsssssdax--> 
+                            </div>
+                            <!--End product-grid-4-->
+                            </div>
                     <!--En tab two (Popular)-->
                     
                        

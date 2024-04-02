@@ -389,13 +389,20 @@ console.log(wishlistdata[0]?.wishcount,"wishdata");
   else
   {
     count=0
-  }
+  }  
   req.session.count=count
   console.log(req.session.count,"req session");
   
     const productData=await product.find({isVerified:true})
     const CategoryData=await Category.find({})
-  res.render('userhome',{username:userData.username,products:productData,category:CategoryData,count,wishcount})
+    const carts=await Cart.find({user_id:req.session.user}).populate('cartItems.product_id')
+    console.log("========>",carts)
+    carts.forEach(cart => {
+      cart.cartItems.forEach(cartItem => {
+          console.log(cartItem.product_id.productname);
+      });
+  });
+  res.render('userhome',{username:userData.username,products:productData,category:CategoryData,count,wishcount,cart:carts})
   
 
 }
@@ -544,6 +551,17 @@ const shoppage = async (req, res) => {
       };
     }}
 
+    const sortoption=req.query.sort
+    let sortcriteria={}
+    if(sortoption=="lowtohigh")
+    {
+      sortcriteria={price:1}
+    }
+    else if(sortoption=="hightolow")
+    {
+      sortcriteria={price:-1}
+    }
+
     const userdata=await user.findOne({_id:userId})
 
    
@@ -566,7 +584,7 @@ const shoppage = async (req, res) => {
     const totalNumberOfProducts = await product.find(productQuery).countDocuments();
     const totalNumberOfPages = Math.ceil(totalNumberOfProducts / productsPerPage);
 
-    const productData = await product.find(productQuery)
+    const productData = await product.find(productQuery).sort(sortcriteria)
       .skip((page - 1) * productsPerPage)
       .limit(productsPerPage);
 
@@ -736,7 +754,16 @@ const removewishlist=async(req,res)=>{
   }
 }
 
+const errorpage=async(req,res)=>{
+  try{
 
+    res.render('404')
+  }
+  catch(error)
+  {
+    console.log(error.message);
+  }
+}
 
   module.exports = {
     Loginload,
@@ -760,6 +787,7 @@ const removewishlist=async(req,res)=>{
     removeCoupon,
     wishlistpage,
     addtoWishlist,
-    removewishlist
+    removewishlist,
+    errorpage
    
 }
