@@ -139,10 +139,9 @@
                                                     <div>
                                                         <label class="form-label">Profile Picture</label>
                                                         <input type="file" id="profile-pic-upload" accept="image/*">
-                                                        <div id="profile-pic-preview-container">
-                                                            <img id="profile-pic-preview" src="" alt="Profile Picture">
-                                                        </div>
-                                                    </div>
+                                                        <div id="profile-pic-preview-container" class="profile-pic-preview">
+                                                            <img id="profile-pic-preview" src="/productImage/<%= users.profilePicture %>" alt="Profile Picture">
+                                                        </div>                                                    </div>
                                                     <button id="cropButton" class="btn btn-primary">Crop Image</button>
                                                     <input type="hidden" name="croppedProfileImageData" id="croppedProfileImageData"> 
                                                     <div class="form-group col-md-6">
