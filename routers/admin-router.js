@@ -64,11 +64,7 @@ admin_route.get("/admin/categories",auth.isLogin,categoryController.loadCategori
   admin_route.get('/admin/order-tracks',auth.isLogin,adminController.ordertracking)
   admin_route.post('/admin/update-order-status',auth.isLogin,adminController.updateorderstatus)
   admin_route.get('/delete-order',auth.isLogin,adminController.deleteOrder)
-  admin_route.get('/saleschart',auth.isLogin,adminController.saleschart)
-  admin_route.get('/orderschart',auth.isLogin,adminController.ordersChart)
-  admin_route.get('/revenuechart',auth.isLogin,adminController.revenueChart)
-  admin_route.get('/productcountchart',auth.isLogin,adminController.productCountChart)
-
+  admin_route.get('/sales-chart',auth.isLogin,adminController.saleschart)
   admin_route.get('/sales-report',auth.isLogin,adminController.salesreport);
 
   // Route to get sales report by week

@@ -25,34 +25,20 @@ catch(error)
     console.log(error.message)
 }}
 
-const edituserprofile = async (req, res) => {
-    try {
-        // Extract user ID from query parameters
-        const userId = req.query.id;
+ const edituserprofile=async(req,res)=>{
+    try{
+        const Userid=req.query.id
+        const data=req.body
+        const userdata=await User.updateOne({_id:Userid},
+            {$set:{username:data.name,email:data.email,phone:data.mobile}
+        })
 
-        // Extract other user details from the request body
-        const { name, email, mobile } = req.body;
-
-        // Extract cropped profile image data from the request file upload
-        const croppedProfileImageData = req.file;
-        console.log("=====>",croppedProfileImageData)
-
-        // Update user details in the database
-        await User.findByIdAndUpdate(userId, {
-            username: name,
-            email: email,
-            phone: mobile,
-            // Update profile picture if available
-            ...(croppedProfileImageData && { profilePicture: croppedProfileImageData.filename })
-        });
-
-        // Redirect or send response as needed
-        res.redirect('/profile');
-    } catch (error) {
-        console.error('Error updating user profile:', error);
-        res.status(500).json({ error: 'Failed to update user profile' });
+        res.redirect('/profile')
     }
-};
+    catch(error)
+{
+    console.log(error.message)
+}}
 const editpassword=async(req,res)=>{
     try{
         const Userid=req.session.user

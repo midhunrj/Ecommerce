@@ -43,10 +43,6 @@ wallet:{
     default:0,
     required:true
 },
-profilePicture:{
-    type:String,
-    required:true
-},
 coupons: [
     {
       couponCode: String,
