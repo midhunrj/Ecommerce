@@ -2,7 +2,7 @@ const User = require('../models/usermodel');
 
 async function getUserFromDatabase(userId) {
   try {
-    const user = await User.findById(userId);
+    const user = await User.findOne({_id:userId});
     return user;
   } catch (error) {
     console.error('Error fetching user from database:', error);

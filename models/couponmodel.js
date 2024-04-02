@@ -23,8 +23,8 @@ Amount:{
 },
 Expirydate:{
     type:Date,
-    required:true
-},
+    required:true 
+}, 
 Minimumamount:{
     type:Number,
     required:true
