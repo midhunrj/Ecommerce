@@ -275,8 +275,8 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                     </a>
                                     <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                         <ul>
-                                            <% console.log(cart[0].cartItems[0].product_id.productname,"cartedssg") %>
-                                            <% if(cart.length>0){ %>
+                                          
+                                            <% if(cart &&cart.length>0){ %>
                                                 <% cart.forEach(carts => { %>
                                                     <% carts.cartItems.forEach(cartItem => { %>
                                             <li>
@@ -291,7 +291,10 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                                     <a href="#"><i class="fi-rs-cross-small"></i></a>
                                                 </div>
                                             </li>
-                                            <% }) }) } %>
+                                            <% }) })  %>
+                                            <% }else{ %>
+                                                <span> Cart is empty</span>
+                                                <% } %>
                                             
                                         </ul>
                                         <div class="shopping-cart-footer">

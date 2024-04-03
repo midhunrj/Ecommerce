@@ -38,7 +38,7 @@
                             </ul>
                         </div>
                     </div>
-                    <!-- mobile menu start -->
+                  
                     <nav>
                         <ul class="mobile-menu">
                             <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/home" id="home">Home</a>
@@ -47,47 +47,7 @@
                             <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/shop" id="shop">shop</a>
                                 
                             </li>
-                            <!-- <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/shop">Mega menu</a>
-                                <ul class="dropdown">
-                                    <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Women's Fashion</a>
-                                        <ul class="dropdown">
-                                            <li><a href="shop-product-right.html">Dresses</a></li>
-                                            <li><a href="shop-product-right.html">Blouses & Shirts</a></li>
-                                            <li><a href="shop-product-right.html">Hoodies & Sweatshirts</a></li>
-                                            <li><a href="shop-product-right.html">Women's Sets</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Men's Fashion</a>
-                                        <ul class="dropdown">
-                                            <li><a href="shop-product-right.html">Jackets</a></li>
-                                            <li><a href="shop-product-right.html">Casual Faux Leather</a></li>
-                                            <li><a href="shop-product-right.html">Genuine Leather</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Technology</a>
-                                        <ul class="dropdown">
-                                            <li><a href="shop-product-right.html">Gaming Laptops</a></li>
-                                            <li><a href="shop-product-right.html">Ultraslim Laptops</a></li>
-                                            <li><a href="shop-product-right.html">Tablets</a></li>
-                                            <li><a href="shop-product-right.html">Laptop Accessories</a></li>
-                                            <li><a href="shop-product-right.html">Tablet Accessories</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-                            </li>
-                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Pages</a>
-                                <ul class="dropdown">
-                                    <li><a href="page-about.html">About Us</a></li>
-                                    <li><a href="page-contact.html">Contact</a></li>
-                                    <li><a href="page-account.html">My Account</a></li>
-                                    <li><a href="page-login-register.html">login/register</a></li>
-                                    <li><a href="page-purchase-guide.html">Purchase Guide</a></li>
-                                    <li><a href="page-privacy-policy.html">Privacy Policy</a></li>
-                                    <li><a href="page-terms.html">Terms of Service</a></li>
-                                    <li><a href="page-404.html">404 Page</a></li>
-                                </ul>
-                            </li> -->
+                            
                             <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Language</a>
                                 <ul class="dropdown">
                                     <li><a href="#">English</a></li>
@@ -216,40 +176,21 @@
                                 <p> We found <strong class="text-brand"><%= products.length %></strong> items for you!</p>
                             </div>
                             <div class="sort-by-product-area">
-                                <div class="sort-by-cover mr-10">
-                                    <div class="sort-by-product-wrap">
-                                        <div class="sort-by">
-                                            <span><i class="fi-rs-apps"></i>Show:</span>
-                                        </div>
-                                        <div class="sort-by-dropdown-wrap">
-                                            <span> 50 <i class="fi-rs-angle-small-down"></i></span>
-                                        </div>
-                                    </div>
-                                    <div class="sort-by-dropdown">
-                                        <ul>
-                                            <li><a class="active" href="#">50</a></li>
-                                            <li><a href="#">100</a></li>
-                                            <li><a href="#">150</a></li>
-                                            <li><a href="#">200</a></li>
-                                            <li><a href="#">All</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
+                                
                                 <div class="sort-by-cover">
                                     <div class="sort-by-product-wrap">
                                         <div class="sort-by">
                                             <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
                                         </div>
                                         <div class="sort-by-dropdown-wrap">
-                                            <span> Featured <i class="fi-rs-angle-small-down"></i></span>
+                                            <span id="selectedSortOption">Featured <i class="fi-rs-angle-small-down"></i></span>
                                         </div>
                                     </div>
                                     <div class="sort-by-dropdown">
-                                        <ul>
+                                        <ul id="sortOptions">
                                             <li><a class="active" href="/shop?sort=featured">Featured</a></li>
                                             <li><a href="/shop?sort=lowtohigh">Price: Low to High</a></li>
-                                            <li><a href="/shop?sort=highttolow">Price: High to Low</a></li>
-                                           
+                                            <li><a href="/shop?sort=hightolow">Price: High to Low</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -640,8 +581,37 @@
         sortedProducts.forEach(element => parent.appendChild(element));
     }
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const sortOptions = document.getElementById("sortOptions");
+        const selectedSortOption = localStorage.getItem("selectedSortOption");
+        
+        // Check if there's a selected option stored in local storage
+        if (selectedSortOption) {
+            // Move the selected option to the top
+            const selectedOption = document.querySelector(`#sortOptions li a[href="/shop?sort=${selectedSortOption}"]`).closest("li");
+            sortOptions.insertBefore(selectedOption, sortOptions.firstChild);
+            // Update the displayed selected option
+            document.getElementById("selectedSortOption").textContent = selectedOption.textContent;
+        }
 
-    <!-- <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+        sortOptions.addEventListener("click", function(event) {
+            const selectedOption = event.target.closest("li");
+            if (selectedOption) {
+                // Move the selected option to the top
+                sortOptions.insertBefore(selectedOption, sortOptions.firstChild);
+                // Update the displayed selected option
+                const selectedText = selectedOption.textContent;
+                document.getElementById("selectedSortOption").textContent = selectedText;
+                // Store the selected option in local storage
+                const selectedSortOptionValue = selectedOption.querySelector("a").getAttribute("href").split("=")[1];
+                localStorage.setItem("selectedSortOption", selectedSortOptionValue);
+            }
+        });
+    });
+</script>
+
+     <!-- <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
     <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
     <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
     <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
@@ -661,9 +631,9 @@
     <script src="assets/js/plugins/jquery.vticker-min.js"></script>
     <script src="assets/js/plugins/jquery.theia.sticky.js"></script>
     <script src="assets/js/plugins/jquery.elevatezoom.js"></script>
-    <!-- Template  JS -->
+    Template  JS 
     <script src="./assets/js/main.js?v=3.4"></script>
-    <script src="./assets/js/shop.js?v=3.4"></script>
+    <script src="./assets/js/shop.js?v=3.4"></script> -->
 </body>
 
-</html> -->
+</html>

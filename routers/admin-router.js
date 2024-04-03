@@ -24,6 +24,7 @@ const auth=require('../Middleware/Admin-auth')
 const adminController = require('../controllers/admin-controller')
 
 const categoryController=require('../controllers/category-controller')
+const bannercontroller=require('../controllers/banner-controller')
 // admin_route.get('/',adminController.loginload);
 // admin_route.get('/login',adminController.loginload);
 // admin_route.post('/login',adminController.verifyLogin)
@@ -68,7 +69,9 @@ admin_route.get("/admin/categories",auth.isLogin,categoryController.loadCategori
   admin_route.get('/orderschart',auth.isLogin,adminController.ordersChart)
   admin_route.get('/revenuechart',auth.isLogin,adminController.revenueChart)
   admin_route.get('/productcountchart',auth.isLogin,adminController.productCountChart)
-
+  admin_route.get('/banner-upload',auth.isLogin,bannercontroller.bannerupload)
+  admin_route.post('/banner-upload',auth.isLogin,uploader.single('bannerImage'),bannercontroller.insertBanner)
+  admin_route.get('/admin/bannerlist',auth.isLogin,bannercontroller.bannerlist)
   admin_route.get('/sales-report',auth.isLogin,adminController.salesreport);
 
   // Route to get sales report by week
