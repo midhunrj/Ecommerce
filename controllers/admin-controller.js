@@ -3,7 +3,7 @@ const product = require('../models/productmodel');
 const Category = require('../models/categorymodel')
 const Order=require('../models/ordermodel')
 const Coupon=require('../models/couponmodel')
-const _=require("lodash")
+
 const bcrypt = require('bcrypt');
 const exceljs=require("exceljs")
 const fs=require('fs')
@@ -279,98 +279,70 @@ const Addproducts = async (req, res) => {
     console.log(error.message);
   }
 }
-// const insertproduct = async (req, res) => {
-//   try {
-//     const { productname, Color, price, description, stock, Brand, Category } = req.body;
-//     console.log("Adding new product");
-//     console.log("Request body:", req.body);
-//     console.log(req.files);
-    
-//     // Process each uploaded image to crop and save it
-//     const croppedImages = [];
-//     for (const file of req.files) {
-//       console.log(file, "file");
-      
-//       // Read the uploaded image
-//       const image = sharp(file.path);
-//       // console.log("Image metadata:", await image.metadata()); // Log image metadata
-      
-//       // Perform cropping (example: crop to 300x300 square)
-//       const croppedImageBuffer = await image
-//         .resize({ width: 650, height: 500, fit: 'outside' })  // Resize to 300x300 and maintain aspect ratio
-//         .toBuffer();  // Convert to buffer
-//       console.log("Cropped image buffer length:", croppedImageBuffer.length); // Log length of cropped image buffer
-      
-//       // Generate a unique filename for the cropped image
-//       const croppedImageFilename = `cropped_${Date.now()}_${file.originalname}`;
-         
-//       // Save the cropped image to the specified directory
-//       await sharp(croppedImageBuffer).toFile(path.join('public', 'productImage', croppedImageFilename));
-//       console.log("Cropped image saved:", croppedImageFilename); // Log filename of saved cropped image
-      
-//       // Store the filename of the cropped image
-//       croppedImages.push(croppedImageFilename);
-//     }
-
-//     console.log(Category);
-
-//     // Create a new product instance
-//     const newProduct = new product({
-//       productname,
-//       Color,
-//       price,
-//       description,
-//       stock,
-//       Brand,
-//       image: croppedImages,  // Use the filenames of the cropped images
-//       Category: Category
-//     });
-
-//     // Save the new product to the database
-//     await newProduct.save();
-
-//     // Respond to the client with a success message
-//     res.redirect('/products-list');
-//   } catch (error) {
-//     console.error('Error adding product:', error);
-//     res.status(500).json({ error: 'Failed to add product' });
-//   }
-// };
 const insertproduct = async (req, res) => {
   try {
+    const { productname, Color, price, description, stock, Brand, Category } = req.body;
+    console.log("Adding new product");
+    console.log("Request body:", req.body);
+    console.log(req.files);
+    
+    // Process each uploaded image to crop and save it
+    const croppedImages = [];
+    for (const file of req.files) {
+      console.log(file, "file");
+      
+      // Read the uploaded image
+      const image = sharp(file.path);
+      // console.log("Image metadata:", await image.metadata()); // Log image metadata
+      
+      // Perform cropping (example: crop to 300x300 square)
+      const croppedImageBuffer = await image
+        .resize({ width: 650, height: 500, fit: 'outside' })  // Resize to 300x300 and maintain aspect ratio
+        .toBuffer();  // Convert to buffer
+      console.log("Cropped image buffer length:", croppedImageBuffer.length); // Log length of cropped image buffer
+      
+      // Generate a unique filename for the cropped image
+      const croppedImageFilename = `cropped_${Date.now()}_${file.originalname}`;
+         
+      // Save the cropped image to the specified directory
+      await sharp(croppedImageBuffer).toFile(path.join('public', 'productImage', croppedImageFilename));
+      console.log("Cropped image saved:", croppedImageFilename); // Log filename of saved cropped image
+      
+      // Store the filename of the cropped image
+      croppedImages.push(croppedImageFilename);
+    }
 
-      const { productname, Color, price, description, stock, Brand, Category } = req.body;
-      const croppedImages = req.files.map(file => file.filename); // Extract filenames of cropped images from req.files array
+    console.log(Category);
 
-      // Create a new product instance
-      const newProduct = new product({
-          productname,
-          Color,
-          price,
-          description,
-          stock,
-          Brand,
-          image: croppedImages, // Use the filenames of the cropped images
-          Category
-      });
+    // Create a new product instance
+    const newProduct = new product({
+      productname,
+      Color,
+      price,
+      description,
+      stock,
+      Brand,
+      image: croppedImages,  // Use the filenames of the cropped images
+      Category: Category
+    });
 
-      // Save the new product to the database
-      await newProduct.save();
-      // Respond to the client with a success message
-      res.redirect('/products-list');
+    // Save the new product to the database
+    await newProduct.save();
+
+    // Respond to the client with a success message
+    res.redirect('/products-list');
   } catch (error) {
-      console.error('Error adding product:', error);
-      res.status(500).json({ error: 'Failed to add product' });
+    console.error('Error adding product:', error);
+    res.status(500).json({ error: 'Failed to add product' });
   }
 };
- 
 const loadEditProduct = async (req, res) => {
   try {
     const id = req.query.id;
     const productData = await product.findById(id);
     const categoryData = await Category.find({ is_active: false });
- 
-    if (productData&&categoryData) { 
+
+    if (productData&&categoryData) {
       res.render("editProduct", {
         products: productData,
         category: categoryData,
@@ -381,8 +353,7 @@ const loadEditProduct = async (req, res) => {
   } catch (error) {
     handleServerError(res, error, "Error loading edit product page");
   }
-};  
-
+};
 
 const deleteProduct = async (req, res) => {
   try {
@@ -797,7 +768,7 @@ const saleschart = async (req, res) => {
       }  else if (timeRange === 'Daily') {
         startDate = moment().subtract(7, 'days').startOf('day').toDate();
       } else {
-          startDate = moment().subtract(3, 'months').startOf('month').toDate();
+          startDate = moment().subtract(2, 'months').startOf('month').toDate();
       }
 
       // Aggregate orders data based on the specified time range and start date
@@ -849,229 +820,7 @@ const saleschart = async (req, res) => {
       res.status(500).json({ error: 'Failed to fetch sales chart data' });
   }
 }
-const revenueChart = async (req, res) => {
-  try {
-    const timeRange = req.query.timeRange || 'monthly'; // Default to monthly if not provided
-    let startDate;
-    if (timeRange === 'weekly') {
-      startDate = moment().startOf('year').toDate();
-    } else if (timeRange === 'daily') {
-      startDate = moment().subtract(7, 'days').startOf('day').toDate();
-    } else {
-      startDate = moment().subtract(3, 'months').startOf('month').toDate();
-    }
 
-    const revenueData = await Order.aggregate([
-      {
-        $match: {
-          Order_verified: true,
-          $or: [
-            { Status: "Delivered" },
-            { paymentstatus: "paid" }
-          ],
-          placedon: { $gte: startDate }
-        }
-      },
-      {
-        $group: {
-          _id: {
-            $cond: [
-              { $eq: [timeRange, 'weekly'] },
-              { $isoWeek: "$placedon" },
-              { $cond: [{ $eq: [timeRange, 'daily'] }, { $dayOfMonth: "$placedon" }, { $month: "$placedon" }] }
-            ]
-          },
-          totalRevenue: { $sum: "$Totalprice" }, // Assuming total_price field contains the revenue for each order
-          totalOrders: { $sum: 1 } // Count the number of orders
-        }
-      },
-      { $sort: { "_id": 1 } }
-    ]);
-
-    const labels = revenueData.map(item => {
-      if (timeRange === 'weekly') {
-        return `Week ${item._id}`;
-      } else if (timeRange === 'daily') {
-        return moment(item._id).format('MMMM Do, YYYY');
-      } else {
-        return moment().month(item._id - 1).format('MMMM');
-      }
-    });
-
-    const datasets = [{
-      label: 'Revenue',
-      data: revenueData.map(item => item.totalRevenue)
-    }, {
-      label: 'Orders Count',
-      data: revenueData.map(item => item.totalOrders)
-    }];
-
-    console.log(labels,datasets,"revenue charts");
-    res.json({ labels, datasets });
-  } catch (error) {
-    console.error('Error fetching revenue chart data:', error);
-    res.status(500).json({ error: 'Failed to fetch revenue chart data' });
-  }
-}
-
-const ordersChart = async (req, res) => {
-  try {
-      const timeRange = req.query.timeRange || 'monthly'; // Default to monthly if not provided
-      let startDate;
-      if (timeRange === 'weekly') {
-          startDate = moment().startOf('year').toDate()
-      } else if (timeRange === 'daily') {
-          startDate = moment().subtract(7, 'days').startOf('day').toDate();
-      } else {
-          startDate = moment().subtract(3, 'months').startOf('month').toDate();
-      }
-
-      const ordersData = await Order.aggregate([
-          {
-              $match: {
-                  Order_verified: true,
-                  $or: [
-                      { Status: "Delivered" },
-                      { paymentstatus: "paid" }
-                  ],
-                  placedon: { $gte: startDate }
-              }
-          },
-          {
-              $group: {
-                  _id: {
-                      $cond: [
-                          { $eq: [timeRange, 'weekly'] },
-                          { $isoWeek: "$placedon" },
-                          { $cond: [{ $eq: [timeRange, 'daily'] }, { $dayOfMonth: "$placedon" }, { $month: "$placedon" }] }
-                      ]
-                  },
-                  totalOrders: { $sum: 1 } // Count the number of orders
-              }
-          },
-          { $sort: { "_id": 1 } }
-      ]);
-
-      const labels = ordersData.map(item => {
-          if (timeRange === 'weekly') {
-              return `Week ${item._id}`;
-          } else if (timeRange === 'daily') {
-              return moment(item._id).format('MMMM Do, YYYY');
-          } else {
-              return moment().month(item._id - 1).format('MMMM');
-          }
-      });
-
-      const datasets = [{
-          label: 'Orders Count',
-          data: ordersData.map(item => item.totalOrders)
-      }];
-
-      res.json({ labels, datasets });
-  } catch (error) {
-      console.error('Error fetching orders chart data:', error);
-      res.status(500).json({ error: 'Failed to fetch orders chart data' });
-  }
-}
-const getCategoryNameById = async (categoryId) => {
-  try {
-    const category = await Category.findOne({_id:categoryId})
-    console.log(category,"category labels");
-    console.log(category.catName,"category name",typeof category.catName);
-    return category.catName
-  } catch (error) {
-    console.error('Error fetching category:', error);
-    return 'Unknown Category';
-  }
-};
-const productCountChart = async (req, res) => {
-  try {
-    const timeRange = req.query.timeRange || 'monthly'; // Default to monthly if not provided
-    let startDate;
-    if (timeRange === 'weekly') {
-      startDate = moment().startOf('year').toDate()
-    } else if (timeRange === 'daily') {
-      startDate = moment().subtract(7, 'days').startOf('day').toDate();
-    } else {
-      startDate = moment().subtract(3, 'months').startOf('month').toDate();
-    }
-
-    const productCountData = await Order.aggregate([
-      {
-        $match: {
-          Order_verified: true,
-          $or: [
-            { Status: "Delivered" },
-            { paymentstatus: "paid" }
-          ],
-          placedon: { $gte: startDate }
-        }
-      },
-      {
-        $unwind: "$products" // Split each order into multiple documents, one for each product
-      },
-      {
-        $lookup: {
-          from: "products", // Assuming the name of your products collection is "products"
-          localField: "products.product",
-          foreignField: "_id",
-          as: "product"
-        }
-      },
-      {
-        $unwind: "$product" // Unwind the product array
-      },
-      {
-        $group: {
-          _id: {
-            category: "$product.Category", // Assuming category is a field in your products collection
-            date: {
-              $cond: [
-                { $eq: [timeRange, 'weekly'] },
-                { $isoWeek: "$placedon" },
-                { $cond: [{ $eq: [timeRange, 'daily'] }, { $dayOfMonth: "$placedon" }, { $month: "$placedon" }] }
-              ]
-            }
-          },
-          count: { $sum: "$products.quantity" } // Count the quantity of each product
-        }
-      },
-      { $sort: { "_id.date": 1 } }
-    ]);
-
-    // Group product counts by date
-    const groupedData = _.groupBy(productCountData, '_id.date');
-
-    // Format data for the frontend chart
-    const labels = Object.keys(groupedData).map(date => {
-      if (timeRange === 'weekly') {
-        return `Week ${date}`;
-      } else if (timeRange === 'daily') {
-        return moment(date).format('MMMM Do, YYYY');
-      } else {
-        return moment().month(date - 1).format('MMMM');
-      }
-    });
-
-    // Construct datasets containing the product counts for each category
-    const categories = Array.from(new Set(productCountData.map(item => item._id.category))); 
-    const categoryNamesPromises = categories.map(category => getCategoryNameById(category));
-    const categoryNames = await Promise.all(categoryNamesPromises);
-
-    const datasets = categories.map((category, index) => ({
-      label: categoryNames[index],
-      data: Object.values(groupedData).map(data => {
-        const categoryData = data.find(item => item._id.category === category);
-        return categoryData ? categoryData.count : 0;
-      })
-    }));
-    console.log(labels,datasets,"product count based category");
-    res.json({ labels, datasets });
-  } catch (error) {
-    console.error('Error fetching product count chart data:', error);
-    res.status(500).json({ error: 'Failed to fetch product count chart data' });
-  }
-}
 
 
 const couponpage=async(req,res)=>{
@@ -1147,7 +896,7 @@ const couponeditpage=async(req,res)=>{
     }
     res.render('edit-coupon',{Coupons:coupondata})
 }
-  catch(error) 
+  catch(error)
   {
     console.log(error.message);
   }
@@ -1349,9 +1098,6 @@ module.exports = {
   coupondelete,
   couponeditpage,
   couponupdate,
-  revenueChart,
-  productCountChart,
-  ordersChart
       
   // toggleUserStatus
 }

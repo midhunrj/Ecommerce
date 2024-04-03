@@ -1,0 +1,29 @@
+<%- include("./layouts/Admin-header.ejs") %>
+<div class="container">
+    <h1 class="mt-5 mb-4">Banners List</h1>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Description</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% banners.forEach(banner => { %>
+                <tr>
+                    <td><img src="/productImage/<%= banner.image %>" class="img-thumbnail" alt="Banner Image" style="width:50px; height:50px"></td>
+                    <td><%= banner.description %></td>
+                    <td><%= banner.startDate.toLocaleString() %></td>
+                    <td><%= banner.endDate.toLocaleString() %></td>
+                    <td><%= banner.status %></td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>
+<%- include('./layouts/Admin-footer.ejs') %>

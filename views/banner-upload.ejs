@@ -1,0 +1,384 @@
+<%- include("./layouts/Admin-header.ejs") %>
+<div class="container">
+    <h1 class="mt-5 mb-4">Create Banner</h1>
+    <form id="userProfileForm" novalidate>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <input type="text" class="form-control" id="description" name="description" required>
+            <div id="descriptionError" class="Error"></div>
+        </div>
+        <div class="form-group">
+            <label for="startDate">Start Date:</label>
+            <input type="date" class="form-control" id="startDate" name="startDate" required>
+            <div id="startDateError" class="Error"></div>
+        </div>
+        <div class="form-group">
+            <label for="endDate">End Date:</label>
+            <input type="date" class="form-control" id="endDate" name="endDate" required>
+            <div id="endDateError" class="Error"></div>
+        </div>
+        <div class="form-group">
+            <label for="bannerImage">Banner Image:</label>
+            <input type="file" class="form-control-file" id="bannerImage" name="bannerImage" accept="image/*" required>
+            <div id="bannerImageError" class="Error"></div>
+        </div>
+        <div id="imagePreviewContainer" class="mt-3"></div> 
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <button id="cropButton" type="button" class="btn btn-primary btn-block">Crop Image</button> <!-- Crop button -->
+          </div>  
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-primary btn-block" id="submitButton">Submit</button> 
+            </div>
+        </div>
+        <input type="hidden" id="croppedImageData" name="croppedImageData">
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.js"></script>
+<!-- <script>
+    document.getElementById("bannerImage").addEventListener("change", handleFileSelect);
+    const cropButton = document.getElementById("cropButton");
+    let cropper;
+
+    function handleFileSelect(event) {
+        event.preventDefault();
+
+        const file = event.target.files[0];
+
+        const thumbnail = document.createElement("div");
+        thumbnail.classList.add("thumbnail");
+
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.alt = file.name;
+        img.classList.add("img-thumbnail", "mt-2");
+
+        thumbnail.appendChild(img);
+        document.getElementById("imagePreviewContainer").innerHTML = ""; // Clear previous content
+        document.getElementById("imagePreviewContainer").appendChild(thumbnail);
+
+        // Initialize Cropper.js on the selected image
+        cropper = new Cropper(img, {
+            aspectRatio: 16 / 9,
+            viewMode: 1,
+            zoomable: false,
+        });
+    }
+
+    cropButton.addEventListener('click', () => {
+        if (cropper) {
+            // Get cropped canvas
+            const croppedCanvas = cropper.getCroppedCanvas();
+
+            // Convert canvas to blob
+            croppedCanvas.toBlob(blob => {
+                const formData = new FormData();
+                formData.append('bannerImage', blob, 'cropped-image.png');
+
+                // Append other form data
+                formData.append('description', document.getElementById('description').value);
+                formData.append('startDate', document.getElementById('startDate').value);
+                formData.append('endDate', document.getElementById('endDate').value);
+
+                // Submit the form
+                fetch('/banner-upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    console.log(response);
+                    // Redirect or handle response as needed
+                })
+                .catch(error => {
+                    console.error('Error uploading data:', error);
+                });
+            });
+        }
+    });
+</script> -->
+<!-- <script>
+    document.getElementById("bannerImage").addEventListener("change", handleFileSelect);
+    const cropButton = document.getElementById("cropButton");
+    const formData = new FormData();
+    const croppedImages = [];
+
+    function handleFileSelect(event) {
+        event.preventDefault();
+
+        const addedImagesContainer = document.getElementById("imagePreviewContainer");
+        addedImagesContainer.innerHTML = ""; // Clear previous content
+
+        const files = event.target.files[0];
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            const thumbnail = document.createElement("div");
+            thumbnail.classList.add("thumbnail");
+
+            const img = document.createElement("img");
+            img.src = URL.createObjectURL(file);
+            img.alt = file.name;
+
+            img.style.width = "100px"; // Adjust the width as needed
+            img.style.height = "auto";
+
+            const removeIcon = document.createElement("span");
+            removeIcon.classList.add("remove-icon");
+            removeIcon.innerHTML = "&times;";
+
+            removeIcon.addEventListener("click", function () {
+                thumbnail.remove();
+                // Remove the corresponding cropped image from the array
+                const index = croppedImages.findIndex(img => img.file === file);
+                if (index !== -1) {
+                    croppedImages.splice(index, 1);
+                }
+                // Destroy Cropper instance
+                cropper.destroy();
+            });
+
+            thumbnail.appendChild(img);
+            thumbnail.appendChild(removeIcon);
+            addedImagesContainer.appendChild(thumbnail);
+
+            // Initialize Cropper.js on the selected image
+            const cropper = new Cropper(img, {
+                aspectRatio: 16 / 9,
+                viewMode: 1,
+                zoomable: false,
+            });
+
+            cropButton.addEventListener('click', () => cropSave(cropper, file));
+        }
+    }
+
+    function cropSave(cropper, file) {
+        const croppedCanvas = cropper.getCroppedCanvas();
+        croppedCanvas.toBlob(blob => {
+            // Add the cropped image to the croppedImages array
+            croppedImages.push({ file, blob });
+        });
+    }
+
+    function save(e) {
+        // Update formData with cropped images
+        const valid = validate()
+        if(valid){
+            croppedImages.forEach(({ file, blob }) => {
+            formData.append('image', blob, file.name);
+        });
+
+        formData.append('productname', document.getElementById('productname').value);
+        formData.append('Color', document.getElementById('Color').value);
+        formData.append('price', document.getElementById('price').value);
+        formData.append('description', document.getElementById('description').value);
+        formData.append('stock', document.getElementById('stock').value);
+        formData.append('Brand', document.getElementById('Brand').value);
+        formData.append('Category', document.querySelector('input[name="Category"]:checked').value);
+        
+
+        fetch('/banner-upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            console.log(response);
+            window.location.href = '/products-list';
+        })
+        .catch(error => {
+            console.error('Error uploading data:', error);
+        });
+        }else{
+            
+        }
+
+    }
+</script>
+
+<script>
+    document.getElementById("bannerImage").addEventListener("change", handleFileSelect);
+    const cropButton = document.getElementById("cropButton");
+    let cropper;
+
+    function handleFileSelect(event) {
+        event.preventDefault();
+
+        const file = event.target.files[0];
+
+        const thumbnail = document.createElement("div");
+        thumbnail.classList.add("thumbnail");
+
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.alt = file.name;
+        img.classList.add("img-thumbnail", "mt-2");
+
+        thumbnail.appendChild(img);
+        document.getElementById("imagePreviewContainer").innerHTML = ""; // Clear previous content
+        document.getElementById("imagePreviewContainer").appendChild(thumbnail);
+
+        // Initialize Cropper.js on the selected image
+        cropper = new Cropper(img, {
+            aspectRatio: 16 / 9,
+            viewMode: 1,
+            zoomable: false,
+        });
+        cropButton.addEventListener('click', () => cropSave(cropper, file));
+    }
+function cropSave(cropper,file){
+            // Get cropped canvas
+            const croppedCanvas = cropper.getCroppedCanvas();
+
+            // Convert canvas to blob
+            croppedCanvas.toBlob(blob => {
+                const formData = new FormData();
+                formData.append('bannerImage', blob, 'cropped-image.png');
+
+                // Append other form data
+                formData.append('description', document.getElementById('description').value);
+                formData.append('startDate', document.getElementById('startDate').value);
+                formData.append('endDate', document.getElementById('endDate').value);
+
+                // Submit the form
+                fetch('/banner-upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    console.log(response);
+                    // Redirect or handle response as needed
+                })
+                .catch(error => {
+                    console.error('Error uploading data:', error);
+                });
+            });
+        }
+    });
+</script>
+
+ -->
+ <script>
+    document.getElementById("bannerImage").addEventListener("change", handleFileSelect);
+    const cropButton = document.getElementById("cropButton");
+    const submitButton = document.getElementById("submitButton");
+    let cropper;
+
+    function handleFileSelect(event) {
+        event.preventDefault();
+
+        const file = event.target.files[0];
+
+        const thumbnail = document.createElement("div");
+        thumbnail.classList.add("thumbnail");
+
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.alt = file.name;
+        img.classList.add("img-thumbnail", "mt-2");
+
+        thumbnail.appendChild(img);
+        document.getElementById("imagePreviewContainer").innerHTML = ""; // Clear previous content
+        document.getElementById("imagePreviewContainer").appendChild(thumbnail);
+
+        // Initialize Cropper.js on the selected image
+        cropper = new Cropper(img, {
+            aspectRatio: 16 / 9,
+            viewMode: 1,
+            zoomable: false,
+        });
+    }
+
+    function cropSave() {
+        return new Promise((resolve, reject) => {
+            if (!cropper) {
+                reject("Cropper not initialized");
+            }
+            // Get cropped canvas
+            const croppedCanvas = cropper.getCroppedCanvas();
+
+            // Convert canvas to blob
+            croppedCanvas.toBlob(blob => {
+                const formData = new FormData();
+
+                formData.append('bannerImage', blob, 'cropped-image.png');
+
+                // Append other form data
+                formData.append('description', document.getElementById('description').value);
+                formData.append('startDate', document.getElementById('startDate').value);
+                formData.append('endDate', document.getElementById('endDate').value);
+
+                resolve(formData);
+            });
+        });
+    }
+
+    function save() {
+    cropSave()
+    .then(formData => {
+        // Submit the form
+        return fetch('/banner-upload', {
+            method: 'POST',
+            body: formData
+        });
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json(); // Assuming server returns JSON
+    })
+    .then(data => {
+        console.log('Server response:', data);
+       // alert('Banner uploaded successfully');
+        // Redirect or handle response as needed
+    })
+    .catch(error => {
+        console.error('Error uploading banner:', error);
+        //alert('Error uploading banner: ' + error.message);
+    });
+    window.location.href="/admin/banner-list"
+}
+
+cropButton.addEventListener('click', () => {
+    cropSave()
+    .catch(error => {
+        console.error('Error cropping image:', error);
+        //alert('Error cropping image: ' + error.message);
+    });
+});
+function validate() {
+        const isValid = checkEmptyFields();
+        if (isValid) {
+            save();
+        }
+        return isValid;
+    }
+
+    function checkEmptyFields() {
+        const fields = ['description', 'startDate', 'endDate', 'bannerImage'];
+        let isValid = true;
+
+        fields.forEach(field => {
+            const inputElement = document.getElementById(field);
+            const errorElement = document.getElementById(`${field}Error`);
+
+            if (inputElement.value.trim() === '') {
+                errorElement.innerHTML = 'Field is required';
+                isValid = false;
+            } else {
+                errorElement.innerHTML = ''; // Clear previous error messages
+            }
+        });
+
+        return isValid;
+    }
+
+    submitButton.addEventListener('click', () => {
+        const isValid = validate();
+        if (!isValid) {
+            event.preventDefault(); // Prevent form submission if validation fails
+        }
+    });
+</script>

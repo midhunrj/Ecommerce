@@ -185,7 +185,30 @@
       font-size: 16px;
       font-weight: 300;
     }
-    @media only screen and (max-width: 768px) {
+
+  </style>
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+ </head>
+<body>
+  
+<div class="login-container">
+  <% if(locals.alert ) { %>
+            
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <%= alert %>
+        <button type="button" class="close" id="custom-close-btn" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <% } %>
+      
+    
+      <% if(locals.message) { %>
+        <!-- <h2>Your acoount has been Created Successfully</h2> -->
+        <h4><%= message %></h4>
+      <% } %>
+      
+      @media only screen and (max-width: 768px) {
         .login-container {
           padding: 8vw;
           border-radius: 4vw;
@@ -215,29 +238,6 @@
         }
       }
   
-  </style>
- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
- </head>
-<body>
-  
-<div class="login-container">
-  <% if(locals.alert ) { %>
-            
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <%= alert %>
-        <button type="button" class="close" id="custom-close-btn" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <% } %>
-      
-    
-      <% if(locals.message) { %>
-        <!-- <h2>Your acoount has been Created Successfully</h2> -->
-        <h4><%= message %></h4>
-      <% } %>
-      
-      
       
   <h1 id="choc">Login</h1>  
   <form action="/admin_login" method="post" onsubmit="return validate()" novalidate>

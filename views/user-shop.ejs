@@ -38,16 +38,17 @@
                             </ul>
                         </div>
                     </div>
-                    <!-- mobile menu start -->
+                  
                     <nav>
                         <ul class="mobile-menu">
-                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/home" id="home">Home</a>
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/home">Home</a>
                                
                             </li>
-                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/shop" id="shop">shop</a>
+                            <li class="menu-item-has-children"><span class="menu-expand"></span>shop
                                 
                             </li>
-                            <!-- <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/shop">Mega menu</a>
+<<<<<<< Updated upstream
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Mega menu</a>
                                 <ul class="dropdown">
                                     <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Women's Fashion</a>
                                         <ul class="dropdown">
@@ -87,7 +88,10 @@
                                     <li><a href="page-terms.html">Terms of Service</a></li>
                                     <li><a href="page-404.html">404 Page</a></li>
                                 </ul>
-                            </li> -->
+                            </li>
+=======
+                            
+>>>>>>> Stashed changes
                             <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Language</a>
                                 <ul class="dropdown">
                                     <li><a href="#">English</a></li>
@@ -126,8 +130,8 @@
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
-                    <a href="/home" id="home" rel="nofollow">Home</a>
-                    <span></span><a href="/shop" id="shop"> Shop</a>
+                    <a href="/home" rel="nofollow">Home</a>
+                    <span></span> Shop
                 </div>
             </div>
         </div>
@@ -216,40 +220,30 @@
                                 <p> We found <strong class="text-brand"><%= products.length %></strong> items for you!</p>
                             </div>
                             <div class="sort-by-product-area">
-                                <div class="sort-by-cover mr-10">
-                                    <div class="sort-by-product-wrap">
-                                        <div class="sort-by">
-                                            <span><i class="fi-rs-apps"></i>Show:</span>
-                                        </div>
-                                        <div class="sort-by-dropdown-wrap">
-                                            <span> 50 <i class="fi-rs-angle-small-down"></i></span>
-                                        </div>
-                                    </div>
-                                    <div class="sort-by-dropdown">
-                                        <ul>
-                                            <li><a class="active" href="#">50</a></li>
-                                            <li><a href="#">100</a></li>
-                                            <li><a href="#">150</a></li>
-                                            <li><a href="#">200</a></li>
-                                            <li><a href="#">All</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
+                                
                                 <div class="sort-by-cover">
                                     <div class="sort-by-product-wrap">
                                         <div class="sort-by">
                                             <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
                                         </div>
                                         <div class="sort-by-dropdown-wrap">
-                                            <span> Featured <i class="fi-rs-angle-small-down"></i></span>
+                                            <span id="selectedSortOption">Featured <i class="fi-rs-angle-small-down"></i></span>
                                         </div>
                                     </div>
                                     <div class="sort-by-dropdown">
+<<<<<<< Updated upstream
                                         <ul>
+                                            <li><a class="active" href="#">Featured</a></li>
+                                            <li><a href="#">Price: Low to High</a></li>
+                                            <li><a href="#">Price: High to Low</a></li>
+                                            <li><a href="#">Release Date</a></li>
+                                            <li><a href="#">Avg. Rating</a></li>
+=======
+                                        <ul id="sortOptions">
                                             <li><a class="active" href="/shop?sort=featured">Featured</a></li>
                                             <li><a href="/shop?sort=lowtohigh">Price: Low to High</a></li>
-                                            <li><a href="/shop?sort=highttolow">Price: High to Low</a></li>
-                                           
+                                            <li><a href="/shop?sort=hightolow">Price: High to Low</a></li>
+>>>>>>> Stashed changes
                                         </ul>
                                     </div>
                                 </div>
@@ -263,7 +257,7 @@
                                   <div class="product-img-action-wrap" style="width: 30%;">
                                     <div class="product-img product-img-zoom">
                                       <div class="product-img-inner">
-                                        <a href="/productDetails?id=<%= products[i]._id %>" id="productdetails">
+                                        <a href="/productDetails?id=<%= products[i]._id %>">
                                           <img class="default-img" src="./productImage/<%= products[i].image[0] %>"
                                                style="height:200px;" alt="product">
                                         </a>
@@ -349,8 +343,7 @@
     
         
     </main>
-    <%- include("./layouts/footer.ejs") %>
-    <!-- <footer class="main">
+    <footer class="main">
         <section class="newsletter p-30 text-white wow fadeIn animated">
             <div class="container">
                 <div class="row align-items-center">
@@ -367,12 +360,12 @@
                     </div>
                     <div class="col-lg-5">
                         <!-- Subscribe Form -->
-                        <!-- <form class="form-subcriber d-flex wow fadeIn animated">
+                        <form class="form-subcriber d-flex wow fadeIn animated">
                             <input type="email" class="form-control bg-white font-small" placeholder="Enter your email">
                             <button class="btn bg-dark text-white" type="submit">Subscribe</button>
                         </form>
                         <!-- End Subscribe Form -->
-                    <!-- </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -425,8 +418,8 @@
                             <li><a href="#">Help</a></li>
                             <li><a href="#">Order</a></li>
                         </ul>
-                    </div> -->
-                    <!-- <div class="col-lg-4">
+                    </div>
+                    <div class="col-lg-4">
                         <h5 class="widget-title wow fadeIn animated">Install App</h5>
                         <div class="row">
                             <div class="col-md-8 col-lg-12">
@@ -445,8 +438,8 @@
                 </div>
             </div>
         </section>
-        <div class="container pb-20 wow fadeIn animated"> -->
-            <!-- <div class="row">
+        <div class="container pb-20 wow fadeIn animated">
+            <div class="row">
                 <div class="col-12 mb-20">
                     <div class="footer-bottom"></div>
                 </div>
@@ -460,9 +453,9 @@
                 </div>
             </div>
         </div>
-    </footer> -->
+    </footer>
     <!-- Preloader Start -->
-    <!-- <div id="preloader-active">
+    <div id="preloader-active">
         <div class="preloader d-flex align-items-center justify-content-center">
             <div class="preloader-inner position-relative">
                 <div class="text-center">
@@ -475,7 +468,7 @@
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
     <!-- Vendor JS-->
     <!-- Include SweetAlert library -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -617,11 +610,10 @@
         })
     }
 </script>
-<script>
-    function sortProducts() {
-        var selectBox = document.getElementById("priceSortDropdown");
-        var selectedValue = selectBox.options[selectBox.selectedIndex].value;
 
+<<<<<<< Updated upstream
+    <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+=======
         var productList = document.querySelectorAll(".product-list");
 
         var sortedProducts = Array.from(productList).sort((a, b) => {
@@ -640,8 +632,38 @@
         sortedProducts.forEach(element => parent.appendChild(element));
     }
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const sortOptions = document.getElementById("sortOptions");
+        const selectedSortOption = localStorage.getItem("selectedSortOption");
+        
+        // Check if there's a selected option stored in local storage
+        if (selectedSortOption) {
+            // Move the selected option to the top
+            const selectedOption = document.querySelector(`#sortOptions li a[href="/shop?sort=${selectedSortOption}"]`).closest("li");
+            sortOptions.insertBefore(selectedOption, sortOptions.firstChild);
+            // Update the displayed selected option
+            document.getElementById("selectedSortOption").textContent = selectedOption.textContent;
+        }
 
-    <!-- <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+        sortOptions.addEventListener("click", function(event) {
+            const selectedOption = event.target.closest("li");
+            if (selectedOption) {
+                // Move the selected option to the top
+                sortOptions.insertBefore(selectedOption, sortOptions.firstChild);
+                // Update the displayed selected option
+                const selectedText = selectedOption.textContent;
+                document.getElementById("selectedSortOption").textContent = selectedText;
+                // Store the selected option in local storage
+                const selectedSortOptionValue = selectedOption.querySelector("a").getAttribute("href").split("=")[1];
+                localStorage.setItem("selectedSortOption", selectedSortOptionValue);
+            }
+        });
+    });
+</script>
+
+     <!-- <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+>>>>>>> Stashed changes
     <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
     <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
     <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
@@ -661,9 +683,9 @@
     <script src="assets/js/plugins/jquery.vticker-min.js"></script>
     <script src="assets/js/plugins/jquery.theia.sticky.js"></script>
     <script src="assets/js/plugins/jquery.elevatezoom.js"></script>
-    <!-- Template  JS -->
+    Template  JS 
     <script src="./assets/js/main.js?v=3.4"></script>
-    <script src="./assets/js/shop.js?v=3.4"></script>
+    <script src="./assets/js/shop.js?v=3.4"></script> -->
 </body>
 
-</html> -->
+</html>

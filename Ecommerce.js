@@ -9,7 +9,7 @@ mongoose.connect(process.env.atlas).then(()=>{
 }).catch((error)=>{
   console.log(error,'EROOOR');
 })
-const sharp=require("sharp") 
+const sharp=require("sharp")
 const nocache = require("nocache");
 const flash=require("connect-flash")
 
