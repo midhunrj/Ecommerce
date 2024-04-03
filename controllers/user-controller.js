@@ -105,17 +105,17 @@ const verifyLogin = async (req, res) => {
         res.redirect('/home');
       } else if (password===userdata.password&&userdata.is_admin === 0&&userdata.is_blocked===1) {
         console.log("Blocked");
-        res.render('loginpage', { alert: "Your account is blocked" });
+        res.render('Loginpage', { alert: "Your account is blocked" });
       
       } else if(password!==userdata.password||!passwordmatch) {
         console.log("Invalid password or user");
-        res.render('loginpage', { alert: "Invalid password" });
+        res.render('Loginpage', { alert: "Invalid password" });
       }else if (password===userdata.password&&userdata.is_admin === 1) {
-        res.render('loginpage', { alert: "Invalid user" });
+        res.render('Loginpage', { alert: "Invalid user" });
     }} 
     else {
       console.log("User not found");
-      res.render('loginpage', { alert: "Invalid user details " });
+      res.render('Loginpage', { alert: "Invalid user details " });
     }
   } catch (error) {
     console.error(error.message);
