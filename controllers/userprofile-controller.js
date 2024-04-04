@@ -107,7 +107,9 @@ const getaddress=async(req,res)=>{
     try{
         const user=req.session.user
         const userdata=await User.findOne({_id:user})
-        res.render("Add-address",{username:userdata.username})
+        let wishcount=req.session.wishcount
+        let count=req.session.count
+        res.render("Add-address",{username:userdata.username,count,wishcount})
     }
 
 catch(error)
@@ -183,9 +185,9 @@ const editaddress=async(req,res)=>{
       );
     const userdata=await User.findOne({_id:UserId})
     console.log("this is ",Addressdata)
-  
-  
-    res.render('edit-address',{userAddress:Addressdata,username:userdata.username})
+    let wishcount=req.session.wishcount
+    let count=req.session.count
+    res.render('edit-address',{userAddress:Addressdata,username:userdata.username,count,wishcount})
 }
 // else{
 //     console.log(error.message)
