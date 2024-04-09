@@ -16,7 +16,6 @@
     <!-- Template CSS -->
     <link href="Admin-assets/css/main.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <style>
         /* Style for carousel control buttons */
         .carousel-control-prev,
@@ -73,7 +72,6 @@
             margin-bottom: 15px;
         }
     </style>
-
 </head>
 
 <body>
@@ -306,17 +304,61 @@
                 </div>
             </div>
             
-            <div class="row">
-                <div class="col-xl-8 col-lg-12">
-                    <div class="card mb-4">
-                        <article class="card-body">
-                            <h5 class="card-title">Sale statistics</h5>
-                            <canvas id="myChart" width="400" height="400"></canvas>
-                        </article>
+            <div id="chartCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <!-- First slide -->
+                    <div class="carousel-item active">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-8">
+                                    <article class="card-body">
+                                        <h5 class="card-title">Sale statistics</h5>
+                                        <canvas id="salesChart" width="300" height="200"></canvas>
+                                    </article>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-4">
+                                    <article class="card-body">
+                                        <h5 class="card-title">Orders statistics</h5>
+                                        <canvas id="ordersChart" width="300" height="200"></canvas>
+                                    </article>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Second slide -->
+                    <div class="carousel-item">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-4">
+                                    <article class="card-body">
+                                        <h5 class="card-title">Revenue statistics</h5>
+                                        <canvas id="revenueChart" width="300" height="200"></canvas>
+                                    </article>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-4">
+                                    <article class="card-body">
+                                        <h5 class="card-title">Product count</h5>
+                                        <canvas id="productCountChart" width="300" height="200"></canvas>
+                                    </article>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!-- Add previous and next arrows -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#chartCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#chartCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
-
             
               </div>
            
@@ -336,7 +378,6 @@
                                         <h5 class="card-title"><%= product.productname %></h5>
                                        
                                       
-
                                     </div>
                                 </div>
                             </div>
@@ -496,7 +537,6 @@
     <script src="Admin-assets/js/main.js" type="text/javascript"></script>
     <script src="Admin-assets/js/sales-chart.js" type="text/javascript"></script>
     <script>
-
         document.addEventListener('DOMContentLoaded', function () {
             const timeRangeFilter = document.getElementById('timeRangeFilter');
             const fetchDataButton = document.getElementById('fetchDataButton');
@@ -628,7 +668,6 @@
                         data: dataset.data,
                         backgroundColor: ['rgb(75, 192, 192)', 'rgb(255, 205, 86)', 'rgb(54, 162, 235)', 'rgb(255, 99, 132)'],
                     }))
-
                 },
                 options: {
                     plugins: {
