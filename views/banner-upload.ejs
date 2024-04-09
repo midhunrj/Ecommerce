@@ -1,0 +1,464 @@
+<%- include("./layouts/Admin-header.ejs") %>
+<div class="container">
+    <h1 class="mt-5 mb-4 text-center">Create Banner</h1>
+    <form id="userProfileForm"  >
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                    <div id="nameError" class="Error"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="bannerType">Banner Type:</label>
+                    <select class="form-control" id="bannerType" name="bannerType" required>
+                        <option value="">Select Banner Type</option>
+                        <option value="Type 1">Home Banner</option>
+                        <option value="Type 2">Side Banner</option>
+                        <option value="Type 3">middle Banner</option>
+                        <!-- Add more options as needed -->
+                    </select>
+                    <div id="bannerTypeError" class="Error"></div>
+                </div>
+            </div>
+        </div>
+        <!-- Existing form fields -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <input type="text" class="form-control" id="description" name="description" required>
+                    <div id="descriptionError" class="Error"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" class="form-control" id="startDate" name="startDate" required>
+                    <div id="startDateError" class="Error"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="endDate">End Date:</label>
+                    <input type="date" class="form-control" id="endDate" name="endDate" required>
+                    <div id="endDateError" class="Error"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="bannerImage">Banner Image:</label>
+                    <input type="file" class="form-control-file" id="bannerImage" name="bannerImage" accept="image/*" required>
+                    <div id="bannerImageError" class="Error"></div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div id="imagePreviewContainer" class="mt-3"></div> 
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <button id="cropButton" type="button" class="btn btn-primary btn-block">Crop Image</button> <!-- Crop button -->
+            </div>  
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-primary btn-block" id="submitButton">Submit</button> 
+            </div>
+        </div>
+        <input type="hidden" id="croppedImageData" name="croppedImageData">
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.js"></script>
+<!-- <script>
+    document.getElementById("bannerImage").addEventListener("change", handleFileSelect);
+    const cropButton = document.getElementById("cropButton");
+    let cropper;
+
+    function handleFileSelect(event) {
+        event.preventDefault();
+
+        const file = event.target.files[0];
+
+        const thumbnail = document.createElement("div");
+        thumbnail.classList.add("thumbnail");
+
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.alt = file.name;
+        img.classList.add("img-thumbnail", "mt-2");
+
+        thumbnail.appendChild(img);
+        document.getElementById("imagePreviewContainer").innerHTML = ""; // Clear previous content
+        document.getElementById("imagePreviewContainer").appendChild(thumbnail);
+
+        // Initialize Cropper.js on the selected image
+        cropper = new Cropper(img, {
+            aspectRatio: 16 / 9,
+            viewMode: 1,
+            zoomable: false,
+        });
+    }
+
+    cropButton.addEventListener('click', () => {
+        if (cropper) {
+            // Get cropped canvas
+            const croppedCanvas = cropper.getCroppedCanvas();
+
+            // Convert canvas to blob
+            croppedCanvas.toBlob(blob => {
+                const formData = new FormData();
+                formData.append('bannerImage', blob, 'cropped-image.png');
+
+                // Append other form data
+                formData.append('description', document.getElementById('description').value);
+                formData.append('startDate', document.getElementById('startDate').value);
+                formData.append('endDate', document.getElementById('endDate').value);
+
+                // Submit the form
+                fetch('/banner-upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    console.log(response);
+                    // Redirect or handle response as needed
+                })
+                .catch(error => {
+                    console.error('Error uploading data:', error);
+                });
+            });
+        }
+    });
+</script> -->
+<!-- <script>
+    document.getElementById("bannerImage").addEventListener("change", handleFileSelect);
+    const cropButton = document.getElementById("cropButton");
+    const formData = new FormData();
+    const croppedImages = [];
+
+    function handleFileSelect(event) {
+        event.preventDefault();
+
+        const addedImagesContainer = document.getElementById("imagePreviewContainer");
+        addedImagesContainer.innerHTML = ""; // Clear previous content
+
+        const files = event.target.files[0];
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            const thumbnail = document.createElement("div");
+            thumbnail.classList.add("thumbnail");
+
+            const img = document.createElement("img");
+            img.src = URL.createObjectURL(file);
+            img.alt = file.name;
+
+            img.style.width = "100px"; // Adjust the width as needed
+            img.style.height = "auto";
+
+            const removeIcon = document.createElement("span");
+            removeIcon.classList.add("remove-icon");
+            removeIcon.innerHTML = "&times;";
+
+            removeIcon.addEventListener("click", function () {
+                thumbnail.remove();
+                // Remove the corresponding cropped image from the array
+                const index = croppedImages.findIndex(img => img.file === file);
+                if (index !== -1) {
+                    croppedImages.splice(index, 1);
+                }
+                // Destroy Cropper instance
+                cropper.destroy();
+            });
+
+            thumbnail.appendChild(img);
+            thumbnail.appendChild(removeIcon);
+            addedImagesContainer.appendChild(thumbnail);
+
+            // Initialize Cropper.js on the selected image
+            const cropper = new Cropper(img, {
+                aspectRatio: 16 / 9,
+                viewMode: 1,
+                zoomable: false,
+            });
+
+            cropButton.addEventListener('click', () => cropSave(cropper, file));
+        }
+    }
+
+    function cropSave(cropper, file) {
+        const croppedCanvas = cropper.getCroppedCanvas();
+        croppedCanvas.toBlob(blob => {
+            // Add the cropped image to the croppedImages array
+            croppedImages.push({ file, blob });
+        });
+    }
+
+    function save(e) {
+        // Update formData with cropped images
+        const valid = validate()
+        if(valid){
+            croppedImages.forEach(({ file, blob }) => {
+            formData.append('image', blob, file.name);
+        });
+
+        formData.append('productname', document.getElementById('productname').value);
+        formData.append('Color', document.getElementById('Color').value);
+        formData.append('price', document.getElementById('price').value);
+        formData.append('description', document.getElementById('description').value);
+        formData.append('stock', document.getElementById('stock').value);
+        formData.append('Brand', document.getElementById('Brand').value);
+        formData.append('Category', document.querySelector('input[name="Category"]:checked').value);
+        
+
+        fetch('/banner-upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            console.log(response);
+            window.location.href = '/products-list';
+        })
+        .catch(error => {
+            console.error('Error uploading data:', error);
+        });
+        }else{
+            
+        }
+
+    }
+</script>
+
+<script>
+    document.getElementById("bannerImage").addEventListener("change", handleFileSelect);
+    const cropButton = document.getElementById("cropButton");
+    let cropper;
+
+    function handleFileSelect(event) {
+        event.preventDefault();
+
+        const file = event.target.files[0];
+
+        const thumbnail = document.createElement("div");
+        thumbnail.classList.add("thumbnail");
+
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.alt = file.name;
+        img.classList.add("img-thumbnail", "mt-2");
+
+        thumbnail.appendChild(img);
+        document.getElementById("imagePreviewContainer").innerHTML = ""; // Clear previous content
+        document.getElementById("imagePreviewContainer").appendChild(thumbnail);
+
+        // Initialize Cropper.js on the selected image
+        cropper = new Cropper(img, {
+            aspectRatio: 16 / 9,
+            viewMode: 1,
+            zoomable: false,
+        });
+        cropButton.addEventListener('click', () => cropSave(cropper, file));
+    }
+function cropSave(cropper,file){
+            // Get cropped canvas
+            const croppedCanvas = cropper.getCroppedCanvas();
+
+            // Convert canvas to blob
+            croppedCanvas.toBlob(blob => {
+                const formData = new FormData();
+                formData.append('bannerImage', blob, 'cropped-image.png');
+
+                // Append other form data
+                formData.append('description', document.getElementById('description').value);
+                formData.append('startDate', document.getElementById('startDate').value);
+                formData.append('endDate', document.getElementById('endDate').value);
+
+                // Submit the form
+                fetch('/banner-upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    console.log(response);
+                    // Redirect or handle response as needed
+                })
+                .catch(error => {
+                    console.error('Error uploading data:', error);
+                });
+            });
+        }
+    });
+</script>
+
+ -->
+ <script>
+    document.getElementById("bannerImage").addEventListener("change", handleFileSelect);
+    const cropButton = document.getElementById("cropButton");
+    const submitButton = document.getElementById("submitButton");
+    let cropper;
+
+    function handleFileSelect(event) {
+        event.preventDefault();
+
+        const file = event.target.files[0];
+
+        const thumbnail = document.createElement("div");
+        thumbnail.classList.add("thumbnail");
+
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.alt = file.name;
+        img.classList.add("img-thumbnail", "mt-2");
+
+        thumbnail.appendChild(img);
+        document.getElementById("imagePreviewContainer").innerHTML = ""; // Clear previous content
+        document.getElementById("imagePreviewContainer").appendChild(thumbnail);
+
+        // Initialize Cropper.js on the selected image
+        cropper = new Cropper(img, {
+            aspectRatio: 16 / 9,
+            viewMode: 1,
+            zoomable: false,
+        });
+        console.log("Cropper initialized:", cropper)
+    }
+
+    async function cropSave() {
+        return new Promise((resolve, reject) => {
+            if (!cropper) {
+                reject("Cropper not initialized");
+            }
+            
+            // Get cropped canvas
+            const croppedCanvas = cropper.getCroppedCanvas();
+            console.log(croppedCanvas,'CROPED Img');
+            if (!croppedCanvas) {
+                reject("Failed to get cropped canvas");
+            }
+            
+            // Convert canvas to blob
+            croppedCanvas.toBlob(blob => {
+                if (!blob) {
+                    reject("Failed to convert canvas to blob");
+                }
+                
+                // Create a new File object from the blob
+                const file = new File([blob], 'cropped-image.png', { type: blob.type });
+                console.log(file,'THIS IS FILE------');
+                resolve(file);
+            });
+        });
+    }
+
+    async function save() {
+        try {
+            const resultData = await cropSave();
+
+            const formData = new FormData();
+            formData.append('croppedImageData', resultData);
+            formData.append('name', document.getElementById('name').value);
+            formData.append('description', document.getElementById('description').value);
+            formData.append('startDate', document.getElementById('startDate').value);
+            formData.append('endDate', document.getElementById('endDate').value);
+            formData.append('bannerType', document.getElementById('bannerType').value);
+
+            const response = await fetch('/admin/banner-uploads', {
+                method: 'POST',
+                body: formData,
+            });
+
+            console.log(response,'THIS IS RESPONSE');
+            if (response.status == 200) {
+                window.location.href = '/admin/bannerlist';
+            }
+        } catch (error) {
+            console.error('Error uploading banner:', error);
+        }
+    }
+
+    function validate() {
+        const isValid = checkEmptyFields();
+        return isValid;
+    }
+
+    function checkEmptyFields() {
+        const fields = ['name', 'bannerType', 'description', 'startDate', 'endDate', 'bannerImage'];
+        let isValid = true;
+        
+        fields.forEach(field => {
+            const inputElement = document.getElementById(field);
+            const errorElement = document.getElementById(`${field}Error`);
+
+            if (inputElement.value.trim() === '') {
+                errorElement.innerHTML = 'Field is required';
+                isValid = false;
+            } else {
+                errorElement.innerHTML = ''; // Clear previous error messages
+            }
+        });
+
+        return isValid;
+    }
+
+    submitButton.addEventListener('click', async (event) => {
+        event.preventDefault();
+        const isValid = await validate();
+        if (!isValid) {
+            event.preventDefault();
+        } else {
+            save();
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get the current URL
+        const currentUrl = window.location.pathname;
+       
+        // Define an array of menu items with their corresponding URLs
+        const menuItems = [
+            { url: "/admin/home", id: "dashboard" },
+            { url: "/admin/users", id: "users" },
+            { url: "/admin/products-list", id: "products" },
+            { url: "/admin/orderlist", id: "orders" },
+            { url: "/admin/Add-product", id: "add-product" },
+            { url: "/admin/new-coupon", id: "coupons" },
+            {url:"/admin/categories",id:"categories"},
+            {url:"/admin/banner-upload",id:"banners"},
+            {url:"/admin/bannerlist",id:"banners"}
+            // Add more menu items as needed
+        ];
+    
+        // Find the active menu item based on the current URL
+        const activeMenuItem = menuItems.find(item => item.url.includes(currentUrl));
+    
+           if (activeMenuItem) {
+            // Highlight the active menu item
+            const activeMenuLink = document.querySelector(`.menu-item#${activeMenuItem.id}`);
+            
+            if (activeMenuLink) {
+                activeMenuLink.classList.add("active");
+            }
+    
+            // Store the ID of the active menu item in local storage
+            localStorage.setItem("activeMenuItem", activeMenuItem.id);
+        }
+    });
+    </script>
+    
+<script src="/Admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
+<script src="/Admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
+<script src="/Admin-assets/js/vendors/select2.min.js"></script>
+<script src="/Admin-assets/js/vendors/perfect-scrollbar.js"></script>
+<script src="/Admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
+<script src="/Admin-assets/js/vendors/chart.js"></script>
+<!-- Main Script -->
+<script src="/Admin-assets/js/main.js" type="text/javascript"></script>
+<script src="/Admin-assets/js/custom-chart.js" type="text/javascript"></script>
+

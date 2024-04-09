@@ -352,7 +352,7 @@ async function addOffer(categoryId) {
         inputPlaceholder: '%'
     })
     $.ajax({
-        url: "/add-CategoryOffer",
+        url: "/admin/add-CategoryOffer",
         method: "post",
         data: {
             percentage: amount,
@@ -389,7 +389,7 @@ function removeOffer(categoryId) {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: "/Remove-CategoryOffer",
+                    url: "/admin/Remove-CategoryOffer",
                     method: "post",
                     data: {
                         categoryId: categoryId
@@ -428,12 +428,12 @@ function removeOffer(categoryId) {
        
         // Define an array of menu items with their corresponding URLs
         const menuItems = [
-            { url: "/admin_home", id: "dashboard" },
+            { url: "/admin/home", id: "dashboard" },
             { url: "/admin/users", id: "users" },
-            { url: "/products-list", id: "products" },
+            { url: "/admin/products-list", id: "products" },
             { url: "/admin-orderlist", id: "orders" },
-            { url: "/Add-product", id: "add-product" },
-            { url: "/new-coupon", id: "coupons" },
+            { url: "/admin/Add-product", id: "add-product" },
+            { url: "/admin/new-coupon", id: "coupons" },
             {url:"/admin/categories",id:"categories"}
             // Add more menu items as needed
         ];

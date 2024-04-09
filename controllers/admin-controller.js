@@ -3,6 +3,7 @@ const product = require('../models/productmodel');
 const Category = require('../models/categorymodel')
 const Order=require('../models/ordermodel')
 const Coupon=require('../models/couponmodel')
+
 const _=require("lodash")
 const bcrypt = require('bcrypt');
 const exceljs=require("exceljs")
@@ -29,7 +30,7 @@ const loginload = async (req, res) => {
     // res.setHeader("Cache-Control","no-store ,max-age=0");
     console.log("Admin login page");
     if(req.session.admin) {
-      res.redirect('/admin_home')
+      res.redirect('/admin/home')
     }
     else{
     res.render('login', { title: "login page" })
@@ -60,7 +61,7 @@ const verifyLogin = async (req, res) => {
         console.log("admin id",req.session.admin);
         console.log("hi")
         
-        res.redirect('/admin_home')
+        res.redirect('/admin/home')
         console.log('jk')
       }
       else if (password !== userdata.password) {
@@ -105,16 +106,95 @@ const getRevenueData = async () => {
       return 0; // Return 0 in case of error
   }
 };
+const getTopSellingProducts = async () => {
+  // Fetch all products
+  const products = await product.find({ isVerified: true });
+
+  // Aggregate order data to count occurrences of each product
+  const topSellingProducts = await Order.aggregate([
+      { $match: { Order_verified: true } },
+      { $unwind: "$products" },
+      { $group: { _id: "$products", ordersCount: { $sum: 1 } } }
+  ]);
+
+  // Assign orders count to respective products
+  for (const product of products) {
+      const matchingProduct = topSellingProducts.find(item => item._id.toString() === product._id.toString());
+      if (matchingProduct) {
+          product.ordersCount = matchingProduct.ordersCount;
+      } else {
+          product.ordersCount = 0;
+      }
+  }
+
+  return products;
+};
+
+const getTopSellingProductsByCategory = async () => {
+  // Fetch all categories
+  const categories = await Category.find({});
+
+  // Initialize array to store top selling products by category
+  const topSellingProductsByCategory = [];
+
+  // Loop through each category
+  for (const category of categories) {
+      // Fetch products for the current category
+      const products = await product.find({ Category: category._id, isVerified: true });
+
+      // Aggregate order data to count occurrences of each product within the category
+      const topSellingProducts = await Order.aggregate([
+          { $match: { Order_verified: true } },
+          { $unwind: "$products" },
+          { $match: { "products.Category": category._id } },
+          { $group: { _id: "$products", ordersCount: { $sum: 1 } } },
+          { $sort: { ordersCount: -1 } },
+          { $limit: 3 } // Get top 3 selling products per category
+      ]);
+
+      // Assign orders count to respective products
+      for (const product of products) {
+          const matchingProduct = topSellingProducts.find(item => item._id.toString() === product._id.toString());
+          if (matchingProduct) {
+              product.ordersCount = matchingProduct.ordersCount;
+          } else {
+              product.ordersCount = 0;
+          }
+      }
+
+      // Push category and its top selling products to the result array
+      topSellingProductsByCategory.push({ category, products });
+  }
+
+  return topSellingProductsByCategory;
+};
+
 const loadhomepage = async (req, res) => {
   try {
     const userId = req.session.admin;
     if (!userId) {
       // Redirect if user is not logged in
-      return res.redirect("/login");
+      return res.redirect("/admin/");
     }
 
     const userData = await user.findById(userId);
+    const orders=await Order.find({Order_verified:true})
     const productdata=await product.find({isVerified:true})
+    ;
+
+    const topSellingProducts = await Order.aggregate([
+      { $unwind: "$products" },
+      { $group: { _id: "$products.product", totalQuantity: { $sum: "$products.quantity" } } },
+      { $sort: { totalQuantity: -1 } },
+      { $limit: 5 },
+      { $lookup: { from: "products", localField: "_id", foreignField: "_id", as: "product" } }, // Populate product details
+      { $unwind: "$product" },
+      { $project: { _id: "$product._id", productname: "$product.productname",image: "$product.image", totalQuantity: 1 } }
+  ]);
+    
+    const topSellingProductsByCategory = await getTopSellingProductsByCategory();
+
+  
     const currentPage = parseInt(req.query.page) || 1; 
     const perPage = 10; // 
 
@@ -141,7 +221,9 @@ const loadhomepage = async (req, res) => {
       products:productdata,
       categories: catdata,
       currentPage, 
-      totalPages, 
+      totalPages,
+      topSellingProducts,
+      topSellingProductsByCategory 
     });
   } catch (error) {
     console.log(error.message);
@@ -154,7 +236,7 @@ const logout = async (req, res) => {
     console.log(req.session.admin,"IDD");
     req.session.admin=null;
     console.log(req.session.admin,"iidddd");
-    res.redirect('/admin_login');
+    res.redirect('/admin/login');
   } catch (error) {
     console.log(error.message);
   }
@@ -263,7 +345,7 @@ const productslist = async (req, res) => {
   try {
     const productData = await product.find({ isVerified: true })
     const CategoryData=await Category.find({})
-    res.render('Admin-products', { products: productData,category:CategoryData })
+    res.render('admin-products', { products: productData,category:CategoryData })
   }
   catch (error) {
     console.log(error.message);
@@ -357,7 +439,7 @@ const insertproduct = async (req, res) => {
       // Save the new product to the database
       await newProduct.save();
       // Respond to the client with a success message
-      res.redirect('/products-list');
+      res.redirect('/admin/products-list');
   } catch (error) {
       console.error('Error adding product:', error);
       res.status(500).json({ error: 'Failed to add product' });
@@ -376,7 +458,7 @@ const loadEditProduct = async (req, res) => {
         category: categoryData,
       });
     } else {
-      res.redirect("/product-list");
+      res.redirect("/admin/products-list");
     }
   } catch (error) {
     handleServerError(res, error, "Error loading edit product page");
@@ -390,7 +472,7 @@ const deleteProduct = async (req, res) => {
     const id = req.query.id;
     const result = await product.updateOne({ _id: id },{$set:{isVerified:false}});
 
-   res.redirect('/products-list')
+   res.redirect('/admin/products-list')
 
     
   } catch (error) {
@@ -459,7 +541,7 @@ const updateProducts = async (req, res) => {
     );
 
     if (productData) {
-      res.redirect("/products-list");
+      res.redirect("/admin/products-list");
     } else {
       // Handle the case where the product update fails
       res.status(500).json({ error: 'Failed to update product' });
@@ -642,7 +724,7 @@ const deleteOrder = async (req, res) => {
     await Order.findByIdAndDelete(orderId);
 
     // Redirect to the order list page with the current page number
-    res.redirect(`/admin-orderlist?page=${page}`);
+    res.redirect(`/admin/orderlist?page=${page}`);
   } catch (error) {
     console.log(error.message);
     res.status(500).send('Error deleting order');
@@ -675,8 +757,7 @@ const salesreport=async(req,res)=>{
     const orderdata = await Order.find({
       Order_verified: true,
       $or: [
-          { Status: "Delivered" },
-          { paymentstatus: "paid" }
+          { Status: "Delivered" }
       ]
   }).sort({placedon:-1}).skip((validpage - 1) * ordersperpage)
     .limit(ordersperpage);
@@ -788,14 +869,13 @@ const saleschart = async (req, res) => {
   try {
       // Get the time range (e.g., monthly, weekly, daily) from query params
       const timeRange = req.query.timeRange || 'monthly'; // Default to monthly if not provided
-      console.log(timeRange, "timerange");
 
       // Calculate the start date based on the specified time range
       let startDate;
-      if (timeRange === 'Weekly') {
-        startDate = moment().startOf('year').toDate()
-      }  else if (timeRange === 'Daily') {
-        startDate = moment().subtract(7, 'days').startOf('day').toDate();
+      if (timeRange === 'weekly') {
+          startDate = moment().startOf('year').toDate();
+      } else if (timeRange === 'daily') {
+          startDate = moment().subtract(7, 'days').startOf('day').toDate();
       } else {
           startDate = moment().subtract(3, 'months').startOf('month').toDate();
       }
@@ -806,8 +886,7 @@ const saleschart = async (req, res) => {
               $match: {
                   Order_verified: true,
                   $or: [
-                      { Status: "Delivered" },
-                      { paymentstatus: "paid" }
+                      { Status: "Delivered" }
                   ],
                   placedon: { $gte: startDate } // Filter orders placed after the start date
               }
@@ -829,14 +908,15 @@ const saleschart = async (req, res) => {
 
       // Format the fetched data as needed for the frontend chart
       const labels = salesData.map(item => {
-          if (timeRange === 'Weekly') {
+          if (timeRange === 'weekly') {
               return `Week ${item._id}`;
-          } else if (timeRange === 'Daily') {
-            return moment(item._id).format('MMMM Do, YYYY'); 
+          } else if (timeRange === 'daily') {
+              return moment(item._id).format('MMMM Do, YYYY');
           } else {
               return moment().month(item._id - 1).format('MMMM');
           }
       });
+
       const datasets = [{
           label: 'Sales',
           data: salesData.map(item => item.totalSales)
@@ -931,7 +1011,7 @@ const ordersChart = async (req, res) => {
               $match: {
                   Order_verified: true,
                   $or: [
-                      { Status: "Delivered" },
+                      { Status: "Confirmed" },
                       { paymentstatus: "paid" }
                   ],
                   placedon: { $gte: startDate }
@@ -1107,7 +1187,7 @@ const newCoupon = async (req, res) => {
         })
         
         await coupon.save()
-        res.redirect('/Admin/coupons')
+        res.redirect('/admin/coupons')
     } catch (error) {
         console.error('Error:', error.message);
         res.status(500).send('An error occurred while creating the coupon.');
@@ -1167,7 +1247,7 @@ const couponupdate=async(req,res)=>{
       Minimumamount:miniamount}})
     if(coupondata)
     {
-    res.redirect('/Admin/coupons')
+    res.redirect('/admin/coupons')
 }
 }
   catch(error)
@@ -1179,13 +1259,32 @@ const couponupdate=async(req,res)=>{
 const downloadpdf = async (req, res) => {
   try {
     const doc = new PDFDocument();
-    const orderdata = await Order.find({
-      Order_verified: true,
-      $or: [
-        { Status: "Delivered" },
-        { paymentstatus: "paid" }
-      ]
-    })
+    const timeRange = req.query.timeRange; // Get the time range from query parameters
+
+    // Define the filter based on the selected time range
+    let filter = {};
+    if (timeRange === 'monthly') {
+      const startOfMonth = moment().startOf('month');
+      const endOfMonth = moment().endOf('month');
+      filter = {
+        $or: [
+          { placedon: { $gte: startOfMonth, $lte: endOfMonth }, Status: "Delivered" },
+          { placedon: { $gte: startOfMonth, $lte: endOfMonth }, paymentstatus: "paid" }
+        ]
+      };
+    } else if (timeRange === 'yearly') {
+      const startOfYear = moment().startOf('year');
+      const endOfYear = moment().endOf('year');
+      filter = {
+        $or: [
+          { placedon: { $gte: startOfYear, $lte: endOfYear }, Status: "Delivered" },
+          { placedon: { $gte: startOfYear, $lte: endOfYear }, paymentstatus: "paid" }
+        ]
+      };
+    }
+    console.log('Filter:', filter)
+    const orderdata = await Order.find(
+      filter)
 
   
     const currentdate = new Date()
@@ -1235,7 +1334,34 @@ const downloadpdf = async (req, res) => {
 const downloadExcel=async(req,res)=>{
   try
   {
-    const orderdata=await Order.find({Order_verified:true,$or:[{paymentstatus:"paid"},{Status:"Delivered"}]})
+    const timeRange = req.query.timeRange; // Get the time range from query parameters
+
+    // Define the filter based on the selected time range
+    let filter = {};
+    if (timeRange === 'monthly') {
+      const startOfMonth = moment().startOf('month');
+      const endOfMonth = moment().endOf('month');
+      filter = {
+        $or: [
+          { placedon: { $gte: startOfMonth, $lte: endOfMonth }, Status: "Delivered" },
+          { placedon: { $gte: startOfMonth, $lte: endOfMonth }, paymentstatus: "paid" }
+        ]
+      };
+    } else if (timeRange === 'yearly') {
+      const startOfYear = moment().startOf('year');
+      const endOfYear = moment().endOf('year');
+      filter = {
+        $or: [
+          { placedon: { $gte: startOfYear, $lte: endOfYear }, Status: "Delivered" },
+          { placedon: { $gte: startOfYear, $lte: endOfYear }, paymentstatus: "paid" }
+        ]
+      };
+    }
+    console.log('Filter:', filter)
+    const orderdata = await Order.find(
+      filter)
+
+  
 
     const workbook=new exceljs.Workbook()
     const worksheet=workbook.addWorksheet('Sales Report')
