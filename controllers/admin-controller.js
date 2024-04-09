@@ -1102,7 +1102,11 @@ const productCountChart = async (req, res) => {
       }
     });
 
-
+  } catch (error) {
+    console.error('Error fetching orders chart data:', error);
+    res.status(500).json({ error: 'Failed to fetch orders chart data' });
+}
+}
 
 
 const couponpage=async(req,res)=>{
@@ -1427,5 +1431,4 @@ module.exports = {
   couponeditpage,
   couponupdate,
       
-  // toggleUserStatus
 }
