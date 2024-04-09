@@ -32,8 +32,8 @@ port: 587,
 secure: false,
 
     auth: {
-      user: process.env.user,
-      pass: process.env.pass,
+      user: process.env.USER,
+      pass: process.env.PASS,
     },
   })
 const securepassword = async (password) => {
@@ -52,7 +52,7 @@ const sendresetpasswordmail=async(username,email,_id,token)=>{
     from: 'mdnrj3600@gmail.com',
     to: email,
     subject: 'Email Verification',
-    html: '<p>Hi '+username+', please click here to <a href="https://www.tech-tique.shop/forget-password-load?token='+token+'"Reset</a> your password</p>'
+    html: '<p>Hi '+username+', please click here to <a href="http://localhost:5000/forget-password-load?token='+token+'"Reset</a> your password</p>'
   };
 
   await transporter.sendMail(mailOptions);
@@ -390,13 +390,12 @@ console.log(wishlistdata[0]?.wishcount,"wishdata");
   else
   {
     count=0
-  }
+  }  
   req.session.count=count
   console.log(req.session.count,"req session");
   
     const productData=await product.find({isVerified:true})
     const CategoryData=await Category.find({})
-
     const carts=await Cart.find({user_id:req.session.user}).populate('cartItems.product_id')
     console.log("========>",carts)
     carts.forEach(cart => {
@@ -407,7 +406,6 @@ console.log(wishlistdata[0]?.wishcount,"wishdata");
   const bannerdata=await banner.find({status:"active"})
   console.log(bannerdata);
   res.render('userhome',{username:userData.username,products:productData,category:CategoryData,count,wishcount,cart:carts,banners:bannerdata})
-
   
 
 }
@@ -556,7 +554,6 @@ const shoppage = async (req, res) => {
       };
     }}
 
-
     const sortoption=req.query.sort
     let sortcriteria={}
     if(sortoption=="lowtohigh")
@@ -598,7 +595,7 @@ const shoppage = async (req, res) => {
     const totalNumberOfProducts = await product.find(productQuery).countDocuments();
     const totalNumberOfPages = Math.ceil(totalNumberOfProducts / productsPerPage);
 
-    const productData = await product.find(productQuery)
+    const productData = await product.find(productQuery).sort(sortcriteria)
       .skip((page - 1) * productsPerPage)
       .limit(productsPerPage);
 
@@ -768,7 +765,16 @@ const removewishlist=async(req,res)=>{
   }
 }
 
+const errorpage=async(req,res)=>{
+  try{
 
+    res.render('404')
+  }
+  catch(error)
+  {
+    console.log(error.message);
+  }
+}
 
   module.exports = {
     Loginload,
@@ -792,6 +798,7 @@ const removewishlist=async(req,res)=>{
     removeCoupon,
     wishlistpage,
     addtoWishlist,
-    removewishlist
+    removewishlist,
+    errorpage
    
 }
