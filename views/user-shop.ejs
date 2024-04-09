@@ -41,15 +41,13 @@
                   
                     <nav>
                         <ul class="mobile-menu">
-                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/home">Home</a>
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/home" id="home">Home</a>
                                
                             </li>
-                            <li class="menu-item-has-children"><span class="menu-expand"></span>shop
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/shop" id="shop">shop</a>
                                 
                             </li>
-
                             
-
                             <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Language</a>
                                 <ul class="dropdown">
                                     <li><a href="#">English</a></li>
@@ -88,8 +86,8 @@
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
-                    <a href="/home" rel="nofollow">Home</a>
-                    <span></span> Shop
+                    <a href="/home" id="home" rel="nofollow">Home</a>
+                    <span></span><a href="/shop" id="shop"> Shop</a>
                 </div>
             </div>
         </div>
@@ -195,7 +193,6 @@
                                             <li><a href="/shop?sort=hightolow">Price: High to Low</a></li>
                                             <li><a href="/shop?sort=atoz">Alphabetical: A to Z</a></li>
                                             <li><a href="/shop?sort=ztoa">Alphabetical: Z to A</a></li>
-
                                         </ul>
                                     </div>
                                 </div>
@@ -209,7 +206,7 @@
                                   <div class="product-img-action-wrap" style="width: 30%;">
                                     <div class="product-img product-img-zoom">
                                       <div class="product-img-inner">
-                                        <a href="/productDetails?id=<%= products[i]._id %>">
+                                        <a href="/productDetails?id=<%= products[i]._id %>" id="productdetails">
                                           <img class="default-img" src="./productImage/<%= products[i].image[0] %>"
                                                style="height:200px;" alt="product">
                                         </a>
@@ -295,7 +292,8 @@
     
         
     </main>
-    <footer class="main">
+    <%- include("./layouts/footer.ejs") %>
+    <!-- <footer class="main">
         <section class="newsletter p-30 text-white wow fadeIn animated">
             <div class="container">
                 <div class="row align-items-center">
@@ -312,12 +310,12 @@
                     </div>
                     <div class="col-lg-5">
                         <!-- Subscribe Form -->
-                        <form class="form-subcriber d-flex wow fadeIn animated">
+                        <!-- <form class="form-subcriber d-flex wow fadeIn animated">
                             <input type="email" class="form-control bg-white font-small" placeholder="Enter your email">
                             <button class="btn bg-dark text-white" type="submit">Subscribe</button>
                         </form>
                         <!-- End Subscribe Form -->
-                    </div>
+                    <!-- </div>
                 </div>
             </div>
         </section>
@@ -370,8 +368,8 @@
                             <li><a href="#">Help</a></li>
                             <li><a href="#">Order</a></li>
                         </ul>
-                    </div>
-                    <div class="col-lg-4">
+                    </div> -->
+                    <!-- <div class="col-lg-4">
                         <h5 class="widget-title wow fadeIn animated">Install App</h5>
                         <div class="row">
                             <div class="col-md-8 col-lg-12">
@@ -390,8 +388,8 @@
                 </div>
             </div>
         </section>
-        <div class="container pb-20 wow fadeIn animated">
-            <div class="row">
+        <div class="container pb-20 wow fadeIn animated"> -->
+            <!-- <div class="row">
                 <div class="col-12 mb-20">
                     <div class="footer-bottom"></div>
                 </div>
@@ -405,9 +403,9 @@
                 </div>
             </div>
         </div>
-    </footer>
+    </footer> -->
     <!-- Preloader Start -->
-    <div id="preloader-active">
+    <!-- <div id="preloader-active">
         <div class="preloader d-flex align-items-center justify-content-center">
             <div class="preloader-inner position-relative">
                 <div class="text-center">
@@ -420,7 +418,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- Vendor JS-->
     <!-- Include SweetAlert library -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -562,9 +560,10 @@
         })
     }
 </script>
-
-
-    <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+<script>
+    function sortProducts() {
+        var selectBox = document.getElementById("priceSortDropdown");
+        var selectedValue = selectBox.options[selectBox.selectedIndex].value;
 
         var productList = document.querySelectorAll(".product-list");
 
@@ -615,7 +614,6 @@
 </script>
 
      <!-- <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
-
     <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
     <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
     <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
