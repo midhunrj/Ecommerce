@@ -4,7 +4,6 @@ const Category = require('../models/categorymodel')
 const Order=require('../models/ordermodel')
 const Coupon=require('../models/couponmodel')
 
-
 const _=require("lodash")
 const bcrypt = require('bcrypt');
 const exceljs=require("exceljs")
@@ -362,77 +361,110 @@ const Addproducts = async (req, res) => {
     console.log(error.message);
   }
 }
+// const insertproduct = async (req, res) => {
+//   try {
+//     const { productname, Color, price, description, stock, Brand, Category } = req.body;
+//     console.log("Adding new product");
+//     console.log("Request body:", req.body);
+//     console.log(req.files);
+    
+//     // Process each uploaded image to crop and save it
+//     const croppedImages = [];
+//     for (const file of req.files) {
+//       console.log(file, "file");
+      
+//       // Read the uploaded image
+//       const image = sharp(file.path);
+//       // console.log("Image metadata:", await image.metadata()); // Log image metadata
+      
+//       // Perform cropping (example: crop to 300x300 square)
+//       const croppedImageBuffer = await image
+//         .resize({ width: 650, height: 500, fit: 'outside' })  // Resize to 300x300 and maintain aspect ratio
+//         .toBuffer();  // Convert to buffer
+//       console.log("Cropped image buffer length:", croppedImageBuffer.length); // Log length of cropped image buffer
+      
+//       // Generate a unique filename for the cropped image
+//       const croppedImageFilename = `cropped_${Date.now()}_${file.originalname}`;
+         
+//       // Save the cropped image to the specified directory
+//       await sharp(croppedImageBuffer).toFile(path.join('public', 'productImage', croppedImageFilename));
+//       console.log("Cropped image saved:", croppedImageFilename); // Log filename of saved cropped image
+      
+//       // Store the filename of the cropped image
+//       croppedImages.push(croppedImageFilename);
+//     }
+
+//     console.log(Category);
+
+//     // Create a new product instance
+//     const newProduct = new product({
+//       productname,
+//       Color,
+//       price,
+//       description,
+//       stock,
+//       Brand,
+//       image: croppedImages,  // Use the filenames of the cropped images
+//       Category: Category
+//     });
+
+//     // Save the new product to the database
+//     await newProduct.save();
+
+//     // Respond to the client with a success message
+//     res.redirect('/products-list');
+//   } catch (error) {
+//     console.error('Error adding product:', error);
+//     res.status(500).json({ error: 'Failed to add product' });
+//   }
+// };
 const insertproduct = async (req, res) => {
   try {
-    const { productname, Color, price, description, stock, Brand, Category } = req.body;
-    console.log("Adding new product");
-    console.log("Request body:", req.body);
-    console.log(req.files);
-    
-    // Process each uploaded image to crop and save it
-    const croppedImages = [];
-    for (const file of req.files) {
-      console.log(file, "file");
-      
-      // Read the uploaded image
-      const image = sharp(file.path);
-      // console.log("Image metadata:", await image.metadata()); // Log image metadata
-      
-      // Perform cropping (example: crop to 300x300 square)
-      const croppedImageBuffer = await image
-        .resize({ width: 650, height: 500, fit: 'outside' })  // Resize to 300x300 and maintain aspect ratio
-        .toBuffer();  // Convert to buffer
-      console.log("Cropped image buffer length:", croppedImageBuffer.length); // Log length of cropped image buffer
-      
-      // Generate a unique filename for the cropped image
-      const croppedImageFilename = `cropped_${Date.now()}_${file.originalname}`;
-         
-      // Save the cropped image to the specified directory
-      await sharp(croppedImageBuffer).toFile(path.join('public', 'productImage', croppedImageFilename));
-      console.log("Cropped image saved:", croppedImageFilename); // Log filename of saved cropped image
-      
-      // Store the filename of the cropped image
-      croppedImages.push(croppedImageFilename);
-    }
 
-    console.log(Category);
+      const { productname, Color, price, description, stock, Brand, Category } = req.body;
+      const croppedImages = req.files.map(file => file.filename); // Extract filenames of cropped images from req.files array
 
+      // Create a new product instance
+      const newProduct = new product({
+          productname,
+          Color,
+          price,
+          description,
+          stock,
+          Brand,
+          image: croppedImages, // Use the filenames of the cropped images
+          Category
+      });
 
       // Save the new product to the database
       await newProduct.save();
       // Respond to the client with a success message
       res.redirect('/admin/products-list');
-
-
-    // Save the new product to the database
-    
-
-    // Respond to the client with a success message
-    
   } catch (error) {
-    console.error('Error adding product:', error);
-    res.status(500).json({ error: 'Failed to add product' });
+      console.error('Error adding product:', error);
+      res.status(500).json({ error: 'Failed to add product' });
   }
 };
+ 
 const loadEditProduct = async (req, res) => {
   try {
     const id = req.query.id;
     const productData = await product.findById(id);
     const categoryData = await Category.find({ is_active: false });
-
-    if (productData&&categoryData) {
-      res.render("editproduct", {
+ 
+    if (productData&&categoryData) { 
+      res.render("editProduct", {
         products: productData,
         category: categoryData,
       });
     } else {
-
       res.redirect("/admin/products-list");
     }
   } catch (error) {
     handleServerError(res, error, "Error loading edit product page");
   }
-};
+};  
+
 
 const deleteProduct = async (req, res) => {
   try {
@@ -845,7 +877,7 @@ const saleschart = async (req, res) => {
       } else if (timeRange === 'daily') {
           startDate = moment().subtract(7, 'days').startOf('day').toDate();
       } else {
-          startDate = moment().subtract(2, 'months').startOf('month').toDate();
+          startDate = moment().subtract(3, 'months').startOf('month').toDate();
       }
 
       // Aggregate orders data based on the specified time range and start date
@@ -897,7 +929,6 @@ const saleschart = async (req, res) => {
       res.status(500).json({ error: 'Failed to fetch sales chart data' });
   }
 }
-
 const revenueChart = async (req, res) => {
   try {
     const timeRange = req.query.timeRange || 'monthly'; // Default to monthly if not provided
@@ -1102,10 +1133,24 @@ const productCountChart = async (req, res) => {
       }
     });
 
+    // Construct datasets containing the product counts for each category
+    const categories = Array.from(new Set(productCountData.map(item => item._id.category))); 
+    const categoryNamesPromises = categories.map(category => getCategoryNameById(category));
+    const categoryNames = await Promise.all(categoryNamesPromises);
+
+    const datasets = categories.map((category, index) => ({
+      label: categoryNames[index],
+      data: Object.values(groupedData).map(data => {
+        const categoryData = data.find(item => item._id.category === category);
+        return categoryData ? categoryData.count : 0;
+      })
+    }));
+    console.log(labels,datasets,"product count based category");
+    res.json({ labels, datasets });
   } catch (error) {
-    console.error('Error fetching orders chart data:', error);
-    res.status(500).json({ error: 'Failed to fetch orders chart data' });
-}
+    console.error('Error fetching product count chart data:', error);
+    res.status(500).json({ error: 'Failed to fetch product count chart data' });
+  }
 }
 
 
@@ -1182,7 +1227,7 @@ const couponeditpage=async(req,res)=>{
     }
     res.render('edit-coupon',{Coupons:coupondata})
 }
-  catch(error)
+  catch(error) 
   {
     console.log(error.message);
   }
@@ -1382,7 +1427,7 @@ const removeproductoffer = async (req, res) => {
     productdata.price = originalprice; // Reset price to original
     console.log(productdata.price, "djshfsdjf");
     await productdata.save();
-    return res.json({ success: true }); 
+    return res.json({ success: true });
   } catch (error) {
     console.log(error.message);
     return res.status(500).json({ success: false, message: "Internal server error" });
@@ -1430,5 +1475,9 @@ module.exports = {
   coupondelete,
   couponeditpage,
   couponupdate,
+  revenueChart,
+  productCountChart,
+  ordersChart
       
+  // toggleUserStatus
 }
