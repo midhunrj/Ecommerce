@@ -236,7 +236,7 @@ const logout = async (req, res) => {
     console.log(req.session.admin,"IDD");
     req.session.admin=null;
     console.log(req.session.admin,"iidddd");
-    res.redirect('/admin/login');
+    res.redirect('/admin/');
   } catch (error) {
     console.log(error.message);
   }
