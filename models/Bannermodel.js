@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const bannerSchema = new mongoose.Schema({
+
     name:{
         type:String,
         required:true,
@@ -26,6 +27,7 @@ const bannerSchema = new mongoose.Schema({
         type: String,
         enum: ['active', 'inactive'],
         default: 'active'
+
     },
     bannerType:{
         type:String,
