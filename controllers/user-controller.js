@@ -8,6 +8,7 @@ const  nodemailer=require('nodemailer')
 const randomString = require('randomstring')
 const jwt = require('jsonwebtoken');
 const mongoose  = require('mongoose');
+const banner=require('../models/Bannermodel')
 
 const currentDate=new Date()
 
@@ -170,7 +171,7 @@ const insertUser = async (req, res) => {
         }
         if(confirmPassword!==hashpassword)
         {
-         res.render('signuppage',{message:'Two passwords are not same'})
+         res.render('Signuppage',{message:'Two passwords are not same'})
         }
         const generateOTP = () => Math.floor(100000 + Math.random() * 900000);
         // Generate OTP
@@ -395,7 +396,18 @@ console.log(wishlistdata[0]?.wishcount,"wishdata");
   
     const productData=await product.find({isVerified:true})
     const CategoryData=await Category.find({})
-  res.render('userhome',{username:userData.username,products:productData,category:CategoryData,count,wishcount})
+
+    const carts=await Cart.find({user_id:req.session.user}).populate('cartItems.product_id')
+    console.log("========>",carts)
+    carts.forEach(cart => {
+      cart.cartItems.forEach(cartItem => {
+          console.log(cartItem.product_id.productname);
+      });
+  });
+  const bannerdata=await banner.find({status:"active"})
+  console.log(bannerdata);
+  res.render('userhome',{username:userData.username,products:productData,category:CategoryData,count,wishcount,cart:carts,banners:bannerdata})
+
   
 
 }
@@ -543,6 +555,26 @@ const shoppage = async (req, res) => {
         $lte: Number(maxPrice),
       };
     }}
+
+
+    const sortoption=req.query.sort
+    let sortcriteria={}
+    if(sortoption=="lowtohigh")
+    {
+      sortcriteria={price:1}
+    }
+    else if(sortoption=="hightolow")
+    {
+      sortcriteria={price:-1}
+    }
+    else if(sortoption=="atoz")
+    {
+      sortcriteria={productname:1}
+    }
+    else if(sortoption=="ztoa")
+    {
+      sortcriteria={productname:-1}
+    }
 
     const userdata=await user.findOne({_id:userId})
 

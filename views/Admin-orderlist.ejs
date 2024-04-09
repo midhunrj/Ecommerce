@@ -75,7 +75,7 @@
                                                     <div class="dropdown-menu">
                                                         <a class="dropdown-item" href="/admin/order-detail?id=<%= orders[i]._id %>">View detail</a>
                                                         <a class="dropdown-item" href="/admin/order-tracks?id=<%= orders[i]._id %>">Edit info</a>
-                                                        <a class="dropdown-item text-danger" href="/delete-order?id=<%= orders[i]._id %>&page=<%= page %>">Delete</a>
+                                                        <a class="dropdown-item text-danger" href="/admin/delete-order?id=<%= orders[i]._id %>&page=<%= page %>">Delete</a>
 
                                                     </div>
                                                 </div> <!-- dropdown //end -->
@@ -96,7 +96,7 @@
                   <ul class="pagination justify-content-start">
                     <% if (page > 1) { %>
                         <li class="page-item">
-                            <a class="page-link" href="/admin-orderlist?page=<%= page - 1 %>" aria-label="Previous">
+                            <a class="page-link" href="/admin/orderlist?page=<%= page - 1 %>" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
@@ -104,13 +104,13 @@
                     
                     <% for (let currentPage = Math.max(1, page - 1); currentPage <= Math.min(page + 1, totalNumberOfPages); currentPage++) { %>
                         <li class="page-item <%= currentPage === page ? 'active' : '' %>">
-                            <a class="page-link" href="/admin-orderlist?page=<%= currentPage %>"><%= currentPage %></a>
+                            <a class="page-link" href="/admin/orderlist?page=<%= currentPage %>"><%= currentPage %></a>
                         </li>
                     <% } %>
                     
                     <% if (page < totalNumberOfPages) { %>
                         <li class="page-item">
-                            <a class="page-link" href="/admin-orderlist?page=<%= page + 1 %>" aria-label="Next">
+                            <a class="page-link" href="/admin/orderlist?page=<%= page + 1 %>" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>

@@ -120,7 +120,13 @@ if (userCart) {
                else 
                {
                 userdata.wallet-=totalprice
-                 
+                userdata.history.push({
+                    amount:totalprice,
+                    status:"Debit",
+                    message:"placed order from wallet",
+                    timestamp:new Date()
+
+                  })
                 await userdata.save()
                 console.log("orderDetails", newOrder);
                 const orderData = await newOrder.save();

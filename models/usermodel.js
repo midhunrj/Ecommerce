@@ -59,7 +59,7 @@ history:{
             type:String,
             required:true,
         },
-        transact:
+        timestamp:
         {
             type:Date,
             default:Date.now()

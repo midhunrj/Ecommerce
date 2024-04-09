@@ -240,13 +240,13 @@
   
       
   <h1 id="choc">Login</h1>  
-  <form action="/admin_login" method="post" onsubmit="return validate()" novalidate>
+  <form action="/admin/login" method="post" onsubmit="return validate()" novalidate>
     <input type="email" id="email" placeholder="email"  name="email"  >
     <div id="emailError" class="Error"></div>
     <input type="password" id="password" placeholder="Password" name="password" >
     <div id="passwordError" class="Error"></div>
     <button type="submit" id="jammer">Log In</button>
-    <a href="/forget-password" id="forgot"><br>Forgot Password</a>
+    <!-- <a href="/forget-password" id="forgot"><br>Forgot Password</a> -->
     <span><br><br>Don't have an Account?<br></span><Button id="jammer"><a href="/signup" id="siren" method="get">Signup</a></Button>
   </form>
 </div>
