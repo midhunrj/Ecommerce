@@ -8,6 +8,7 @@ const  nodemailer=require('nodemailer')
 const randomString = require('randomstring')
 const jwt = require('jsonwebtoken');
 const mongoose  = require('mongoose');
+const banner=require('../models/Bannermodel')
 
 const currentDate=new Date()
 
@@ -105,17 +106,17 @@ const verifyLogin = async (req, res) => {
         res.redirect('/home');
       } else if (password===userdata.password&&userdata.is_admin === 0&&userdata.is_blocked===1) {
         console.log("Blocked");
-        res.render('loginpage', { alert: "Your account is blocked" });
+        res.render('Loginpage', { alert: "Your account is blocked" });
       
       } else if(password!==userdata.password||!passwordmatch) {
         console.log("Invalid password or user");
-        res.render('loginpage', { alert: "Invalid password" });
+        res.render('Loginpage', { alert: "Invalid password" });
       }else if (password===userdata.password&&userdata.is_admin === 1) {
-        res.render('loginpage', { alert: "Invalid user" });
+        res.render('Loginpage', { alert: "Invalid user" });
     }} 
     else {
       console.log("User not found");
-      res.render('loginpage', { alert: "Invalid user details " });
+      res.render('Loginpage', { alert: "Invalid user details " });
     }
   } catch (error) {
     console.error(error.message);
@@ -170,7 +171,7 @@ const insertUser = async (req, res) => {
         }
         if(confirmPassword!==hashpassword)
         {
-         res.render('signuppage',{message:'Two passwords are not same'})
+         res.render('Signuppage',{message:'Two passwords are not same'})
         }
         const generateOTP = () => Math.floor(100000 + Math.random() * 900000);
         // Generate OTP
@@ -402,7 +403,9 @@ console.log(wishlistdata[0]?.wishcount,"wishdata");
           console.log(cartItem.product_id.productname);
       });
   });
-  res.render('userhome',{username:userData.username,products:productData,category:CategoryData,count,wishcount,cart:carts})
+  const bannerdata=await banner.find({status:"active"})
+  console.log(bannerdata);
+  res.render('userhome',{username:userData.username,products:productData,category:CategoryData,count,wishcount,cart:carts,banners:bannerdata})
   
 
 }
@@ -560,6 +563,14 @@ const shoppage = async (req, res) => {
     else if(sortoption=="hightolow")
     {
       sortcriteria={price:-1}
+    }
+    else if(sortoption=="atoz")
+    {
+      sortcriteria={productname:1}
+    }
+    else if(sortoption=="ztoa")
+    {
+      sortcriteria={productname:-1}
     }
 
     const userdata=await user.findOne({_id:userId})

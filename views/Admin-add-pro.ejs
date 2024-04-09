@@ -1,7 +1,7 @@
 
 <%- include("./layouts/Admin-header.ejs") %>
         <section class="content-main">
-            <form action="/Add-product" method="post" enctype="multipart/form-data"  novalidate>
+            <form action="/admin/Add-product" method="post" enctype="multipart/form-data"  novalidate>
             <div class="row">
                 <div class="col-9">
                     <div class="content-header">
@@ -212,13 +212,13 @@
             formData.append('Category', document.querySelector('input[name="Category"]:checked').value);
             
     
-            fetch('/Add-product', {
+            fetch('/admin/Add-product', {
                 method: 'POST',
                 body: formData
             })
             .then(response => {
                 console.log(response);
-                window.location.href = '/products-list';
+                window.location.href = '/admin/products-list';
             })
             .catch(error => {
                 console.error('Error uploading data:', error);
@@ -405,12 +405,12 @@ const name = document.getElementById('productname');
            
             // Define an array of menu items with their corresponding URLs
             const menuItems = [
-                { url: "/admin_home", id: "dashboard" },
+                { url: "/admin/home", id: "dashboard" },
                 { url: "/admin/users", id: "users" },
-                { url: "/products-list", id: "products" },
-                { url: "/admin-orderlist", id: "orders" },
-                { url: "/Add-product", id: "add-product" },
-                { url: "/new-coupon", id: "coupons" },
+                { url: "/admin/products-list", id: "products" },
+                { url: "/admin/orderlist", id: "orders" },
+                { url: "/admin/Add-product", id: "add-product" },
+                { url: "/admin/new-coupon", id: "coupons" },
                 {url:"/admin/categories",id:"categories"}
                 // Add more menu items as needed
             ];

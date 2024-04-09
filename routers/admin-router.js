@@ -29,16 +29,16 @@ const bannercontroller=require('../controllers/banner-controller')
 // admin_route.get('/login',adminController.loginload);
 // admin_route.post('/login',adminController.verifyLogin)
 
-admin_route.get('/admin_login',adminController.loginload);
+admin_route.get('/',adminController.loginload);
 
-admin_route.post('/admin_login',adminController.verifyLogin);
+admin_route.post('/login',adminController.verifyLogin);
 
 
-admin_route.get('/admin_home',auth.isLogin, adminController.loadhomepage);
+admin_route.get('/home',auth.isLogin, adminController.loadhomepage);
 
-admin_route.get('/admin/logout',auth.isLogin,adminController.logout);
+admin_route.get('/logout',auth.isLogin,adminController.logout);
 
-admin_route.get('/admin/users',auth.isLogin,adminController.adminDashboard);
+admin_route.get('/users',auth.isLogin,adminController.adminDashboard);
 
 // admin_route.get('/new-user',auth.isLogin,adminController.newUserLoad);
 
@@ -46,32 +46,33 @@ admin_route.get('/admin/users',auth.isLogin,adminController.adminDashboard);
 
 // admin_route.get('/edit-user',auth.isLogin,adminController.editUserLoad);
 
-admin_route.get('/admin/block-user',adminController.blockUser);
-admin_route.get('/admin/unblock-user',adminController.unblockUser);
+admin_route.get('/block-user',adminController.blockUser);
+admin_route.get('/unblock-user',adminController.unblockUser);
 // admin_route.get('/delete-user',adminController.deleteUsers);
 admin_route.get('/products-list',auth.isLogin,adminController.productslist)
 admin_route.get('/Add-product',auth.isLogin,adminController.Addproducts)
 admin_route.post('/Add-product',auth.isLogin,uploader.array('image',4),adminController.insertproduct)
-admin_route.get("/admin/categories",auth.isLogin,categoryController.loadCategoriesPage);
-  admin_route.get("/admin/delete-category",auth.isLogin,categoryController.deleteCategory);
-  admin_route.post("/admin/categories",auth.isLogin,categoryController.addCategory);
-  admin_route.post("/admin/update-category",auth.isLogin,categoryController.updateCategory);
+admin_route.get("/categories",auth.isLogin,categoryController.loadCategoriesPage);
+  admin_route.get("/delete-category",auth.isLogin,categoryController.deleteCategory);
+  admin_route.post("/categories",auth.isLogin,categoryController.addCategory);
+  admin_route.post("/update-category",auth.isLogin,categoryController.updateCategory);
   admin_route.get('/edit-product',auth.isLogin,adminController.loadEditProduct)
-  admin_route.post('/admin/delete-single-image',auth.isLogin,adminController.deleteSingleImage);
+  admin_route.post('/delete-single-image',auth.isLogin,adminController.deleteSingleImage);
   admin_route.post("/update-product",uploader.array('image',4),auth.isLogin,adminController.updateProducts);
   admin_route.get("/delete-product",auth.isLogin,adminController.deleteProduct)
-  admin_route.get("/admin-orderlist",auth.isLogin,adminController.Orderlistpage)
-  admin_route.get('/admin/order-detail',auth.isLogin,adminController.orderdetails)
-  admin_route.get('/admin/order-tracks',auth.isLogin,adminController.ordertracking)
-  admin_route.post('/admin/update-order-status',auth.isLogin,adminController.updateorderstatus)
+  admin_route.get("/orderlist",auth.isLogin,adminController.Orderlistpage)
+  admin_route.get('/order-detail',auth.isLogin,adminController.orderdetails)
+  admin_route.get('/order-tracks',auth.isLogin,adminController.ordertracking)
+  admin_route.post('/update-order-status',auth.isLogin,adminController.updateorderstatus)
   admin_route.get('/delete-order',auth.isLogin,adminController.deleteOrder)
   admin_route.get('/saleschart',auth.isLogin,adminController.saleschart)
   admin_route.get('/orderschart',auth.isLogin,adminController.ordersChart)
   admin_route.get('/revenuechart',auth.isLogin,adminController.revenueChart)
   admin_route.get('/productcountchart',auth.isLogin,adminController.productCountChart)
   admin_route.get('/banner-upload',auth.isLogin,bannercontroller.bannerupload)
-  admin_route.post('/banner-upload',auth.isLogin,uploader.single('bannerImage'),bannercontroller.insertBanner)
-  admin_route.get('/admin/bannerlist',auth.isLogin,bannercontroller.bannerlist)
+  admin_route.post('/banner-uploads',auth.isLogin,uploader.single('croppedImageData'),bannercontroller.insertBanner)
+  admin_route.post("/update-banners",auth.isLogin,bannercontroller.updatebanners)
+  admin_route.get('/bannerlist',auth.isLogin,bannercontroller.bannerlist)
   admin_route.get('/sales-report',auth.isLogin,adminController.salesreport);
 
   // Route to get sales report by week
@@ -86,7 +87,7 @@ admin_route.get('/sales/yearly',auth.isLogin,adminController.salesyearly);
 admin_route.get('/sales/daily',auth.isLogin,adminController.salesdaily);
 admin_route.get('/new-coupon',auth.isLogin,adminController.couponpage);
 admin_route.post('/Add-new-coupon',auth.isLogin,adminController.newCoupon)
-admin_route.get('/Admin/coupons',auth.isLogin,adminController.Couponlist);
+admin_route.get('/coupons',auth.isLogin,adminController.Couponlist);
 admin_route.get('/delete-coupon',auth.isLogin,adminController.coupondelete);
 admin_route.get('/edit-coupon',auth.isLogin,adminController.couponeditpage);
 admin_route.post('/update-coupon',auth.isLogin,adminController.couponupdate);

@@ -36,7 +36,7 @@ const Cartpage=async(req,res)=>{
         if(!cartdata)
         {
             let CartIsEmpty="true"
-          return res.status(404).render("cart",{Cart:cartdata,username:userdata.username,count,wishcount})
+          return res.status(404).render("Cart",{Cart:cartdata,username:userdata.username,count,wishcount})
         }
        
         const Cartlist=cartdata.cartItems.map(item=>item.product_id)

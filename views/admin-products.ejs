@@ -69,10 +69,10 @@
                                             <% } %>
                                         <% } %>
                                     <% } %>
-                                    <a href="/edit-product?id=<%= products[i]._id %>" class="btn btn-sm font-sm rounded btn-brand">
+                                    <a href="admin/edit-product?id=<%= products[i]._id %>" class="btn btn-sm font-sm rounded btn-brand">
                                         <i class="material-icons md-edit"></i> Edit
                                     </a>
-                                    <a href="delete-product?id=<%= products[i]._id %>" class="btn btn-sm font-sm btn-light rounded" onclick="confirmDelete('<%= products[i]._id %>')">
+                                    <a href="admin/elete-product?id=<%= products[i]._id %>" class="btn btn-sm font-sm btn-light rounded" onclick="confirmDelete('<%= products[i]._id %>')">
                                         <i class="material-icons md-delete_forever"></i> Delete
                                     </a>
                                     <% if (locals.products[i].offer===0) { %>
@@ -186,7 +186,7 @@
             // Get the offer percentage entered by the user
             var offerPercentage = $('#offerPercentage' + productId).val();
          $.ajax({
-            url:'/Add-productoffer',
+            url:'/admin/Add-productoffer',
             method:"post",
             data:{productId,offerPercentage},
             success:(response)=>{
@@ -239,7 +239,7 @@
         }).then(async (result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: "/Remove-productOffer",
+                    url: "/admin/Remove-productOffer",
                     method: "post",
                     data: {
                         productId:productId
@@ -274,12 +274,12 @@
         
         // Define an array of menu items with their corresponding URLs
         const menuItems = [
-            { url: "/admin_home", id: "dashboard" },
+            { url: "/admin/home", id: "dashboard" },
             { url: "/admin/users", id: "users" },
-            { url: "/products-list", id: "products" },
-            { url: "/admin-orderlist", id: "orders" },
-            { url: "/Add-product", id: "add-product" },
-            { url: "/new-coupon", id: "coupons" },
+            { url: "/admin/products-list", id: "products" },
+            { url: "/admin/orderlist", id: "orders" },
+            { url: "/admin/Add-product", id: "add-product" },
+            { url: "/admin/new-coupon", id: "coupons" },
             {url:"/admin/categories",id:"categories"}
             // Add more menu items as needed
         ];

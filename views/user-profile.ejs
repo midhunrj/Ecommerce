@@ -91,12 +91,38 @@
                                                                 <td><%=orders[i].Totalprice %></td>
                                                                 <td><a href="/order-detail?id=<%= orders[i]._id %>" class="btn-small d-block">View</a></td>
                                                             </tr>
-                                                            <% }} %>
+                                                            <% } %>
                                                         </tbody>
                                                     </table>
                                                 </div>
+                                                <nav aria-label="Page navigation">
+                                                    <ul class="pagination justify-content-center">
+                                                        <% if (currentPage > 1) { %>
+                                                            <li class="page-item">
+                                                                <a class="page-link" href="?tab=orders&page=<%= currentPage - 1 %>#orders" aria-label="Previous">
+                                                                    <span aria-hidden="true">&laquo;</span>
+                                                                </a>
+                                                            </li>
+                                                        <% } %>
+                                                
+                                                        <% for (let i = 1; i <= totalPages; i++) { %>
+                                                            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                                                <a class="page-link" href="?tab=orders&page=<%= i %>#orders"><%= i %></a>
+                                                            </li>
+                                                        <% } %>
+                                                
+                                                        <% if (currentPage < totalPages) { %>
+                                                            <li class="page-item">
+                                                                <a class="page-link" href="?tab=orders&page=<%= currentPage +parseInt(1) %>#orders" aria-label="Next">
+                                                                    <span aria-hidden="true">&raquo;</span>
+                                                                </a>
+                                                            </li>
+                                                        <% } %>
+                                                    </ul>
+                                                </nav>
                                             </div>
                                         </div>
+                                        <% } %>
                                     </div>
                                     <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
                                         <div class="row">
@@ -167,26 +193,51 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="wallet" role="tabpanel" aria-labelledby="wallet-tab">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h3 class="mb-0">Wallet</h3>
-                                            </div>
-                                            <div class="card-body">
-                                                
-                                                <p>Wallet Balance: <span id="balance"><%= users.wallet %></span></p>
-                                                
-                                                <form id="addFundsForm">
-                                                    <div class="mb-3">
-                                                        <label for="amount" class="form-label">Amount</label>
-                                                        <input type="number" class="form-control" id="amount" name="amount" placeholder="Enter amount">
-                                                    </div>
-                                                    <button type="submit" class="btn btn-primary">Add Funds</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="referal" role="tabpanel" aria-labelledby="referal-tab">
+                      <div class="tab-pane fade" id="wallet" role="tabpanel" aria-labelledby="wallet-tab">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="mb-0">Wallet</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <h5>Wallet Balance:</h5>
+                        <p class="wallet-balance"><span id="balance"><%= users.wallet %></span></p>
+                    </div>
+                    <form id="addFundsForm">
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">Add Funds</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="amount" name="amount" placeholder="Enter amount">
+                                <button type="submit" class="btn btn-primary">Add</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <h5>Transaction History</h5>
+                        <button id="toggleHistoryBtn" class="btn btn-secondary">Toggle History</button>
+                    </div>
+                    <div id="walletHistory" style="display: none;">
+                        <ul class="list-group">
+                            <% users.history.forEach(function(item) { %>
+                                <li class="list-group-item <% if (item.status === 'Debit') { %>list-group-item-danger<% } else if (item.status === 'Credit') { %>list-group-item-success<% } %>">
+                                    <span><%= item.timestamp.toLocaleString() %>:</span>
+                                    <span><%= item.message %> (<%= item.amount %>)</span>
+                                </li>
+                            <% }); %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                                      
+                                     <div class="tab-pane fade" id="referal" role="tabpanel" aria-labelledby="referal-tab">
                                         <div class="card">
                                             <div class="card-header">
                                                 
@@ -361,6 +412,9 @@
     if (window.location.hash === '#orders') {
         // Activate the "Orders" tab
         $('#orders-tab').tab('show');
+    }else if(window.location.hash === '#wallet')
+    {
+        $('#wallet-tab').tab('show')
     }
 });
     </script>
@@ -409,7 +463,7 @@
     }
 });
     </script>
-    <script>
+    <!-- <script>
         // Handle form submission to add funds to the wallet
         $('#addFundsForm').submit(function(e) {
             e.preventDefault();
@@ -445,7 +499,118 @@
                 }
             });
         });
-    </script>
+    </script> -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+    $('#addFundsForm').submit(function(e) {
+        e.preventDefault();
+        var formData = $(this).serialize();
+        $.ajax({
+            type: 'POST',
+            url: '/Add-money-to-Wallet', // Backend route to generate Razorpay order
+            data: formData,
+            success: function(response) {
+                console.log(response);
+                if (response.razorpayOrder) {
+                    // If Razorpay order is received, initiate payment
+                    const options = {
+                        key: response.razorId, 
+                        amount: response.amount*100, // Amount is in currency subunits
+                        currency: "INR",
+                        name: "Tech tique",
+                        description: "Adding Funds to Wallet",
+                        order_id: response.razorpayOrder.id,
+                        handler: function (data) {
+                            verifyAndAddMoneyToWallet(response.razorpayOrder.receipt, response.amount,data);
+                        },
+                        prefill: {
+                            name: "customername", // Replace with user's name
+                            email: "customer@example.com", // Replace with user's email
+                            contact: "9000090000" // Replace with user's contact number
+                        },
+                        notes: {
+                            address: "Razorpay Corporate Office"
+                        },
+                        theme: {
+                            color: "#3399cc"
+                        }
+                    };
+                    
+                    const rzp = new Razorpay(options);
+                    rzp.open();
+                } else {
+                    // Handle other cases or errors
+                }
+            },
+            error: function(err) {
+                console.error(err);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to generate Razorpay order.',
+                    icon: 'error',
+                    timer: 3000
+                });
+            }
+        });
+    });
+    
+    function verifyAndAddMoneyToWallet(orderId,amount, data) {
+        $.ajax({
+            url: '/verify-signature',
+            method: 'POST',
+            data: { orderId, amount,data },
+            success: function(response) {
+                console.log(response);
+                if (response.success) {
+                    // Update wallet balance display
+                    var walletBalance = parseInt($("#balance").text());
+                    walletBalance += parseInt(response.amount);
+                    $("#balance").text(walletBalance);
+                    
+                    Swal.fire({
+                        title: 'Money Added!',
+                        text: response.message,
+                        icon: 'success',
+                        timer: 3000
+                    });
+                    window.location.href="/profile#wallet"
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to add money to wallet.',
+                        icon: 'error',
+                        timer: 3000
+                    });
+                }
+            },
+            error: function(err) {
+                console.error(err);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to verify payment.',
+                    icon: 'error',
+                    timer: 3000
+                });
+            }
+        });
+    }
+</script>   
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const toggleHistoryBtn = document.getElementById('toggleHistoryBtn');
+    const walletHistory = document.getElementById('walletHistory');
+
+    toggleHistoryBtn.addEventListener('click', function() {
+        if (walletHistory.style.display === 'none') {
+            walletHistory.style.display = 'block';
+        } else {
+            walletHistory.style.display = 'none';
+        }
+    });
+});
+
+</script>     
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
      -->
      <script src="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.js"></script>

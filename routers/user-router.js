@@ -73,11 +73,15 @@ user_route.get('/download-invoice/:orderId',auth.isLogin,auth.isUserBlocked,Prof
 user_route.get('/order-tracks',auth.isLogin,auth.isUserBlocked,ProfileController.ordertracking)
 user_route.post('/update-order-status',auth.isLogin,auth.isUserBlocked,ProfileController.updateorderstatus)
 user_route.post('/Add-money-to-Wallet',auth.isLogin,auth.isUserBlocked,ProfileController.Addwallet)
+user_route.post('/verify-signature',auth.isLogin,auth.isUserBlocked,ProfileController.verifyPayment)
 user_route.post('/applyCoupon',auth.isLogin,auth.isUserBlocked,userController.applycoupon)
 user_route.post('/removeCoupon',auth.isLogin,auth.isUserBlocked,userController.removeCoupon)
 
 user_route.get('/wishlist',auth.isLogin,userController.wishlistpage)
 user_route.post('/addtowishlist',auth.isLogin,userController.addtoWishlist)
 user_route.get('/removewishlist/:pro',auth.isLogin,userController.removewishlist)
-// user_route.get('*',userController.errorpage)
+// user_route.use("*", (req, res, next) => {
+  
+//     res.status(404).render("404");
+//   });
 module.exports=user_route

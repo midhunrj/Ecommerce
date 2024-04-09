@@ -57,7 +57,7 @@
     </aside>
     <main class="main-wrap">
         <%- include("./layouts/header.ejs") %>
-        <form action="/update-Product" method="POST" enctype="multipart/form-data" class="row g-3" onsubmit="return validate()" novalidate>
+        <form action="/admin/update-Product" method="POST" enctype="multipart/form-data" class="row g-3" onsubmit="return validate()" novalidate>
 
             <!-- <input type="hidden" name="_method" value="PUT"> -->
             <% console.log( "this is "+ products._id ) %>

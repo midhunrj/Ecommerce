@@ -2,10 +2,17 @@ const User = require("../models/usermodel")
 const Product = require("../models/productmodel")
 const Address = require("../models/Addressmodel")
 const Order = require("../models/ordermodel")
+const Cart=require('../models/Cartmodel')
 const nodemailer = require("nodemailer")
 const bcrypt = require("bcrypt")
 const easyinvoice=require("easyinvoice")
+const Razorpay=require("razorpay")
+const crypto=require("crypto")
 
+const instance = new Razorpay({
+    key_id: process.env.RAZORPAY_ID_KEY,
+    key_secret: process.env.Razorsecret_key
+});
 const getprofilepage=async(req,res)=>{
     try{
 
@@ -15,10 +22,32 @@ const getprofilepage=async(req,res)=>{
 
     const Addressdata=await Address.findOne({userid:Id})
     
-    const Orderdata=await Order.find({userId:Id})
-    let count=req.session.count
+    const page = req.query.page || 1; 
+    const limit = 6; 
+    const skip = (page - 1) * limit; 
+    
+    
+    const Orderdata = await Order.find({ userId: Id }).skip(skip).limit(limit);
+
+ 
+    const totalCount = await Order.countDocuments({ userId: Id });
+    const cartData=await Cart.aggregate([{$match:{user_id:req.session.user}},{$unwind:"$cartItems"},{$group:{_id:null,count:{"$sum":"$cartItems.quantity"}}}])
+  console.log(cartData[0]?.count);
+  
+  if(cartData.length>0)
+  {
+     count=cartData[0].count
+     console.log(count,'countcart')
+  }
+  else
+  {
+    count=0
+  }
+  req.session.count=count
+    
     let wishcount=req.session.wishcount
-    res.render('user-profile',{message:'',users:userdata,userAddress:Addressdata,orders:Orderdata,username:userdata.username,count,wishcount})
+    res.render('user-profile',{message:'',users:userdata,userAddress:Addressdata,orders:Orderdata,username:userdata.username,count,wishcount,currentPage: page, // Pass current page to frontend for highlighting active page in pagination
+    totalPages: Math.ceil(totalCount / limit)})
 }
 catch(error)
 {
@@ -301,14 +330,24 @@ catch(error)
     
             
             if (newStatus === 'Cancelled') {
-                if(updatedOrder.payment=="Online")
+                if(updatedOrder.payment=="Online"||updatedOrder.payment=="Wallet")
                 {
                     console.log("hello it is userdata from refunding",userdata);
                     console.log("hello it is updatedorder data from refunding",updatedOrder);
                   userdata.wallet+=updatedOrder.Totalprice
                   updatedOrder.paymentstatus="refunded"
+
+                  userdata.history.push({
+                    amount:updatedOrder.Totalprice,
+                    status:"Credit",
+                    message:"Refunded from cancelled order",
+                    timestamp:new Date()
+
+                  })
                   updatedOrder.save()
                   userdata.save()
+
+                  
                 }
                 await Order.findOneAndUpdate({_id:orderID},{$set:{Order_verified:false}})
 
@@ -431,15 +470,74 @@ catch(error)
         if(!userdata){
             return res.status(400).json({success:false,message:"failed to add money"})
         }
-         userdata.wallet+=parseInt(amount)
-         await userdata.save()
-         res.status(200).json({ success:false,message: "Money has been added to wallet successfully",Wallet:userdata.wallet });
+        const generatedOrder = await generateOrderRazorpay(amount);
+        // userdata.wallet+=parseInt(amount)
+         
+         res.status(200).json({ success:true,message: "Money has been added to wallet successfully",Wallet:userdata.wallet,razorpayOrder: generatedOrder,amount, razorId: process.env.RAZORPAY_ID_KEY  });
     }
     catch (error) {
         console.error(error.message);
         res.status(500).send('Internal Server Error');
     }
 }
+
+const generateOrderRazorpay = (amount) => {
+    return new Promise((resolve, reject) => {
+        const options = {
+            amount: amount*100, // Convert amount to paise
+            currency: "INR",
+            receipt: `wallet_recharge_${Date.now()}`, // Unique receipt ID for wallet recharge
+            payment_capture: 1 // Automatically capture the payment
+        };
+
+        instance.orders.create(options, (err, order) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(order);
+            }
+        });
+    });
+};
+
+const verifyPayment = async (req, res) => {
+    try {
+        console.log("Req.body ==>", req.body);
+        const { orderId, data } = req.body;
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = data;
+        const text = `${razorpay_order_id}|${razorpay_payment_id}`;
+        console.log(text);
+        
+        const hmac = crypto.createHmac("sha256", instance.key_secret);
+        hmac.update(text);
+        const generatedSignature = hmac.digest('hex');
+        console.log("Generated Signature:", generatedSignature);
+        
+        if (generatedSignature === razorpay_signature) {
+            // Payment verified, update user's wallet balance
+            const user = await User.findById(req.session.user);
+            const amount = parseInt(req.body.amount); // Parse the amount from the request body
+            user.wallet += amount; // No need to divide by 100 if amount is already in rupees
+            user.history.push({
+                amount:amount,
+                status:"Credit",
+                message:"Added money to wallet",
+                timestamp:new Date()
+    
+              })
+            // await userdata.save()
+            await user.save();
+
+            res.status(200).json({ success: true, message: "Payment verified and wallet updated successfully",amount });
+        } else {
+            res.status(400).json({ success: false, message: "Payment verification failed" });
+        }
+    } catch (error) {
+        console.error('Error verifying payment:', error);
+        res.status(500).json({ error: 'Failed to verify payment' });
+    }
+};
+
 module.exports={
     NewAddress,
     getprofilepage,
@@ -454,5 +552,7 @@ module.exports={
     ordertracking,
     updateorderstatus,
     orderinfo,
-    Addwallet
+    Addwallet,
+    verifyPayment,
+generateOrderRazorpay
 }

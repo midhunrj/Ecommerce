@@ -116,7 +116,7 @@
 <ul class="pagination justify-content-start">
         <% for (let currentPage = 1; currentPage <= totalNumberOfPages; currentPage++) { %>
             <li class="page-item <%= currentPage == page ? 'active' : '' %>">
-              <a class="page-link" href="/sales-report?page=<%= currentPage %>"><%= currentPage %></a>
+              <a class="page-link" href="/admin/sales-report?page=<%= currentPage %>"><%= currentPage %></a>
               <% console.log(currentPage,'current') %>
             </li>
           <% } %>
@@ -125,7 +125,7 @@
 </nav>
 </div>
 <div>
-<a href="/admin_home"></a>go to home page</div>
+<a href="/admin/home"></a>go to home page</div>
 <%- include("./layouts/Admin-footer.ejs") %>
  <script>
     function downloadmodal()
@@ -142,7 +142,7 @@ function fetchFilteredOrders() {
   const timeRange = document.getElementById('timeRangeFilter').value;
   console.log("Time range selected:", timeRange);
 
-  fetch(`/sales/${timeRange}`)
+  fetch(`/admin/sales/${timeRange}`)
   .then(response => {
       if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -196,7 +196,8 @@ document.getElementById('downloadPDFButton').addEventListener('click', function(
 
     // Function to download PDF report
     function downloadPDFReport() {
-        window.location.href = '/download-pdf'; 
+        const timeRange = document.getElementById('timeRangeFilter').value;
+        window.location.href = `/admin/download-pdf?timeRange=${timeRange}`; 
         $('#downloadModal').modal('hide')
     }
 
@@ -207,7 +208,8 @@ document.getElementById('downloadPDFButton').addEventListener('click', function(
 
     // Function to download PDF report
     function downloadExcelReport() {
-        window.location.href = '/download-excel'; // Route to download PDF report in backend
+        const timeRange = document.getElementById('timeRangeFilter').value;
+        window.location.href = `/admin/download-excel?timeRange=${timeRange}`; // Route to download PDF report in backend
         $('#downloadModal').modal('hide')
     }
 
