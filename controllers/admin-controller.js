@@ -1427,7 +1427,7 @@ const removeproductoffer = async (req, res) => {
     productdata.price = originalprice; // Reset price to original
     console.log(productdata.price, "djshfsdjf");
     await productdata.save();
-    return res.json({ success: true });
+    return res.json({ success: true }); 
   } catch (error) {
     console.log(error.message);
     return res.status(500).json({ success: false, message: "Internal server error" });
