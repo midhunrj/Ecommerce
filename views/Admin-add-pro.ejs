@@ -1,15 +1,15 @@
 
 <%- include("./layouts/Admin-header.ejs") %>
         <section class="content-main">
-            <form action="/admin/Add-product" method="post" enctype="multipart/form-data"  novalidate>      
+            <form action="/admin/Add-product" method="post" enctype="multipart/form-data"  novalidate>
             <div class="row">
                 <div class="col-9">
                     <div class="content-header">
                         <h2 class="content-title">Add New Product</h2>
                         
                         <div>
-                            <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button>
-                             <button class="btn btn-md rounded font-sm hover-up" type="submit" >Publish</button>
+                           <!-- // <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button> -->
+                             <button class="btn btn-md rounded font-sm hover-up" type="button" onclick="save()" >Publish</button>
                             
                         </div>
                     </div>
@@ -52,15 +52,16 @@
                     </div> <!-- card end// -->
                     <div class="card mb-4">
                         <div class="card-body">
-                            <div>
-                                <label class="form-label">Images</label>
-                                <input class="form-control" type="file" name="image" multiple id="imageInput">
-                                <div id="imageError" class="Error"></div>
-                            </div>
-                            <div id="addedImagesContainer" class="thumbnails-container"></div>
-                            
+                          <div>
+                            <label class="form-label">Images</label>
+                            <input class="form-control" type="file" name="image" multiple id="imageInput">
+                            <div id="imageError" class="Error"></div>
+                          </div>
+                          <div id="addedImagesContainer" class="thumbnails-container"></div>
+                          <button type="button" id="cropButton" class="btn btn-primary">Crop Image</button>
+                          <input type="hidden" name="croppedImageData" id="croppedImageData">
                         </div>
-                    </div> <!-- card end// -->
+                      </div>  <!-- card end// -->
                 </div>
                 
                 <div class="col-lg-3">
@@ -72,13 +73,13 @@
                                 <div id="priceError" class="Error"></div>
                             </div>
                         
-                            <div class="mb-4">
+                            <!-- <div class="mb-4">
                                 <label class="form-label">Status</label>
                                 <select class="form-select">
                                     <option>Published</option>
                                     <option>Draft</option>
                                 </select>
-                            </div>
+                            </div> -->
                             <!-- <div class="mb-4">
                                 <label class="form-label">Tags</label>
                                 <input type="text" placeholder="Type here" class="form-control">
@@ -383,6 +384,15 @@ const name = document.getElementById('productname');
       }, 5000);
       return false;
    }
+//    const croppedImageData = document.getElementById("croppedImageData").value;
+//     if (!croppedImageData) {
+//         const imageError = document.getElementById("imageError");
+//         imageError.innerHTML = "Please crop the image";
+//         setTimeout(() => {
+//             imageError.innerHTML = "";
+//         }, 5000);
+//         return false;
+//     }
 
 
    return true;
