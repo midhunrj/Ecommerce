@@ -1,6 +1,5 @@
 <%- include("./layouts/Admin-header.ejs") %>
 <div class="container">
-
     <h1 class="mt-5 mb-4 text-center">Create Banner</h1>
     <form id="userProfileForm"  >
         <div class="row">
@@ -16,9 +15,9 @@
                     <label for="bannerType">Banner Type:</label>
                     <select class="form-control" id="bannerType" name="bannerType" required>
                         <option value="">Select Banner Type</option>
-                        <option value="Type 1">Home Banner</option>
-                        <option value="Type 2">Side Banner</option>
-                        <option value="Type 3">middle Banner</option>
+                        <option value="Home Banner">Home Banner</option>
+                        <option value="Side Banner">Side Banner</option>
+                        <option value="Middle Banner">middle Banner</option>
                         <!-- Add more options as needed -->
                     </select>
                     <div id="bannerTypeError" class="Error"></div>
@@ -330,12 +329,10 @@ function cropSave(cropper,file){
     }
 
     async function cropSave() {
-
         return new Promise((resolve, reject) => {
             if (!cropper) {
                 reject("Cropper not initialized");
             }
-
             
             // Get cropped canvas
             const croppedCanvas = cropper.getCroppedCanvas();
@@ -390,7 +387,6 @@ function cropSave(cropper,file){
     }
 
     function checkEmptyFields() {
-
         const fields = ['name', 'bannerType', 'description', 'startDate', 'endDate', 'bannerImage'];
         let isValid = true;
         
@@ -408,7 +404,6 @@ function cropSave(cropper,file){
 
         return isValid;
     }
-
 
     submitButton.addEventListener('click', async (event) => {
         event.preventDefault();
@@ -466,6 +461,4 @@ function cropSave(cropper,file){
 <!-- Main Script -->
 <script src="/Admin-assets/js/main.js" type="text/javascript"></script>
 <script src="/Admin-assets/js/custom-chart.js" type="text/javascript"></script>
-
-
 
