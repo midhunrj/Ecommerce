@@ -453,7 +453,7 @@ const loadEditProduct = async (req, res) => {
     const categoryData = await Category.find({ is_active: false });
  
     if (productData&&categoryData) { 
-      res.render("editProduct", {
+      res.render("editproduct", {
         products: productData,
         category: categoryData,
       });
