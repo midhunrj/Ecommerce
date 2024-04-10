@@ -97,7 +97,7 @@ admin_route.get('/download-pdf',auth.isLogin,adminController.downloadpdf);
 admin_route.get('/download-excel',auth.isLogin,adminController.downloadExcel);
 admin_route.post('/Add-productoffer',auth.isLogin,adminController.Addproductoffer);
 admin_route.post('/Remove-productOffer',auth.isLogin,adminController.removeproductoffer);
-admin_route.get('/logout',auth.isLogin,adminController.logout)
+admin_route.get('/logout',auth.isLogout,adminController.logout)
 // admin_route.get('*', function (req, res) {
 //     res.redirect('/')
 // });
