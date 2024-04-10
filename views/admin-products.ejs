@@ -76,7 +76,7 @@
                                     <a href="admin/edit-product?id=<%= products[i]._id %>" class="btn btn-sm font-sm rounded btn-brand">
                                         <i class="material-icons md-edit"></i> Edit
                                     </a>
-                                    <a href="admin/elete-product?id=<%= products[i]._id %>" class="btn btn-sm font-sm btn-light rounded" onclick="confirmDelete('<%= products[i]._id %>')">
+                                    <a href="admin/delete-product?id=<%= products[i]._id %>" class="btn btn-sm font-sm btn-light rounded" onclick="confirmDelete('<%= products[i]._id %>')">
                                         <i class="material-icons md-delete_forever"></i> Delete
                                     </a>
                                     <% if (locals.products[i].offer===0) { %>
