@@ -1269,7 +1269,7 @@ const downloadpdf = async (req, res) => {
       filter = {
         $or: [
           { placedon: { $gte: startOfMonth, $lte: endOfMonth }, Status: "Delivered" },
-          { placedon: { $gte: startOfMonth, $lte: endOfMonth }, paymentstatus: "paid" }
+         
         ]
       };
     } else if (timeRange === 'yearly') {
@@ -1278,7 +1278,7 @@ const downloadpdf = async (req, res) => {
       filter = {
         $or: [
           { placedon: { $gte: startOfYear, $lte: endOfYear }, Status: "Delivered" },
-          { placedon: { $gte: startOfYear, $lte: endOfYear }, paymentstatus: "paid" }
+         
         ]
       };
     }
@@ -1344,7 +1344,7 @@ const downloadExcel=async(req,res)=>{
       filter = {
         $or: [
           { placedon: { $gte: startOfMonth, $lte: endOfMonth }, Status: "Delivered" },
-          { placedon: { $gte: startOfMonth, $lte: endOfMonth }, paymentstatus: "paid" }
+         
         ]
       };
     } else if (timeRange === 'yearly') {
@@ -1353,7 +1353,7 @@ const downloadExcel=async(req,res)=>{
       filter = {
         $or: [
           { placedon: { $gte: startOfYear, $lte: endOfYear }, Status: "Delivered" },
-          { placedon: { $gte: startOfYear, $lte: endOfYear }, paymentstatus: "paid" }
+          
         ]
       };
     }
