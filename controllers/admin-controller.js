@@ -745,7 +745,7 @@ const salesreport=async(req,res)=>{
 
     const totalNumberOfOrders=await Order.find({Order_verified:true,$or: [
       {Status: "Delivered" },
-      { paymentstatus: "paid" }
+     
   ]}).countDocuments()
     const totalNumberOfPages=Math.ceil(totalNumberOfOrders/ordersperpage)
     console.log("totalpage",totalNumberOfPages);
@@ -786,7 +786,7 @@ const salesweekly=async (req, res) => {
   const weeklyOrders = await Order.find({
     $or: [
       { placedon: { $gte: startOfWeek, $lte: endOfWeek }, Status: "Delivered" },
-      { placedon: { $gte: startOfWeek, $lte: endOfWeek }, paymentstatus: "paid" }
+     
   ]}).sort({placedon:-1})
        // Modify this to match your schema
  
@@ -811,7 +811,7 @@ const salesmonthly=async (req, res) => {
   const monthlyOrders = await Order.find({
     $or: [
       { placedon: { $gte: startOfMonth, $lte: endOfMonth }, Status: "Delivered" },
-      { placedon: { $gte: startOfMonth, $lte: endOfMonth }, paymentstatus: "paid" }
+     
   ]}).sort({placedon:-1})
       // Modify this to match your schema
   
@@ -836,7 +836,7 @@ const salesyearly=async (req, res) => {
   const yearlyOrders = await Order.find({
     $or: [
       { placedon: { $gte: startOfYear, $lte: endOfYear }, Status: "Delivered" },
-      { placedon: { $gte: startOfYear, $lte: endOfYear }, paymentstatus: "paid" }
+     
   ]}).sort({placedon:-1})
        // Modify this to match your schema
  
@@ -857,7 +857,7 @@ const salesdaily=async(req,res)=>{
 
     const dailyorders=await Order.find({$or: [
       { placedon: { $gte: startOfDay, $lte: endOfDay }, Status: "Delivered" },
-      { placedon: { $gte: startOfDay, $lte: endOfDay }, paymentstatus: "paid" }
+     
   ]}).sort({placedon:-1})
     res.json(dailyorders)
   }catch(error)
@@ -1268,7 +1268,7 @@ const downloadpdf = async (req, res) => {
       const endOfMonth = moment().endOf('month');
       filter = {
         $or: [
-          { placedon: { $gte: startOfMonth, $lte: endOfMonth }, Status: "Delivered" },
+          { placedon: { $gte: startOfMonth, $lte: endOfMonth }, Status: "Delivered" }
          
         ]
       };
@@ -1344,7 +1344,7 @@ const downloadExcel=async(req,res)=>{
       filter = {
         $or: [
           { placedon: { $gte: startOfMonth, $lte: endOfMonth }, Status: "Delivered" },
-         
+          
         ]
       };
     } else if (timeRange === 'yearly') {
