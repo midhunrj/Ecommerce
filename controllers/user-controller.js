@@ -32,8 +32,8 @@ port: 587,
 secure: false,
 
     auth: {
-      user: process.env.USER,
-      pass: process.env.PASS,
+      user: process.env.user,
+      pass: process.env.pass,
     },
   })
 const securepassword = async (password) => {
