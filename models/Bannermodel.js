@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const bannerSchema = new mongoose.Schema({
-
     name:{
         type:String,
         required:true,
@@ -17,7 +16,7 @@ const bannerSchema = new mongoose.Schema({
     endDate: {
         type: Date,
         required: true,
-        index: { expires: 0 } 
+        
     },
     image: {
         type: String, // Assuming you'll store the image path
@@ -27,7 +26,6 @@ const bannerSchema = new mongoose.Schema({
         type: String,
         enum: ['active', 'inactive'],
         default: 'active'
-
     },
     bannerType:{
         type:String,
