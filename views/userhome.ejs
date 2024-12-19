@@ -19,38 +19,70 @@
 header-top header-top-ptb-1 d-none d-lg-block {
     background-color: #ff0000; /* Change '#ff0000' to your desired color */
 }
+
+.home-slider {
+    margin-top:20px;
+    /* height: 100vh; */
+    overflow: hidden;
+    position: relative;
+}
+
+.single-hero-slider {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+
+
+.single-hero-slider .row {
+    /* height: 100%; */
+    position: relative;
+    z-index: 2;
+}
+
+.single-hero-slider .hero-slider-content-2 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    color: #fff;
+    text-align: center;
+}
+
+.single-hero-slider img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+   object-fit: fill;
+    z-index: 1;
+}
+
+.single-hero-slider .animated {
+    animation: fadeIn 1s ease-in-out;
+    color:aliceblue;
+    
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
    </style>
     
 </head>
 
 <body>
-    <!-- Modal -->
-    <!-- <div class="modal fade custom-modal" id="onloadModal" tabindex="-1" aria-labelledby="onloadModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-        <div class="modal-content">              
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>       
-                <div class="modal-body">
-                    <div class="deal" style="background-image: url('assets/imgs/banner/menu-banner-7.png')">
-                        <div class="deal-top">
-                            <h2 class="text-brand">Deal of the Day</h2>
-                            <h5>Limited quantities.</h5>
-                        </div>
-                        <div class="deal-content">
-                            <h6 class="product-title"><a href="shop-product-right.html">Summer Collection New Morden Design</a></h6>
-                            <div class="product-price"><span class="new-price">$139.00</span><span class="old-price">$160.99</span></div>
-                        </div>
-                        <div class="deal-bottom">
-                            <p>Hurry Up! Offer End In:</p>
-                            <div class="deals-countdown" data-countdown="2025/03/25 00:00:00"><span class="countdown-section"><span class="countdown-amount hover-up">03</span><span class="countdown-period"> days </span></span><span class="countdown-section"><span class="countdown-amount hover-up">02</span><span class="countdown-period"> hours </span></span><span class="countdown-section"><span class="countdown-amount hover-up">43</span><span class="countdown-period"> mins </span></span><span class="countdown-section"><span class="countdown-amount hover-up">29</span><span class="countdown-period"> sec </span></span></div>
-                            <a href="shop-grid-right.html" class="btn hover-up">Shop Now <i class="fi-rs-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>        
-        </div>
-        </div>
-    </div> -->
-
-    <!-- Quick view -->
+    
     <div class="modal fade custom-modal" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
         <div class="modal-dialog">
         <div class="modal-content">              
@@ -140,13 +172,7 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                     <strong class="mr-10">Color</strong>
                                     <ul class="list-filter color-filter">
                                         <li class="active"><span class="product-color-white"><%= products[i].Color %></span></li>
-                                        <!-- <li><a href="#" data-color="Red"><span class="product-color-red"></span></a></li>
-                                        <li><a href="#" data-color="Yellow"><span class="product-color-yellow"></span></a></li>
-                                        <li class="active"><a href="#" data-color="White"><span class="product-color-white"></span></a></li>
-                                        <li><a href="#" data-color="Orange"><span class="product-color-orange"></span></a></li>
-                                        <li><a href="#" data-color="Cyan"><span class="product-color-cyan"></span></a></li>
-                                        <li><a href="#" data-color="Green"><span class="product-color-green"></span></a></li>
-                                        <li><a href="#" data-color="Purple"><span class="product-color-purple"></span></a></li> -->
+                                      
                                     </ul>
                                 </div>
                                 <div class="attr-detail attr-size">
@@ -244,19 +270,7 @@ header-top header-top-ptb-1 d-none d-lg-block {
                     <div class="header-right">
                         <div class="search-style-2">
                             <form action="/shop" method="get">
-                                <!-- <select class="select-active">
-                                    <option>All Categories</option>
-                                    <option>Women's</option>
-                                    <option>Men's</option>
-                                    <option>Cellphones</option>
-                                    <option>Computer</option>
-                                    <option>Electronics</option>
-                                    <option> Accessories</option>
-                                    <option>Home & Garden</option>
-                                    <option>Luggage</option>
-                                    <option>Shoes</option>
-                                    <option>Mother & Kids</option>
-                                </select> -->
+                                
                                 <input type="text" name="search" placeholder="Search for items...">
                             </form>
                         </div>
@@ -508,9 +522,7 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                     <li><a class="active" href="/home" id="home">Home </a>
                                        
                                     </li>
-                                    <!-- <li>
-                                        <a href="page-about.html">About</a>
-                                    </li> -->
+                                    
                                     <li><a href="/shop" id="shop">Shop</a>
                                       
                                     </li>
@@ -705,34 +717,34 @@ header-top header-top-ptb-1 d-none d-lg-block {
     </div>
  <main class="main">       
        
-        <section class="home-slider position-relative pt-50">
+        <section class="home-slider position-relative">
             <div id="carousel" class="hero-slider-1 dot-style-1 dot-style-1-position-1">
-                <% banners.forEach((banner,index) => { %>
-                    <div class="single-hero-slider single-animation-wrap">
-                        <div class="container">
-                            <div class="row align-items-center slider-animated-1">
-                                <div class="col-lg-5 col-md-6">
-                                    <div class="hero-slider-content-2">
-                                        <h4 class="animated"><%= banner.name %></h4>
-                                        <p class="animated"><%= banner.description %></p>
-                                        <a href="/shop" class="btn btn-primary animated">Shop Now</a>
-                                    </div>
+                <% const reversedbanners=banners.reverse().slice(0,4) %>
+                <% reversedbanners.forEach((banner, index) => { %>
+                <div class="single-hero-slider single-animation-wrap">
+                    <div class="container-fluid p-0">
+                        <div class="row align-items-center justify-content-center slider-animated-1" >
+                            <div class="col-12 text-center">
+                                <div class="hero-slider-content-2">
+                                    <h4 class="animated"><%= banner.name %></h4>
+                                    <p class="animated"><%= banner.description %></p>
+                                    <a href="/shop" class="btn btn-primary animated">Shop Now</a>
                                 </div>
-                                <div class="col-lg-7 col-md-6">
-                                    <div class="single-slider-img single-slider-img-1">
-                                        <img class="animated slider-<%= index + 1 %>" src="./productImage/<%= banner.image %>" alt="<%= banner.name %>" style="width:100%;height:100%;">
-                                    </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="single-slider-img single-slider-img-1">
+                                    <img class="animated slider-<%= index + 1 %>" src="./productImage/<%= banner.image %>"
+                                        alt="<%= banner.name %>" >
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
                 <% }); %>
             </div>
-            <div class="slider-arrow hero-slider-1-arrow">
-                <!-- <button id="prevButton" class="prev-btn" onclick="prevSlide()"></button>
-                <button id="nextButton" class="next-btn" onclick="nextSlide()"></button> -->
-            </div>
+            <div class="slider-arrow hero-slider-1-arrow"></div>
         </section>
+        
         
         <section class="featured section-padding position-relative">            
             <div class="container">
@@ -985,7 +997,7 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                        
                                       <!-- xxxsssssdax--> 
                                     </div>
-                                    <!--End product-grid-4-->
+                                  
                                     </div>
                         <!--End product-grid-4-->
                          <div class="tab-pane fade" id="tab-three" role="tabpanel" aria-labelledby="tab-three">

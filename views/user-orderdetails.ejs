@@ -30,8 +30,8 @@
                                     <option value="refund" <%= orders.Status === 'refund' ? 'selected' : '' %>>Refund</option>
                                 <% } else if(orders.Status=="Confirmed") { %>
                                     <option class="selectopt" value="Cancelled" <%= orders.Status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
-                                    
-                                
+                                    <% } else if(orders.Status=="Shipped") { %>
+                                    <option value="Cancelled" <%= orders.Status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
                                 <% } else if(orders.Status=="Cancelled") { %>
                                    
                                     

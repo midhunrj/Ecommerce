@@ -45,6 +45,7 @@ const isUserBlocked = async (req, res, next) => {
     if (user && user.is_blocked === 0) {
       next();
     } else {
+      req.session.user=null
       res.redirect('/')
     }
   } catch (error) {

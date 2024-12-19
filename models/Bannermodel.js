@@ -16,7 +16,7 @@ const bannerSchema = new mongoose.Schema({
     endDate: {
         type: Date,
         required: true,
-        index: { expires: 0 } 
+        
     },
     image: {
         type: String, // Assuming you'll store the image path
