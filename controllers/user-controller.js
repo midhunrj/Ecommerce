@@ -32,8 +32,8 @@ port: 587,
 secure: false,
 
     auth: {
-      user: process.env.USER,
-      pass: process.env.PASS,
+      user: process.env.user,
+      pass: process.env.pass,
     },
   })
 const securepassword = async (password) => {
@@ -52,7 +52,7 @@ const sendresetpasswordmail=async(username,email,_id,token)=>{
     from: 'mdnrj3600@gmail.com',
     to: email,
     subject: 'Email Verification',
-    html: '<p>Hi '+username+', please click here to <a href="http://localhost:5000/forget-password-load?token='+token+'"Reset</a> your password</p>'
+    html: '<p>Hi '+username+', please click here to <a href="https://www.tech-tique.store/forget-password-load?token='+token+'"Reset</a> your password</p>'
   };
 
   await transporter.sendMail(mailOptions);

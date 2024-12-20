@@ -196,7 +196,7 @@ document.getElementById('downloadPDFButton').addEventListener('click', function(
 
     // Function to download PDF report
     function downloadPDFReport() {
-        const timeRange = document.getElementById('timeRangeFilter').value;
+        const timeRange = document.getElementById('timeRangeFilter').value; 
         window.location.href = `/admin/download-pdf?timeRange=${timeRange}`; 
         $('#downloadModal').modal('hide')
     }
