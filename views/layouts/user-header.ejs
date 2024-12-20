@@ -106,6 +106,7 @@
                     <div class="search-style-2">
                         <form action="/shop" method="get">
                             
+                            
                             <input type="text" name="search" placeholder="Search for items...">
                         </form>
                     </div>
@@ -114,7 +115,7 @@
                             <div class="header-action-icon-2">
                                 <a href="/wishlist" class="menu-item" id="wishlist">
                                     <img class="svgInject" alt="Evara" src="assets/imgs/theme/icons/icon-heart.svg">
-                                    <span class="pro-count blue" id="wishlist-count"><%=wishcount %></span>
+                                    <span class="pro-count blue" id="wishlist-count"><%=wishcount>0?wishcount:0 %></span>
                                 </a>
                             </div>
                             <div class="header-action-icon-2">

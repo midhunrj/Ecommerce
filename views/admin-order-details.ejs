@@ -34,7 +34,9 @@
                                     <option value="Refund Requested" <%= orders.Status === 'Refund Requested' ? 'selected' : '' %>>Refund Requested</option>
                                 <option value="Refund Approved" <%= orders.Status === 'Refund Approved' ? 'selected' : '' %>>Refund Approved</option>
                                 <option value="Refund Rejected" <%= orders.Status === 'Refund Rejected' ? 'selected' : '' %>>Refund Rejected</option>
-                                
+                           <% } else if(orders.Status=="Shipped") { %>
+                            <option value="Delivered" <%= orders.Status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                <option value="Cancelled" <%= orders.Status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
                                 <% } else if(orders.Status=="Cancelled") { %>
                                     <option value="Cancelled" <%= orders.Status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
                                     <% }else if(orders.Status=="Delivered"){ %>
@@ -204,7 +206,7 @@
                     success: function (response) {
                         console.log('Order status updated successfully');
                         setTimeout(function () {
-                    window.location.href = '/admin-orderlist';
+                    window.location.href = '/admin/orderlist';
                     }, 1000);
                         // Optionally update the UI to reflect the new status
                     },

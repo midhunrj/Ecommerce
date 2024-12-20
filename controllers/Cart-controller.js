@@ -80,6 +80,7 @@ const Cartpage=async(req,res)=>{
 
         // Extract required data from the aggregation result
         const cartData = cartAggregate[0]; // Assuming there's only one cart per user
+        console.log(cartData,"cartdata sjfjhhshhdh");
         if (!cartData) {
             // Handle the case where the cart is not found for the user
             return res.status(404).render('Check-out', {username:userdata.username,count});

@@ -45,7 +45,7 @@ wallet:{
 },
 profilePicture:{
     type:String,
-    required:true
+    default:''
 },
 coupons: [
     {
