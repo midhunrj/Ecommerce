@@ -38,7 +38,7 @@ console.log(req.body,"banner");
 
          
         // Respond to the client with a success message or redirect to a success page
-      res.status(200).json({status:true})
+     // res.status(200).json({status:true})
 
 
         // Respond to the client with a success message or redirect to a success page
