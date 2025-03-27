@@ -28,7 +28,7 @@
     cursor: pointer;
     /* Add any other styling you desire */
 }
- /* Add this style in your CSS or within a <style> tag in your EJS file */
+ 
     .address-item {
             display: flex;
             align-items: center;
@@ -36,7 +36,14 @@
     
         input[type="radio"] {
             transform: scale(0.5);
-            margin-right: 5px; /* Add some spacing between the radio button and the text */
+            margin-right: 5px; 
+        }
+        button.disabled-btn{
+          cursor: not-allowed;
+          background-color: #ccc !important; 
+    color: #666 !important;
+    border: 1px solid #aaa;
+    pointer-events: none; 
         }
         
     </style>

@@ -52,7 +52,11 @@
 
                                         </td>
                                         <td class="text-right" data-title="Cart">
-                                            <button class="btn btn-sm" onclick="addToCart('<%= wishlist[i]._id %>')"><i class="fi-rs-shopping-bag mr-5"></i>Add to cart</button>
+                                            <% if(wishlist[i].stock>0){%>
+                                            <button class="btn btn-sm  " style="cursor: pointer;"   onclick="addToCart('<%= wishlist[i]._id %>')"><i class="fi-rs-shopping-bag mr-5"></i>Add to cart</button>
+                                            <% }else {%>
+                                                <button class="btn btn-sm disabled-btn"  style="cursor:not-allowed; pointer-events: none; " disabled aria-disabled="true" onclick="addToCart('<%= wishlist[i]._id %>')"><i class="fi-rs-shopping-bag mr-5"></i>Add to cart</button>
+                                            <% } %>
                                         </td>
                                         <td class="action" data-title="Remove"><a href="/removewishlist/<%=wishlist[i]._id %>"><i class="fi-rs-trash"></i></a></td>
                                     </tr>
@@ -83,12 +87,12 @@
                         </div>
                     </div>
                     <div class="col-lg-5">
-                        <!-- Subscribe Form -->
+                        
                         <form class="form-subcriber d-flex wow fadeIn animated">
                             <input type="email" class="form-control bg-white font-small" placeholder="Enter your email">
                             <button class="btn bg-dark text-white" type="submit">Subscribe</button>
                         </form>
-                        <!-- End Subscribe Form -->
+                        
                     </div>
                 </div>
             </div>
@@ -178,7 +182,7 @@
             </div>
         </div>
     </footer>
-    <!-- Preloader Start -->
+    
     <div id="preloader-active">
         <div class="preloader d-flex align-items-center justify-content-center">
             <div class="preloader-inner position-relative">
@@ -193,7 +197,7 @@
             </div>
         </div>
     </div>
-    <!-- Vendor JS-->
+    
     <script>
         
 function addToCart(productId) {
@@ -202,16 +206,16 @@ function addToCart(productId) {
     $.ajax({
         url: '/Add-cart',
         method: 'POST',
-        data: { productId: productId },  // Pass productId in the request payload
+        data: { productId: productId },  
     success: (response) => {
         console.log(response);
         if (response.success) {
-            // Show SweetAlert for success
+        
             Swal.fire({
                 title: 'Product Added!',
                 text: 'Product has been added to your cart.',
                 icon: 'success',
-                timer: 3000  // Optional: Close the alert after 3 seconds
+                timer: 3000  
             }); 
             var carticon=document.getElementById('cart-count')
             var cartcount=parseInt(carticon.innerText)
