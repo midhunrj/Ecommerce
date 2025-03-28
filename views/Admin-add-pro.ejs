@@ -129,7 +129,7 @@
 
 
 
-    <script src="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.js"></script> -->
     <script>
         document.getElementById("imageInput").addEventListener("change", handleFileSelect);
         const cropButton = document.getElementById("cropButton");
@@ -176,7 +176,7 @@
                 thumbnail.appendChild(removeIcon);
                 addedImagesContainer.appendChild(thumbnail);
     
-                // Initialize Cropper.js on the selected image
+                
                 const cropper = new Cropper(img, {
                     aspectRatio: 16 / 9,
                     viewMode: 1,
@@ -190,13 +190,13 @@
         function cropSave(cropper, file) {
             const croppedCanvas = cropper.getCroppedCanvas();
             croppedCanvas.toBlob(blob => {
-                // Add the cropped image to the croppedImages array
+                
                 croppedImages.push({ file, blob });
             });
         }
     
         function save(e) {
-            // Update formData with cropped images
+            
             const valid = validate()
             if(valid){
                 croppedImages.forEach(({ file, blob }) => {
