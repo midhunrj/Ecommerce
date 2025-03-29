@@ -427,7 +427,7 @@
     // Function to share via email
     function shareViaEmail() {
         var referralCode = document.getElementById("referralCodeInput").value;
-        var signupLink = "http://localhost:5000/signup?ref=" + encodeURIComponent(referralCode);
+        var signupLink = "https://www.tech-tique.store/signup?ref=" + encodeURIComponent(referralCode);
         var emailBody = "Hey! Use my referral code: " + referralCode + ". Sign up using this link: " + signupLink;
         var emailLink = "mailto:?subject=Join and get rewarded&body=" + encodeURIComponent(emailBody);
         window.location.href = emailLink;

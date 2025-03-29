@@ -1165,7 +1165,7 @@ const couponpage=async(req,res)=>{
 }
 const newCoupon = async (req, res) => {
     try {
-        const { code, type,limit,expirydate, description, amount,miniamount} = req.body;
+        const { code, type,limit,startdate,expirydate, description, amount,miniamount} = req.body;
     
         // const expirydate=req.body[Expiry-date]
         
@@ -1180,6 +1180,7 @@ const newCoupon = async (req, res) => {
         Couponcode:code,
         Coupontype:type,
         Usagelimit:limit,
+        StartDate:startdate,
         Expirydate:expirydate,
         Amount:amount,
         Description:description,

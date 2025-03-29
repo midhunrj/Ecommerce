@@ -122,7 +122,9 @@ const addToCart = async (req, res) => {
       console.log("products stock",productData.stock);
         // Check if product is in stock
         
-
+        if (productData.stock < 1) {
+            return res.status(200).json({ success: false, message: 'Product is out of stock' });
+       }
 
         // Check if the user has a cart
         if (cartData) {
@@ -140,6 +142,8 @@ const addToCart = async (req, res) => {
                 cartItem.subtotal = subtotal;
             } else {
                 // Add a new item to cartItems
+                console.log("hvhvhgv");
+                
                 if (productData.stock < 1) {
                     return res.status(200).json({ success: false, message: 'Product is out of stock' });
                }
