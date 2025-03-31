@@ -4,6 +4,8 @@ const path=require('path')
 
 const session=require('express-session');
 const config=require('../configure/config');
+
+const uploader =require("../Multer/multer")
 user_route.use(
     session({
         secret:process.env.SECRET,
@@ -65,7 +67,7 @@ user_route.post('/Add-Address',auth.isLogin,auth.isUserBlocked,ProfileController
 user_route.get('/edit-Address',auth.isLogin,auth.isUserBlocked,ProfileController.editaddress)
 user_route.get('/delete-Address',auth.isLogin,auth.isUserBlocked,ProfileController.deleteaddress)
 user_route.post('/edit-Address',auth.isLogin,auth.isUserBlocked,ProfileController.updateaddress)
-user_route.post('/edit-userdetails',auth.isLogin,auth.isUserBlocked,ProfileController.edituserprofile)
+user_route.post('/edit-userdetails',auth.isLogin,auth.isUserBlocked,uploader.single('croppedProfileImageData'),ProfileController.edituserprofile)
 user_route.get('/change-password',auth.isLogin,auth.isUserBlocked,ProfileController.editpassword)
 user_route.post('/change-password',auth.isLogin,auth.isUserBlocked,ProfileController.changepassword)
 user_route.get('/order-detail',auth.isLogin,auth.isUserBlocked,ProfileController.orderdetails)
@@ -80,5 +82,5 @@ user_route.post('/removeCoupon',auth.isLogin,auth.isUserBlocked,userController.r
 user_route.get('/wishlist',auth.isLogin,userController.wishlistpage)
 user_route.post('/addtowishlist',auth.isLogin,userController.addtoWishlist)
 user_route.get('/removewishlist/:pro',auth.isLogin,userController.removewishlist)
-
+user_route.post('/retry-payment/:orderId',auth.isLogin,OrderController.retryPayment)
 module.exports=user_route

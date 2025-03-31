@@ -46,7 +46,7 @@ const getprofilepage=async(req,res)=>{
   req.session.count=count
     
     let wishcount=req.session.wishcount
-    res.render('user-profile',{message:'',users:userdata,userAddress:Addressdata,orders:Orderdata,username:userdata.username,count,wishcount,currentPage: page, // Pass current page to frontend for highlighting active page in pagination
+    res.render('user-profile',{message:'',users:userdata,userAddress:Addressdata,orders:Orderdata,username:userdata.username,count,wishcount,currentPage: page,referalCode: userdata.referalCode||'n/a', // Pass current page to frontend for highlighting active page in pagination
     totalPages: Math.ceil(totalCount / limit)})
 }
 catch(error)
@@ -56,8 +56,9 @@ catch(error)
 
 const edituserprofile = async (req, res) => {
     try {
-        // Extract user ID from query parameters
+
         const userId = req.query.id;
+console.log(req.body,"user profile update",req.file)
 
         // Extract other user details from the request body
         const { name, email, mobile } = req.body;
@@ -71,11 +72,10 @@ const edituserprofile = async (req, res) => {
             username: name,
             email: email,
             phone: mobile,
-            // Update profile picture if available
+
             ...(croppedProfileImageData && { profilePicture: croppedProfileImageData.filename })
         });
 
-        // Redirect or send response as needed
         res.redirect('/profile');
     } catch (error) {
         console.error('Error updating user profile:', error);

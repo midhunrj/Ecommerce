@@ -11,7 +11,8 @@
                 <header class="card-header">
                     <div class="row gx-3">
                         <div class="col-lg-4 col-md-6 me-auto">
-                            <input type="text" placeholder="Search..." class="form-control">
+                            <input type="text" id="searchInput" placeholder="Search..." class="form-control" value="<%= searchTerm %>" oninput="searchProducts()">
+
                         </div>
                         <div class="col-lg-2 col-6 col-md-3">
                             <select class="form-select">
@@ -72,9 +73,14 @@
                                     <a href="/admin/edit-product?id=<%= products[i]._id %>" class="btn btn-sm font-sm rounded btn-brand">
                                         <i class="material-icons md-edit"></i> Edit
                                     </a>
-                                    <a href="/admin/delete-product?id=<%= products[i]._id %>" class="btn btn-sm font-sm btn-light rounded" onclick="confirmDelete('<%= products[i]._id %>')">
+                                    <!-- <a href="/admin/delete-product?id=<%= products[i]._id %>" class="btn btn-sm font-sm btn-light rounded" onclick="confirmDelete('<%= products[i]._id %>')">
                                         <i class="material-icons md-delete_forever"></i> Delete
-                                    </a>
+                                    </a> -->
+                                    <a href="javascript:void(0);" class="btn btn-sm font-sm btn-light rounded" 
+   onclick="confirmDelete('<%= products[i]._id %>')">
+   <i class="material-icons md-delete_forever"></i> Delete
+</a>
+
                                     <% if (locals.products[i].offer===0) { %>
                                         <a href="#" class="btn btn-sm font-sm btn-info rounded" onclick="openProductOfferModal('<%= products[i]._id %>')">Apply Offer</a>                                        </button>
                                         <% }else{ %>
@@ -96,17 +102,33 @@
                 <!-- card-body end// -->
             </div> <!-- card end// -->
             <div class="pagination-area mt-30 mb-50">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-start">
-                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                        <li class="page-item"><a class="page-link" href="#">03</a></li>
-                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">16</a></li>
-                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <% if (currentPage > 1) { %>
+                            <li class="page-item">
+                                <a class="page-link" href="?page=<%= currentPage - 1 %>&search=<%= searchTerm %>">
+                                    <i class="material-icons md-chevron_left"></i>
+                                </a>
+                            </li>
+                        <% } %>
+            
+                        <% for (let i = 1; i <= totalPages; i++) { %>
+                            <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                                <a class="page-link" href="?page=<%= i %>&search=<%= searchTerm %>"><%= i %></a>
+                            </li>
+                        <% } %>
+            
+                        <% if (currentPage < totalPages) { %>
+                            <li class="page-item">
+                                <a class="page-link" href="?page=<%= currentPage + 1 %>&search=<%= searchTerm %>">
+                                    <i class="material-icons md-chevron_right"></i>
+                                </a>
+                            </li>
+                        <% } %>
                     </ul>
                 </nav>
             </div>
+            
         </section> <!-- content-main end// -->
         <footer class="main-footer font-xs">
             <div class="row pb-30 pt-15">
@@ -268,6 +290,24 @@
     </script>
 
 <script>
+
+function confirmDelete(productId) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Redirect to delete route
+            window.location.href = `/admin/delete-product?id=${productId}`;
+        }
+    });
+    return false; // Prevent default action
+}
     document.addEventListener("DOMContentLoaded", function() {
         // Get the current URL
         const currentUrl = window.location.pathname;
@@ -303,6 +343,28 @@
     });
     </script>
     
+    <!-- <script>
+        function filterProducts() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let productCards = document.querySelectorAll('.card-product-grid');
+    
+            productCards.forEach((card) => {
+                let productName = card.querySelector('.title').textContent.toLowerCase();
+                
+                if (productName.includes(input)) {
+                    card.style.display = "";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+    </script> -->
+    <script>
+    function searchProducts() {
+        let searchValue = document.getElementById('searchInput').value;
+        window.location.href = `?search=${searchValue}&page=1`; // Redirect with search query
+    }
+    </script>
 </body>
 
 </html>

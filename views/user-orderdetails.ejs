@@ -60,6 +60,27 @@
                         <div class="col-md-4">
                             <article class="icontext align-items-start">
                                 <div class="text">
+                                    <h6 class="mb-1">Order Status</h6>
+                                    <% if (orders.paymentstatus === "Failed") { %>
+                                        <p class="text-danger"><b>Payment Failed</b></p>
+                                        <% let currentTime = new Date().getTime(); %>
+                                        <% let paymentTime = new Date(orders.placedon).getTime(); %>
+                                        <% let timeDiff = currentTime - paymentTime; %>
+                                        <% let retryLimit = 24 * 60 * 60 * 1000; %> <!-- 24 hours -->
+                                        <% if (timeDiff < retryLimit) { %>
+                                            <button class="btn btn-warning" onclick="retryPayment('<%= orders._id %>')">Retry Payment</button>
+                                        <% } else { %>
+                                            <p class="text-danger">Session Expired</p>
+                                        <% } %>
+                                    <% } else { %>
+                                        <p class="text-success">Payment Successful</p>
+                                    <% } %>
+                                </div>
+                            </article>
+                        </div>
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <div class="text">
                                     <h6 class="mb-1">Order info</h6>
                                     <p class="mb-1">
                                         Shipping: Fargo express <br>
@@ -188,7 +209,7 @@
 <%- include("./layouts/footer.ejs") %>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script> 
 <script>
     function updateOrderStatus() {
         var newStatus = $('#statusSelect').val();
@@ -230,4 +251,104 @@
             }
         });
     }
+</script>
+
+<script>
+    // function retryPayment(orderId, amount) {
+    //     fetch('/retry-payment', {
+    //         method: 'POST',
+    //         headers: { 'Content-Type': 'application/json' },
+    //         body: JSON.stringify({ orderId, amount })
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         var options = {
+    //             "key": data.razorpayKey,
+    //             "amount": data.amount,
+    //             "currency": "INR",
+    //             "name": "Movie Ticket Booking",
+    //             "description": "Retry Payment",
+    //             "order_id": data.orderId,
+    //             "handler": function (response) {
+    //                 fetch('/verify-payment', {
+    //                     method: 'POST',
+    //                     headers: { 'Content-Type': 'application/json' },
+    //                     body: JSON.stringify({
+    //                         orderId: orderId,
+    //                         paymentId: response.razorpay_payment_id,
+    //                         signature: response.razorpay_signature
+    //                     })
+    //                 })
+    //                 .then(response => response.json())
+    //                 .then(data => {
+    //                     if (data.success) {
+    //                         alert("Payment successful!");
+    //                         location.reload();
+    //                     } else {
+    //                         alert("Payment verification failed.");
+    //                     }
+    //                 });
+    //             },
+    //             "theme": { "color": "#3399cc" }
+    //         };
+    //         var rzp1 = new Razorpay(options);
+    //         rzp1.open();
+    //     })
+    //     .catch(error => console.error("Error:", error));
+    // }
+
+function retryPayment(orderId) { 
+    fetch(`/retry-payment/${orderId}`, { method: "POST" })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                var options = {
+                    key: data.razorpayKey, // Use key from backend
+                    amount: data.amount, // Directly use the amount
+                    currency: "INR",
+                    name: "Your Company Name",
+                    description: "Order Payment",
+                    order_id: data.razorpayOrderId, // Razorpay order ID
+                    handler: function (response) {
+                        fetch(`/verify-payment`, {  // 🔥 Changed to `/verify-payment`
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                orderId: data.orderId, // Send the database order ID
+                                data:{razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_signature: response.razorpay_signature,
+                                }
+                            }),
+                        })
+                        .then(res => res.json())
+                        .then(result => {
+                            if (result.success) {
+                                Swal.fire({
+                                    title: "Success!",
+                                    text: "Order Placed, Payment Successful.",
+                                    icon: "success",
+                                    confirmButtonText: "OK"
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire("Error", "Payment verification failed.", "error");
+                            }
+                        });
+                    }
+                };
+
+                var rzp1 = new Razorpay(options);
+                rzp1.open();
+            } else {
+                Swal.fire("Error", "Failed to initiate payment", "error");
+            }
+        })
+        .catch(error => {
+            console.error("Fetch error:", error);
+            Swal.fire("Error", "Something went wrong", "error");
+        });
+}
+
 </script>

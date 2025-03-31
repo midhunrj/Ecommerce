@@ -341,16 +341,47 @@ const unblockUser = async (req, res) => {
 
 
 
+// const productslist = async (req, res) => {
+//   try {
+//     const productData = await product.find({ isVerified: true })
+//     const CategoryData=await Category.find({})
+//     res.render('admin-products', { products: productData,category:CategoryData })
+//   }
+//   catch (error) {
+//     console.log(error.message);
+//   }
+// }
 const productslist = async (req, res) => {
   try {
-    const productData = await product.find({ isVerified: true })
-    const CategoryData=await Category.find({})
-    res.render('admin-products', { products: productData,category:CategoryData })
-  }
-  catch (error) {
+    const { page = 1, limit = 10, search = "" } = req.query; // Get query parameters
+
+    const query = {
+      isVerified: true,
+      productname: { $regex: search, $options: "i" } // Case-insensitive search
+    };
+
+    const totalProducts = await product.countDocuments(query);
+    const productData = await product.find(query)
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+
+    const CategoryData = await Category.find({});
+
+    res.render('admin-products', {
+      products: productData,
+      category: CategoryData,
+      currentPage: Number(page),
+      totalPages: Math.ceil(totalProducts / limit),
+      searchTerm: search
+    });
+
+  } catch (error) {
     console.log(error.message);
+    res.status(500).send("Server Error");
   }
-}
+};
+
 const Addproducts = async (req, res) => {
   try {
     const categoryData = await Category.find({});

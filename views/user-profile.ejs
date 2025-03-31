@@ -1,6 +1,62 @@
 <%- include("./layouts/user-header.ejs") %>
-   
-    <main class="main">
+<style>
+.profile-picture-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    margin-bottom: 15px;
+}
+
+#profile-pic-wrapper {
+    width: 120px; /* Default circular profile size */
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid #ccc;
+    transition: all 0.3s ease-in-out;
+}
+
+#profile-pic-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: all 0.3s ease-in-out;
+}
+
+.profile-picture-container.image-selected #profile-pic-wrapper {
+    width: fit-content; /* Larger size when image is selected */
+    height: fit-content;
+    border-radius: 0; /* Remove circular effect */
+}
+
+.profile-picture-container.image-selected #profile-pic-preview {
+    object-fit: contain; /* Show full image */
+    border-radius: 0;
+}
+
+.edit-icon {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.edit-icon i {
+    font-size: 16px;
+}
+
+#chooseProfileButton {
+    margin-top: 10px;
+}
+
+</style>    <main class="main">
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
@@ -162,13 +218,22 @@
                                             <div class="card-body">
                                                 <form method="post" name="enq" action="/edit-userdetails?id=<%=users._id %>" enctype="multipart/form-data" id="userProfileForm">
 
-                                                    <div>
-                                                        <label class="form-label">Profile Picture</label>
-                                                        <input type="file" id="profile-pic-upload" accept="image/*">
-                                                        <div id="profile-pic-preview-container" class="profile-pic-preview">
-                                                            <img id="profile-pic-preview" src="/productImage/<%= users.profilePicture %>" alt="Profile Picture">
-                                                        </div>                                                    </div>
-                                                    <button id="cropButton" class="btn btn-primary">Crop Image</button>
+                                                    <div class="profile-picture-container">
+                                                        <div id="profile-pic-wrapper">
+                                                            <img id="profile-pic-preview" 
+                                                                 src="<%= users.profilePicture ? `/productImage/${users.profilePicture}` : '/default-avatar.png' %>" 
+                                                                 alt="Profile Picture">
+                                                            <label for="profile-pic-upload" class="edit-icon">
+                                                                <i class="fas fa-pencil-alt"></i>
+                                                            </label>
+                                                        </div>
+                                                        <input type="file" id="profile-pic-upload" name="croppedProfileImageData" accept="image/*" hidden>
+                                                        <button id="profileButton" type="button" class="btn btn-secondary">
+                                                            <%= users.profilePicture ? 'Update Profile Picture' : 'Choose Profile Picture' %>
+                                                        </button>
+                                                    </div>
+                                                    
+                                                    <button id="cropButton" class="btn btn-primary" style="display: none;">Crop Image</button>
                                                     <input type="hidden" name="croppedProfileImageData" id="croppedProfileImageData"> 
                                                     <div class="form-group col-md-6">
                                                         <label>Name:<span class="required">*</span></label>
@@ -246,7 +311,7 @@
                                             <div class="card-body">
                                                 <p>Share your referral code:</p>
 
-                                                <input type="hidden" id="referralCodeInput" value="<%=users._id %>" readonly>
+                                                <input  id="referralCodeInput" value="<%=referalCode %>" readonly>
                                                 <button class="btn btn-primary" onclick="shareReferral()">Share</button>
                                             </div>
                                         </div>
@@ -437,7 +502,7 @@
     // Function to share via WhatsApp
     function shareViaWhatsApp() {
         var referralCode = document.getElementById("referralCodeInput").value;
-        var signupLink = "http://localhost:5000/signup?ref=" + encodeURIComponent(referralCode);
+        var signupLink = "https://tech-tique.store/signup?ref=" + encodeURIComponent(referralCode);
         var whatsappMessage = "Hey! Use my referral code: " + referralCode + ". Sign up using this link: " + signupLink;
         var whatsappLink = "https://wa.me/?text=" + encodeURIComponent(whatsappMessage);
         window.open(whatsappLink);
@@ -447,7 +512,7 @@
     // Function to share via SMS
     function shareViaSMS() {
         var referralCode = document.getElementById("referralCodeInput").value;
-        var signupLink = "http://localhost:5000/signup?ref=" + encodeURIComponent(referralCode);
+        var signupLink = "https://tech-tique.store/signup?ref=" + encodeURIComponent(referralCode);
         var smsMessage = "Hey! Use my referral code: " + referralCode + ". Sign up using this link: " + signupLink;
         var smsLink = "sms:?body=" + encodeURIComponent(smsMessage);
         window.location.href = smsLink;
@@ -613,9 +678,8 @@
 </script>     
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
      -->
-     <script src="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.js"></script>
-     <script src="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.js"></script>
-     <script>
+     
+     <!-- <script>
         let cropper;
     
         document.getElementById("profile-pic-upload").addEventListener("change", handleFileSelect);
@@ -683,6 +747,107 @@
                 });
             }
         });
+    </script> -->
+    <script>
+   let cropper;
+
+const fileInput = document.getElementById("profile-pic-upload");
+const profileButton = document.getElementById("profileButton");
+const profilePicPreview = document.getElementById("profile-pic-preview");
+const cropButton = document.getElementById("cropButton");
+const profileContainer = document.querySelector(".profile-picture-container");
+
+// Open file selection
+profileButton.addEventListener("click", function () {
+    fileInput.click();
+});
+
+// Handle file selection
+fileInput.addEventListener("change", function (event) {
+    event.preventDefault();
+    const file = event.target.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            profilePicPreview.src = e.target.result;
+            profileContainer.classList.add("image-selected"); // Change container to full preview mode
+
+            if (cropper) {
+                cropper.destroy();
+            }
+
+            cropper = new Cropper(profilePicPreview, {
+                aspectRatio: NaN, // Remove forced cropping ratio
+                viewMode: 2,
+                dragMode: 'move',
+                autoCropArea: 1,
+                checkOrientation: false,
+                guides: true,
+                center: true,
+                highlight: true,
+                cropBoxMovable: true,
+                cropBoxResizable: true,
+                minCropBoxWidth: 100,
+                minCropBoxHeight: 100
+            });
+
+            cropButton.style.display = "block";
+        };
+
+        reader.readAsDataURL(file);
+    }
+});
+
+// Crop and upload image
+cropButton.addEventListener("click", function () {
+    if (cropper) {
+        const croppedCanvas = cropper.getCroppedCanvas();
+
+        croppedCanvas.toBlob(blob => {
+            const formData = new FormData(document.getElementById("userProfileForm"));
+            formData.append('croppedProfileImageData', blob, 'cropped-profile-image.png');
+
+            fetch('/edit-userdetails?id=<%= users._id %>', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Profile picture updated successfully!");
+                    
+                    // After cropping, return to circular profile picture
+                    profilePicPreview.src = croppedCanvas.toDataURL();
+                    profileContainer.classList.remove("image-selected"); // Revert to circular profile picture
+                }
+            })
+            .catch(error => console.error('Error uploading cropped profile image:', error));
+        });
+    }
+});
+</script>
+    <script>
+        document.getElementById("profile-pic-upload").addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        document.getElementById("profile-pic-preview").src = e.target.result;
+
+        // Show crop button only when image is chosen
+        document.getElementById("cropButton").style.display = "block";
+    };
+    reader.readAsDataURL(file);
+});
+
+// Hide "Choose Profile Picture" when user uploads an image
+document.getElementById("profile-pic-upload").addEventListener("click", function () {
+    document.getElementById("chooseProfileButton").style.display = "none";
+});
+
     </script>
                  <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
     <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>

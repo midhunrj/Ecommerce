@@ -74,6 +74,7 @@ wishlist: [{
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: 'products' // Reference to the Product model
-}]
+}],
+referalCode: { type: String, unique: true }
 })
 module.exports = mongoose.model('user', userSchema);

@@ -4,6 +4,7 @@ const Category=require('../models/categorymodel')
 const Cart=require('../models/Cartmodel')
 const Coupon=require('../models/couponmodel')
 const bcrypt = require('bcrypt');
+const crypto=require('crypto')
 const  nodemailer=require('nodemailer')
 const randomString = require('randomstring')
 const jwt = require('jsonwebtoken');
@@ -101,7 +102,20 @@ const verifyLogin = async (req, res) => {
      
      
       if (passwordmatch||password===userdata.password&&userdata.is_admin === 0 && userdata.is_blocked === 0) {
-        console.log('User');
+        console.log('User before referalcode',userdata.referalCode);
+        if (!userdata.referalCode) {
+         
+         userdata.referalCode = crypto.randomBytes(5).toString('hex'); // Generates a unique referral code
+         console.log(userdata.referalCode,"before saving referal code");
+          
+         try {
+            await userdata.save();  // Ensure the referral code is saved
+            console.log(`Generated referral code: ${userdata.referalCode}`);
+          } catch (err) {
+            console.error("Error saving referral code:", err.message);
+          }
+        
+        }
         req.session.user = userdata._id;
         res.redirect('/home');
       } else if (password===userdata.password&&userdata.is_admin === 0&&userdata.is_blocked===1) {
@@ -159,7 +173,7 @@ const Otppage = async (req, res) => {
     
 const insertUser = async (req, res) => {
     console.log(req.body)
-    const {username,email,phone,password,confirmPassword}=req.body
+    const {username,email,phone,password,confirmPassword,referalCode}=req.body
     try {
         // Check if the phone number is already registered
 
@@ -178,14 +192,22 @@ const insertUser = async (req, res) => {
         const otp = generateOTP();
          const otpexpire=currentDate.getTime()+20000
         console.log(otpexpire);
+       
+        const generatereferalCode = () => Math.random().toString(36).substring(2, 10).toUpperCase();
+        const newreferalCode = generatereferalCode();
+        let referalUser = null;
+        if (referalCode) {
+            referalUser = await user.findOne({ referalCode });
+        }
     
-    const newuser=new user({
+        const newuser=new user({
       username,
       email,
       phone,
       password,
       is_admin:0,
-      otp
+      otp,
+      referalCode:newreferalCode
     })
     
   
@@ -205,7 +227,8 @@ const insertUser = async (req, res) => {
         hashpassword,
         is_admin:0,
       isVerified:false,
-    otp,referal}
+    otp,referalCode:newreferalCode,
+  referalUserId:referalUser?referalUser._id:null}
       res.render('Otp',{title:"signup page"})
     
     }
@@ -236,27 +259,27 @@ const VerifyOtp= async (req, res) => {
     console.log("entered value is",enteredOTP);
       // Find user by phone number
       const {username,email,phone,hashpassword,is_admin,
-        isVerified,otp,referal}=req.session.tempdata
+        isVerified,otp,referalCode,referalUserId}=req.session.tempdata
         console.log(email);
         console.log(referal,"referal userid");
         const newuser = await user.findOne({email:email});
     
       // Nodemailer configuration
     
- 
-      const referwallet=await user.findOne({_id:referal})
+     if(referalUserId){
+      const referwallet=await user.findOne({_id:referalUserId})
    
       let Wallet=0
       if(referwallet)
       {
         Wallet=200
         referwallet.wallet=Wallet
-        
+         await referwallet.save()
       }
       else{
         Wallet=0
       }
-
+    }
         const User=new user({
           username:username,
           email:email,
@@ -265,7 +288,8 @@ const VerifyOtp= async (req, res) => {
           is_admin:is_admin,
           isVerified:true,
           otp:otp,
-          wallet:Wallet
+          wallet:Wallet,
+          referalCode:referalCode
         })
       
         const otpexpire=currentDate.getTime()+20000
@@ -624,6 +648,8 @@ const applycoupon = async (req, res) => {
   try {
     const { coupon, totalSubtotal } = req.body;
     const userId = req.session.user;
+    console.log(req.body,"req body");
+    
      req.session.coupon=coupon
     // Ensure totalSubtotal is parsed as a number
     const parsedTotalSubtotal = parseFloat(totalSubtotal);
@@ -641,7 +667,7 @@ const applycoupon = async (req, res) => {
 
     // Check if the total subtotal is below the minimum amount required for the coupon
     if (parsedTotalSubtotal < couponDocument.Minimumamount) {
-      return res.status(400).json({ error: 'Total subtotal is below the minimum amount required for this coupon' });
+      return res.status(400).json({ error: 'Total subtotal is below the minimum amount required for this coupon',miniamount:couponDocument.Minimumamount });
     }
 
     // Query the database to find the user
