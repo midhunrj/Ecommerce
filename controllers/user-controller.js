@@ -229,9 +229,12 @@ const insertUser = async (req, res) => {
       isVerified:false,
     otp,referalCode:newreferalCode,
   referalUserId:referalUser?referalUser._id:null}
+
+  console.log(req.session.tempdata,"tempdata")
       res.render('Otp',{title:"signup page"})
     
     }
+
     catch(err)
     {
       console.error('Error saving user:',err)
@@ -261,15 +264,15 @@ const VerifyOtp= async (req, res) => {
       const {username,email,phone,hashpassword,is_admin,
         isVerified,otp,referalCode,referalUserId}=req.session.tempdata
         console.log(email);
-        console.log(referal,"referal userid");
+        //console.log(referal,"referal userid");
         const newuser = await user.findOne({email:email});
     
-      // Nodemailer configuration
     
+        let Wallet=0
      if(referalUserId){
       const referwallet=await user.findOne({_id:referalUserId})
    
-      let Wallet=0
+
       if(referwallet)
       {
         Wallet=200

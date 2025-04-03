@@ -57,9 +57,9 @@
                                                     <% let originalPrice = Math.floor(productprice / (1 - categoryoffer+productoffer / 100)); %>
 
                                                     <% console.log("original price", originalPrice); %>
-                                                    <div class="price mb-2">
-                                                        <span>&#8377;<%= products[i].price %></span>
-                                                        <span class="old-price">&#8377;<%= products[i].originalprice %></span>
+                                                    <div class="price mb-2 " style="display: flex; align-items: center; gap: 5px;" >
+                                                        <span style="color:rgb(10, 79, 10);">&#8377;<%= products[i].price %></span>
+                                                        <span class="old-price" style="text-decoration: line-through; color:gray;">&#8377;<%= products[i].originalprice %></span>
                                                         <span class="text-danger"><%= categoryoffer+productoffer %>% off</span>
                                                     </div>
                                                 <% } else { %>

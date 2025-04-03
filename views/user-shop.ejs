@@ -435,13 +435,12 @@
         success: (response) => {
             console.log(response);
             if (response.success) {
-                // Show SweetAlert for success
+                
                 Swal.fire({
                     title: 'Product Added!',
                     text: 'Product has been added to your cart.',
                     icon: 'success',
-                    timer: 3000  // Optional: Close the alert after 3 seconds
-                    
+                    timer: 3000                      
                 });
                
              var carticon=document.getElementById('cart-count')

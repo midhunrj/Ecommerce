@@ -181,6 +181,10 @@
                     aspectRatio: 16 / 9,
                     viewMode: 1,
                     zoomable: false,
+                    ready:function()
+                    {
+                        cropSave(cropper,file)
+                    }
                 });
     
                 cropButton.addEventListener('click', () => cropSave(cropper, file));

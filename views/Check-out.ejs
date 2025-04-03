@@ -333,7 +333,7 @@
                 <form id="couponsform" action="/applyCoupon" method="POST">
                     <label for="coupon" class="text-brand">Coupon Code:</label>
                     <input type="text" id="coupon" name="coupon" style="width:200px;">
-                    <button type="submit" onclick="applyCoupon()">Apply</button>
+                    <button type="submit" onclick="applyCoupon(event)">Apply</button>
                 </form>
                 <button id="showCouponsBtn" type="button" class="btn-dark" onclick="showCouponModal()">Apply Promo</button>
 
@@ -542,21 +542,32 @@
     
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
-                const totalSubtotalElement = document.querySelector('.product-subtotal span');
+    document.addEventListener('DOMContentLoaded', function () {
+    const totalSubtotalElement = document.querySelector('.product-subtotal span');
 
+    if (totalSubtotalElement) {
+        let totalSubtotalText = totalSubtotalElement.innerText.trim();
+        let totalSubtotal = parseFloat(totalSubtotalText.replace(/[^\d.]/g, ''));
 
-    let totalSubtotalText = totalSubtotalElement.innerText.trim();
-    let totalSubtotal = parseFloat(totalSubtotalText.replace(/[^\d.]/g, ''));
+        if (isNaN(totalSubtotal)) {
+            console.error("Invalid totalSubtotal value extracted.");
+            return;
+        }
 
-    let originalTotal = totalSubtotal; // Variable to store the original total value
+        window.originalTotal = totalSubtotal; // Store in window to prevent changes
 
-    // Calculate shipping cost based on totalSubtotal
-    let ship = 0; // Initialize ship variable
-    if (totalSubtotal >= 1000) {
-        ship = 0; // Free shipping
+        // Calculate shipping
+        window.ship = totalSubtotal >= 1000 ? 0 : 40;
+
+        // Check if coupon is already applied
+        const couponCode = document.getElementById('coupon').value;
+        if (couponCode) {
+            displayAppliedCouponMessage(couponCode);
+        }
     } else {
-        ship = 40; // Standard shipping cost
+        console.error("Subtotal element not found.");
     }
+});
 
 //     document.addEventListener('DOMContentLoaded', function () {
 //     const couponCode = document.getElementById('coupon').value;
@@ -565,7 +576,8 @@
 //     }
 // });
 
-    async function applyCoupon() {
+    async function applyCoupon(event) {
+
         
         event.preventDefault();
         const couponCode = document.getElementById('coupon').value;
@@ -663,12 +675,13 @@
     if (response.status === 200) {
       Swal.fire('Success', data.message, 'success');
       // Reset the UI and update total amount
-      const appliedCouponMessage = document.getElementById('appliedCouponMessage');
-      appliedCouponMessage.innerHTML = '';
-      const removeCouponButton = document.getElementById('removeCouponButton');
-      removeCouponButton.style.display = 'none';
+    //   const appliedCouponMessage = document.getElementById('appliedCouponMessage');
+    //   appliedCouponMessage.innerHTML = '';
+    //   const removeCouponButton = document.getElementById('removeCouponButton');
+    //   removeCouponButton.style.display = 'none';
     //   updateTotalAmount(originalTotal);
     restoreOriginalSubtotal()
+    document.getElementById('coupon').value = '';
       resetCouponUI()
     } else {
       Swal.fire('Error', data.message, 'error');
