@@ -137,7 +137,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <% for(let i=orders.length-1;i>=0;i--){ %>
+                                                            <% for(let i=1;i<orders.length;i++){ %>
                                                             <tr>
                                                                 <td><%=orders[i]._id %></td>
                                                                 <td><%=orders[i].Date %></td>
@@ -169,7 +169,7 @@
                                                 
                                                         <% if (currentPage < totalPages) { %>
                                                             <li class="page-item">
-                                                                <a class="page-link" href="?tab=orders&page=<%= currentPage +parseInt(1) %>#orders" aria-label="Next">
+                                                                <a class="page-link" href="?tab=orders&page=<%= parseInt(currentPage) + parseInt(1) %>#orders" aria-label="Next">
                                                                     <span aria-hidden="true">&raquo;</span>
                                                                 </a>
                                                             </li>

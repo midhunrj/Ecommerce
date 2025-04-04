@@ -27,7 +27,7 @@ const getprofilepage=async(req,res)=>{
     const skip = (page - 1) * limit; 
     
     
-    const Orderdata = await Order.find({ userId: Id }).skip(skip).limit(limit);
+    const Orderdata = await Order.find({ userId: Id }).sort({placedon:-1}).skip(skip).limit(limit);
 
  
     const totalCount = await Order.countDocuments({ userId: Id });
