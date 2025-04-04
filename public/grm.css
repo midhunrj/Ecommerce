@@ -15,13 +15,13 @@ body{
     background-color:violet;
 }
 .container {
-    display: flex;
-    justify-content: center;
+    /* display: flex;
+    justify-content: center; */
     align-items: center;
-    width: 35rem;
+    width: 25rem;
     padding: 20px;
-    background-color:#696969;
-    height:100vh;
+    /* background-color:#696969; */
+    height:100%;
 }  
 /* form{
   display: flex;
@@ -37,11 +37,12 @@ form {
   display: flex;
   flex-direction: column;
   align-items: center;
+  height:100%;
 }
 form h2{
   text-align: center;
   color:#e65b00;
-  margin-bottom: 20px; 
+margin-top: -30px; 
 }
 
 .form-group {
@@ -121,9 +122,9 @@ body {
     border-radius: 15px;
     text-align: center;
     max-width: 25rem;
-    max-height: 55rem;
+    max-height: 65rem;
     width: 100%;
-    height:100%;
+    height:100vh;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
     animation: fadeIn 0.8s ease-in-out;
      /* Fade in animation */
@@ -179,7 +180,7 @@ body {
   input::placeholder {
     color: #777; /* Lighter placeholder text color */
   }
-  #name,#password,#phone,#email,#confirmPassword{
+  #name,#password,#phone,#email,#confirmPassword,#ReferalCode{
  text-align: center;
  color:white;
  background:transparent;
@@ -193,7 +194,7 @@ body {
  margin: 1rem;
 }
 
-  #name:focus,#password:focus,#email:focus,#phone:focus,#confirmPassword:focus{
+  #name:focus,#password:focus,#email:focus,#phone:focus,#confirmPassword:focus,#ReferalCode:focus{
   width: 20rem;
   animation-name: colorchange;
   animation-duration: 10s;
@@ -258,7 +259,7 @@ body {
     cursor: pointer;
     transition: all .3s ease-in-out;
     padding: 1rem 3rem;
-
+     
     transition: background 0.5s ease-in-out; /* Smooth background color transition */
   }
 
@@ -285,6 +286,7 @@ body {
     50% { transform: translateX(5px); }
   }
   span{
+    margin-top:-10px;
     color:White;
     font-size: 16px;
     font-weight: 600;
