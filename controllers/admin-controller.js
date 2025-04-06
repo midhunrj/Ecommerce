@@ -11,7 +11,8 @@ const fs=require('fs')
 const moment = require('moment');
 const path = require('path');
 const sharp=require("sharp")
-const PDFDocument=require("pdfkit-table")
+const PDFDocument=require("pdfkit-table");
+const { timeStamp } = require('console');
 
 // const randomString = require('randomstring')
 
@@ -733,6 +734,28 @@ const updateorderstatus = async (req, res) => {
                   console.log("products after restoring\n ratatata !!!! ratattaaatata",Product);
               }
           }
+
+          if(updatedOrder.payment=="Online" && updatedOrder.paymentstatus=='paid')
+          {
+            const User=await user.findById(updatedOrder.userId)
+
+            if(User)
+            {
+              User.wallet +=updatedOrder.Totalprice
+
+              User.history.push(
+                {
+                  amount:updatedOrder.Totalprice,
+                  status:'Refund',
+                  timestamp:new Date()
+                }
+              )
+
+              await User.save()
+            }
+          }
+          updatedOrder.paymentstatus = 'refunded';
+        await updatedOrder.save();
       }
       else if(newStatus=="Delivered"&& updatedOrder)
       {
