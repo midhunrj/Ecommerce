@@ -638,7 +638,10 @@ const shoppage = async (req, res) => {
         currentPage: parseInt(page),
         username:userdata.username,
         count,
-        wishcount
+        wishcount,
+        priceRange,
+        sort:sortoption,
+        search:req.query.search
       });
     }
   }  catch (error) {

@@ -113,11 +113,19 @@
                 </div>
                 <div class="header-right">
                     <div class="search-style-2">
-                        <form action="/shop" method="get">
-                            
-                            
-                            <input type="text" name="search" placeholder="Search for items...">
+                        <form action="/shop" method="get" style="display: flex; gap: 10px;">
+                            <input type="text" name="search" value="<%= typeof search !== 'undefined' ? search : '' %>" placeholder="Search for items…" />
+                            <input type="hidden" name="sort" value="<%= typeof sort !== 'undefined' ? sort : '' %>" />
+                            <input type="hidden" name="priceRange" value="<%= typeof priceRange !== 'undefined' ? priceRange : '' %>" />
+                            <button type="submit"><i class="fi-rs-search"></i></button>
+                        
+                            <% if (search && search.trim() !== '') { %>
+                                <a href="/shop" title="Clear Search" style="color: #999; margin-top: 5px; font-size: 20px;">
+                                    <i class="fi-rs-cross-circle"></i>
+                                </a>
+                            <% } %>
                         </form>
+                        
                     </div>
                     <div class="header-action-right">
                         <div class="header-action-2">

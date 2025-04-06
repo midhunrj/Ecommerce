@@ -14,10 +14,33 @@
             </div>
             <div class="mobile-header-content-area">
                 <div class="mobile-search search-style-3 mobile-header-border">
-                    <form action="/shop" method="get">
-                        <input type="text" name="search" placeholder="Search for items…">
+                    <form action="/shop" method="get" style="position: relative; display: flex; gap: 10px;">
+                        <input
+                          type="text"
+                          id="searchInput"
+                          name="search"
+                          value="<%= typeof search !== 'undefined' ? search : '' %>"
+                          placeholder="Search for items…"
+                          style="padding-right: 30px;"
+                        />
+                        <input type="hidden" name="sort" value="<%= typeof sort !== 'undefined' ? sort : '' %>" />
+                        <input type="hidden" name="priceRange" value="<%= typeof priceRange !== 'undefined' ? priceRange : '' %>" />
+                      
+                        <!-- Submit Button -->
                         <button type="submit"><i class="fi-rs-search"></i></button>
-                    </form>
+                      
+                        <!-- Clear Button -->
+                        <% if (search && search.trim() !== '') { %>
+                          <button
+                            type="button"
+                            onclick="clearSearch()"
+                            style="position: absolute; right: 70px; top: 50%; transform: translateY(-50%); border: none; background: transparent; font-size: 16px; cursor: pointer;"
+                          >
+                            ×
+                          </button>
+                        <% } %>
+                      </form>
+                        
                 </div>
                 <div class="mobile-menu-wrap mobile-header-border">
                     <div class="main-categori-wrap mobile-header-border">
@@ -119,25 +142,22 @@
                                 <div class="bt-1 border-color-1"></div>
                             </div>
                             <form action="/shop" method="get">
-                                <!-- Existing code for search and category filters -->
+                                <input type="hidden" name="search" value="<%= typeof search !== 'undefined' ? search : '' %>">
+                                <input type="hidden" name="sort" value="<%= typeof sort !== 'undefined' ? sort : '' %>">
+                                <input type="hidden" name="category" value="<%= typeof categoryId !== 'undefined' ? categoryId : '' %>" />
 
-                                <!-- Price Range Filter -->
-                                <div>
-                                    <label class="form-group   form-group "> <b>Price Range: </b></label>
-                                    <select name="priceRange" class="form-control">
-                                        <option value="0-999">0-999</option>
-                                        <option value="1000-4999">1000-4999</option>
-                                        <option value="5000-14999">5000-14999</option>
-                                        <option value="15000-49999">15000-49999</option>
-                                        <option value="greater than 50000">greater than 50000</option>
-                                    </select>
-                                </div>
-                                <br>
-                                <br>
-
-                           
-                            
-                                    <button type="submit">Filter</button></form>
+                                <select name="priceRange" class="form-control">
+                                  <option value="0-999" <%= priceRange === '0-999' ? 'selected' : '' %>>0-999</option>
+                                  <option value="1000-4999" <%= priceRange === '1000-4999' ? 'selected' : '' %>>1000-4999</option>
+                                  <option value="5000-14999" <%= priceRange === '5000-14999' ? 'selected' : '' %>>5000-14999</option>
+                                  <option value="15000-49999" <%= priceRange === '15000-49999' ? 'selected' : '' %>>15000-49999</option>
+                                  <option value="greater than 50000" <%= priceRange === 'greater than 50000' ? 'selected' : '' %>>greater than 50000</option>
+                                </select>
+                              
+                                <br><br>
+                                <button type="submit">Filter</button>
+                              </form>
+                              
                         </div>
     
                         <div class="sidebar-widget product-sidebar mb-30 p-30 bg-grey border-radius-10">
@@ -188,12 +208,13 @@
                                     </div>
                                     <div class="sort-by-dropdown">
                                         <ul id="sortOptions">
-                                            <li><a class="active" href="/shop?sort=featured">Featured</a></li>
-                                            <li><a href="/shop?sort=lowtohigh">Price: Low to High</a></li>
-                                            <li><a href="/shop?sort=hightolow">Price: High to Low</a></li>
-                                            <li><a href="/shop?sort=atoz">Alphabetical: A to Z</a></li>
-                                            <li><a href="/shop?sort=ztoa">Alphabetical: Z to A</a></li>
-                                        </ul>
+                                            <li><a class="<%= sort === 'featured' ? 'active' : '' %>" href="/shop?sort=featured&search=<%= search || '' %>&priceRange=<%= priceRange || '' %>&category=<%= categoryId || '' %>"">Featured</a></li>
+                                            <li><a href="/shop?sort=lowtohigh&search=<%= search || '' %>&priceRange=<%= priceRange || '' %>&category=<%= categoryId || '' %>"">Price: Low to High</a></li>
+                                            <li><a href="/shop?sort=hightolow&search=<%= search || '' %>&priceRange=<%= priceRange || '' %>&category=<%= categoryId || '' %>"">Price: High to Low</a></li>
+                                            <li><a href="/shop?sort=atoz&search=<%= search || '' %>&priceRange=<%= priceRange || '' %>&category=<%= categoryId || '' %>"">Alphabetical: A to Z</a></li>
+                                            <li><a href="/shop?sort=ztoa&search=<%= search || '' %>&priceRange=<%= priceRange || '' %>&category=<%= categoryId || '' %>"">Alphabetical: Z to A</a></li>
+                                          </ul>
+                                          
                                     </div>
                                 </div>
                             </div>
@@ -273,17 +294,30 @@
                           <% } %>
                   
                           <!--pagination-->
-                          <div class="pagination-area mt-15 mb-sm-5 mb-lg-0">
-                            <nav aria-label="Page navigation example">
-                              <ul class="pagination justify-content-start">
-                                <% for (let page = 1; page <= totalNumberOfPages; page++) { %>
-                                  <li class="page-item <%= page === currentPage ? 'active' : '' %>">
-                                    <a class="page-link" href="/shop?page=<%= page %>"><%= page %></a>
-                                  </li>
-                                <% } %>
-                              </ul>
+                          <div class="pagination-area mt-20 mb-20">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center">
+                                    <% if (currentPage > 1) { %>
+                                        <li class="page-item">
+                                            <a class="page-link" href="/shop?page=<%= currentPage - 1 %>&search=<%= search || '' %>&sort=<%= sort || '' %>&priceRange=<%= priceRange || '' %>">&laquo; Prev</a>
+                                        </li>
+                                    <% } %>
+                        
+                                    <% for (let i = 1; i <= totalNumberOfPages; i++) { %>
+                                        <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                            <a class="page-link" href="/shop?page=<%= i %>&search=<%= search || '' %>&sort=<%= sort || '' %>&priceRange=<%= priceRange || '' %>"><%= i %></a>
+                                        </li>
+                                    <% } %>
+                        
+                                    <% if (currentPage < totalNumberOfPages) { %>
+                                        <li class="page-item">
+                                            <a class="page-link" href="/shop?page=<%= currentPage + 1 %>&search=<%= search || '' %>&sort=<%= sort || '' %>&priceRange=<%= priceRange || '' %>">Next &raquo;</a>
+                                        </li>
+                                    <% } %>
+                                </ul>
                             </nav>
-                          </div>
+                        </div>
+                        
                   
                         </div>
                       </div>
@@ -293,137 +327,18 @@
         
     </main>
     <%- include("./layouts/footer.ejs") %>
-    <!-- <footer class="main">
-        <section class="newsletter p-30 text-white wow fadeIn animated">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-7 mb-md-3 mb-lg-0">
-                        <div class="row align-items-center">
-                            <div class="col flex-horizontal-center">
-                                <img class="icon-email" src="assets/imgs/theme/icons/icon-email.svg" alt="">
-                                <h4 class="font-size-20 mb-0 ml-3">Sign up to Newsletter</h4>
-                            </div>
-                            <div class="col my-4 my-md-0 des">
-                                <h5 class="font-size-15 ml-4 mb-0">...and receive <strong>$25 coupon for first shopping.</strong></h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-5">
-                        <!-- Subscribe Form -->
-                        <!-- <form class="form-subcriber d-flex wow fadeIn animated">
-                            <input type="email" class="form-control bg-white font-small" placeholder="Enter your email">
-                            <button class="btn bg-dark text-white" type="submit">Subscribe</button>
-                        </form>
-                        <!-- End Subscribe Form -->
-                    <!-- </div>
-                </div>
-            </div>
-        </section>
-        <section class="section-padding footer-mid">
-            <div class="container pt-15 pb-20">
-                <div class="row">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="widget-about font-md mb-md-5 mb-lg-0">
-                            <div class="logo logo-width-1 wow fadeIn animated">
-                                <a href="index.html"><img src="assets/imgs/theme/logo.png" alt="logo"></a>
-                            </div>
-                            <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">Contact</h5>
-                            <p class="wow fadeIn animated">
-                                <strong>Address: </strong>562 Wellington Road, Street 32, San Francisco
-                            </p>
-                            <p class="wow fadeIn animated">
-                                <strong>Phone: </strong>+01 2222 365 /(+91) 01 2345 6789
-                            </p>
-                            <p class="wow fadeIn animated">
-                                <strong>Hours: </strong>10:00 - 18:00, Mon - Sat
-                            </p>
-                            <h5 class="mb-10 mt-30 fw-600 text-grey-4 wow fadeIn animated">Follow Us</h5>
-                            <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
-                                <a href="#"><img src="assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
-                                <a href="#"><img src="assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
-                                <a href="#"><img src="assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
-                                <a href="#"><img src="assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
-                                <a href="#"><img src="assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-3">
-                        <h5 class="widget-title wow fadeIn animated">About</h5>
-                        <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Delivery Information</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Terms &amp; Conditions</a></li>
-                            <li><a href="#">Contact Us</a></li>
-                            <li><a href="#">Support Center</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-2  col-md-3">
-                        <h5 class="widget-title wow fadeIn animated">My Account</h5>
-                        <ul class="footer-list wow fadeIn animated">
-                            <li><a href="#">Sign In</a></li>
-                            <li><a href="#">View Cart</a></li>
-                            <li><a href="#">My Wishlist</a></li>
-                            <li><a href="#">Track My Order</a></li>
-                            <li><a href="#">Help</a></li>
-                            <li><a href="#">Order</a></li>
-                        </ul>
-                    </div> -->
-                    <!-- <div class="col-lg-4">
-                        <h5 class="widget-title wow fadeIn animated">Install App</h5>
-                        <div class="row">
-                            <div class="col-md-8 col-lg-12">
-                                <p class="wow fadeIn animated">From App Store or Google Play</p>
-                                <div class="download-app wow fadeIn animated">
-                                    <a href="#" class="hover-up mb-sm-4 mb-lg-0"><img class="active" src="assets/imgs/theme/app-store.jpg" alt=""></a>
-                                    <a href="#" class="hover-up"><img src="assets/imgs/theme/google-play.jpg" alt=""></a>
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-lg-12 mt-md-3 mt-lg-0">
-                                <p class="mb-20 wow fadeIn animated">Secured Payment Gateways</p>
-                                <img class="wow fadeIn animated" src="assets/imgs/theme/payment-method.png" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <div class="container pb-20 wow fadeIn animated"> -->
-            <!-- <div class="row">
-                <div class="col-12 mb-20">
-                    <div class="footer-bottom"></div>
-                </div>
-                <div class="col-lg-6">
-                    <p class="float-md-left font-sm text-muted mb-0">&copy; 2022, <strong class="text-brand">Evara</strong> - HTML Ecommerce Template </p>
-                </div>
-                <div class="col-lg-6">
-                    <p class="text-lg-end text-start font-sm text-muted mb-0">
-                        Designed by <a href="http://alithemes.com" target="_blank">Alithemes.com</a>. All rights reserved
-                    </p>
-                </div>
-            </div>
-        </div>
-    </footer> -->
-    <!-- Preloader Start -->
-    <!-- <div id="preloader-active">
-        <div class="preloader d-flex align-items-center justify-content-center">
-            <div class="preloader-inner position-relative">
-                <div class="text-center">
-                    <h5 class="mb-5">Now Loading</h5>
-                    <div class="loader">
-                        <div class="bar bar1"></div>
-                        <div class="bar bar2"></div>
-                        <div class="bar bar3"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-    <!-- Vendor JS-->
-    <!-- Include SweetAlert library -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-<!-- Your script handling the AJAX success callback -->
+<!-- 
+<script>
+    function handleCategoryClick(categoryId) {
+      const url = new URL(window.location.origin + "/shop");
+      url.searchParams.set("category", categoryId);
+      url.searchParams.set("page", 1); // reset to first page
+      window.location.href = url.href;
+    }
+  </script> -->
+  
 <script>
     function addToCart(productId) {
         console.log("Product ID:", productId);
@@ -475,9 +390,16 @@
 </script>
 <script>
     function handleCategoryClick(categoryId) {
-        window.location.href = `/shop?id=${categoryId}`;
+        const url = new URL(window.location.href);
+        const search = url.searchParams.get("search") || "";
+        const sort = url.searchParams.get("sort") || "";
+        const priceRange = url.searchParams.get("priceRange") || "";
+
+        const newUrl = `/shop?id=${categoryId}&search=${encodeURIComponent(search)}&sort=${encodeURIComponent(sort)}&priceRange=${encodeURIComponent(priceRange)}`;
+        window.location.href = newUrl;
     }
 </script>
+
 <script>
     function applyFilters() {
       // Gather selected filters
@@ -611,6 +533,22 @@
         });
     });
 </script>
+<script>
+    const searchInput = document.querySelector('input[name="search"]');
+    searchInput?.addEventListener('input', () => {
+      if (searchInput.value.trim() === '') {
+        window.location.href = '/shop';
+      }
+    });
+  </script>
+  <script>
+    function clearSearch() {
+      const input = document.getElementById('searchInput');
+      input.value = '';
+      window.location.href = '/shop'; // redirect to remove all query params
+    }
+  </script>
+  
 
      <!-- <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
     <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
