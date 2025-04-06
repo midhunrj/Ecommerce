@@ -140,9 +140,11 @@
                                                             <% for(let i=0;i<orders.length;i++){ %>
                                                             <tr>
                                                                 <td><%=orders[i]._id %></td>
+                                                                <td>
                                                                 <script>
                                                                     document.write(formatDate("<%= orders[i].Date %>"));
                                                                 </script>
+                                                                </td>
                                                                 <td><%=orders[i].Status %></td>
                                                                 <td><%=orders[i].payment %></td>
                                                                 <td><%=orders[i].paymentstatus %></td>
