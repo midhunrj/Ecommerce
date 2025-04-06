@@ -8,6 +8,7 @@ const bcrypt = require("bcrypt")
 const easyinvoice=require("easyinvoice")
 const Razorpay=require("razorpay")
 const crypto=require("crypto")
+const dayjs=require('dayjs')
 
 const instance = new Razorpay({
     key_id: process.env.RAZORPAY_ID_KEY,
@@ -44,9 +45,24 @@ const getprofilepage=async(req,res)=>{
     count=0
   }
   req.session.count=count
-    
+  let orders = Orderdata.map(order => {
+    let formattedDate = order.Date;;
+  
+    if (order.Date) {
+      const parsedDate = dayjs(order.Date);
+      if (parsedDate.isValid()) {
+        formattedDate = parsedDate.format('DD/MM/YYYY');
+      }
+    }
+  
+    return {
+      ...order.toObject(), // ensure it's plain object to avoid Mongoose issues
+      formattedDate
+    };
+  });
+  
     let wishcount=req.session.wishcount
-    res.render('user-profile',{message:'',users:userdata,userAddress:Addressdata,orders:Orderdata,username:userdata.username,count,wishcount,currentPage: page,referalCode: userdata.referalCode||'n/a', // Pass current page to frontend for highlighting active page in pagination
+    res.render('user-profile',{message:'',users:userdata,userAddress:Addressdata,orders,username:userdata.username,count,wishcount,currentPage: page,referalCode: userdata.referalCode||'n/a', // Pass current page to frontend for highlighting active page in pagination
     totalPages: Math.ceil(totalCount / limit)})
 }
 catch(error)

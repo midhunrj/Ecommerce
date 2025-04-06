@@ -13,7 +13,7 @@ const path = require('path');
 const sharp=require("sharp")
 const PDFDocument=require("pdfkit-table");
 const { timeStamp } = require('console');
-
+const dayjs=require('dayjs')
 // const randomString = require('randomstring')
 
 
@@ -174,7 +174,7 @@ const loadhomepage = async (req, res) => {
   try {
     const userId = req.session.admin;
     if (!userId) {
-      // Redirect if user is not logged in
+      
       return res.redirect("/admin/");
     }
 
@@ -206,9 +206,24 @@ const loadhomepage = async (req, res) => {
     
     const orderdata = await Order
       .find({ Order_verified: true })
+      .sort({placedon:-1})
       .skip((currentPage - 1) * perPage)
       .limit(perPage);
-
+        let ordersData = orderdata.map(order => {
+            let formattedDate = order.Date;;
+          
+            if (order.Date) {
+              const parsedDate = dayjs(order.Date);
+              if (parsedDate.isValid()) {
+                formattedDate = parsedDate.format('DD/MM/YYYY');
+              }
+            }
+          
+            return {
+              ...order.toObject(), // ensure it's plain object to avoid Mongoose issues
+              formattedDate
+            };
+          })
    
     const catdata = await Category.find({});
 
@@ -217,7 +232,7 @@ const loadhomepage = async (req, res) => {
 
     res.render('homesample', {
       username: userData.username,
-      orders: orderdata,
+      orders: ordersData,
       revenue,
       products:productdata,
       categories: catdata,
@@ -663,9 +678,24 @@ const Orderlistpage = async (req, res) => {
       const userdata=await user.find({is_admin:0})
     
       console.log("orderlist dta",orderData);
+      let orders = orderData.map(order => {
+          let formattedDate = order.Date;;
+        
+          if (order.Date) {
+            const parsedDate = dayjs(order.Date);
+            if (parsedDate.isValid()) {
+              formattedDate = parsedDate.format('DD/MM/YYYY');
+            }
+          }
+        
+          return {
+            ...order.toObject(), // ensure it's plain object to avoid Mongoose issues
+            formattedDate
+          };
+        })
     if (orderData) {
       res.render('Admin-orderlist', {
-        orders: orderData,
+        orders,
         page: validPage,
         totalNumberOfPages,
         users:userdata

@@ -448,7 +448,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="orderTableBody">
-                                    <% for(let i=orders.length-1;i>=0;i--){ %>
+                                    <% for(let i=0;i<orders.length;i++){ %>
                                     <tr>
                                         <td class="text-center">
                                             <div class="form-check">
@@ -459,7 +459,7 @@
                                         <td><a href="#" class="fw-bold"><%=orders[i]._id %></a> </td>
                                         <td><%= orders[i].Address[0].name %></td>
                                         <td>
-                                            <%=orders[i].Date %>
+                                            <%=orders[i].formattedDate %>
                                         </td>
                                         <td>
                                             <%= orders[i].Totalprice %>

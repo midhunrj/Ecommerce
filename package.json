@@ -15,6 +15,7 @@
     "body-parser": "^1.20.2",
     "connect-flash": "^0.1.1",
     "crypto": "^1.0.1",
+    "dayjs": "^1.11.13",
     "dotenv": "^16.4.1",
     "easyinvoice": "^3.0.44",
     "ejs": "^3.1.9",

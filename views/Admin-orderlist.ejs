@@ -65,7 +65,7 @@
                                             <% } %>
                                             <td>₹<%= orders[i].Totalprice %></td>
                                             <td><span class="badge rounded-pill alert-warning"><%= orders[i].Status %></span></td>
-                                            <td><%= orders[i].Date %></td>
+                                            <td><%= orders[i].formattedDate %></td>
                                             <td class="text-end">
                                                 <a href="/admin/order-detail?id=<%= orders[i]._id %>" class="btn btn-md rounded font-sm">Detail</a>
                                                 <div class="dropdown">

@@ -140,11 +140,7 @@
                                                             <% for(let i=0;i<orders.length;i++){ %>
                                                             <tr>
                                                                 <td><%=orders[i]._id %></td>
-                                                                <td>
-                                                                <script>
-                                                                    document.write(formatDate("<%= orders[i].Date %>"));
-                                                                </script>
-                                                                </td>
+                                                                <td><%=orders[i].formattedDate %></td>
                                                                 <td><%=orders[i].Status %></td>
                                                                 <td><%=orders[i].payment %></td>
                                                                 <td><%=orders[i].paymentstatus %></td>
@@ -487,18 +483,6 @@
     }
 });
     </script>
-    <script>
-        function formatDate(dateStr) {
-            const parsedDate = new Date(dateStr);
-    
-            const day = String(parsedDate.getDate()).padStart(2, '0');
-            const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
-            const year = parsedDate.getFullYear();
-    
-            return `${day}/${month}/${year}`;
-        }
-    </script>
-    
  <script>
     // Function to open the modal dialog
     function shareReferral() {
