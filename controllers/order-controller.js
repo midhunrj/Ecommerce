@@ -87,7 +87,8 @@ if (userCart) {
                     paymentstatus: "Pending",
                     userId: userId,
                     placedon: new Date(),
-                    Date: new Date().toLocaleDateString(),
+                    Date:new Date().toISOString().split('T')[0],
+                    
                 });            // If paymentOption is true
         // Find the selected address in the array
         if(paymentOption=="COD"){
