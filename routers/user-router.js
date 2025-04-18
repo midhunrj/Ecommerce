@@ -37,7 +37,6 @@ user_route.post('/signup',userController.insertUser);
  user_route.post('/VerifyOtp',auth.isLogout,userController.Loadlog);
 user_route.post('/resendotp', userController.resendotp);
 user_route.post('/Otp', userController.VerifyOtp);
-user_route.get('/',userController.Loginload);
 user_route.get('/forget-password',userController.Forgetload)
 user_route.post('/forget-password',userController.Forget)
 user_route.get('/forget-password-load',userController.forgetpasswordload)
@@ -47,12 +46,13 @@ user_route.post('/reset-password',userController.resetpassword)
 // user_route.get('/login',userController.Loginload);
 console.log("giraffe");
 
-user_route.post('/login',userController.verifyLogin);
+user_route.post('/verify-login',userController.verifyLogin);
 
-
-user_route.get('/home',auth.isLogin,auth.isUserBlocked,userController.Homepage);
-user_route.get('/productDetails',auth.isLogin,auth.isUserBlocked,userController.productdetails)
-user_route.get('/shop',auth.isLogin,auth.isUserBlocked,userController.shoppage);
+user_route.get('/',userController.logRedirect)
+user_route.get('/login',userController.Loginload);
+user_route.get('/home',auth.isUserBlockedOrGuest,userController.Homepage);
+user_route.get('/productDetails',auth.isUserBlockedOrGuest,userController.productdetails)
+user_route.get('/shop',auth.isUserBlockedOrGuest,userController.shoppage);
 user_route.get('/logout',auth.isLogin,auth.isUserBlocked,userController.userLogout);
 user_route.get('/cart',auth.isLogin,auth.isUserBlocked,CartController.Cartpage)
 user_route.post('/Add-cart',auth.isLogin,auth.isUserBlocked,CartController.addToCart)

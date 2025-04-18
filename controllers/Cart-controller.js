@@ -44,7 +44,7 @@ const Cartpage=async(req,res)=>{
         const Productitems=await Product.find({_id:{$in:Cartlist}})
            const cartItems=cartdata.cartItems
        
-     return res.render('Cart',{products:Productitems,Cart:cartdata,cartdata:cartItems,username:userdata.username,count,wishcount})
+     return res.render('Cart',{products:Productitems,Cart:cartdata,cartdata:cartItems,username:userdata.username,count,wishcount,search:req.query.search})
       }
     
     catch (error) {
@@ -93,7 +93,7 @@ const Cartpage=async(req,res)=>{
         const addressData = await Address.findOne({ userid: userId });
         let wishcount=req.session.wishcount
         // Render the checkout page with fetched data
-        res.render('Check-out', { products, Cart: cartData, cartdata: cartItems, userAddress: addressData,username:userdata.username,Coupons:Coupondata,count,wishcount });
+        res.render('Check-out', { products, Cart: cartData, cartdata: cartItems, userAddress: addressData,username:userdata.username,Coupons:Coupondata,count,wishcount,search:req.query.search });
 
     } catch (error) {
         console.log(error.message);
@@ -107,12 +107,14 @@ const addToCart = async (req, res) => {
         const productId = req.body.productId;
         const userId = req.session.user;
         console.log("hello",productId);
-
-        // Find the user's cart
+        if (!userId) {
+            return res.status(401).json({ success: false, message: "You must login" });
+        }
+        
         let cartData = await Cart.findOne({ user_id: userId });
 
         
-        // Find the product data
+        
         const productData = await Product.findOne({ _id: productId });
         console.log("pro-price",productData.price)
 

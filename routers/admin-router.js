@@ -99,7 +99,7 @@ admin_route.post('/Add-productoffer',auth.isLogin,adminController.Addproductoffe
 admin_route.post('/Remove-productOffer',auth.isLogin,adminController.removeproductoffer);
 admin_route.get('/logout',auth.isLogout,adminController.logout)
 // admin_route.get('*', function (req, res) {
-//     res.redirect('/')
+//     res.redirect('/login'))
 // });
 
 module.exports = admin_route;

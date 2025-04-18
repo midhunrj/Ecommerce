@@ -74,7 +74,7 @@ const Loginload = async (req, res) => {
         {
          
           let message=req.session.message
-        res.render('Loginpage',{title:"login page",message})}
+        res.render('Loginpage',{title:"login page",message,flashMessage:req.session.flashMessage})}
         
     } catch (error) {
         console.log(error.message);
@@ -306,7 +306,7 @@ const VerifyOtp= async (req, res) => {
       await User.save();
       console.log("heroooo");
       req.session.message='user saved successfuly'
-      res.redirect('/')
+      res.redirect('/login')
       
    
     } 
@@ -392,7 +392,14 @@ console.log(error.message)
 
 const Homepage = async (req, res) => {
 try{
-const userData = await user.findOne({_id: req.session.user })
+
+  let userData = null;
+    let count = 0;
+    let wishcount = 0;
+    let carts = [];
+    if (req.session.user)
+    {
+ userData = await user.findOne({_id: req.session.user })
 console.log("user",userData);
 
   req.session.user?true:false;
@@ -421,8 +428,7 @@ console.log(wishlistdata[0]?.wishcount,"wishdata");
   req.session.count=count
   console.log(req.session.count,"req session");
   
-    const productData=await product.find({isVerified:true})
-    const CategoryData=await Category.find({})
+   
     const carts=await Cart.find({user_id:req.session.user}).populate('cartItems.product_id')
     console.log("========>",carts)
     carts.forEach(cart => {
@@ -430,9 +436,12 @@ console.log(wishlistdata[0]?.wishcount,"wishdata");
           console.log(cartItem.product_id.productname);
       });
   });
+}
+const productData=await product.find({isVerified:true})
+const CategoryData=await Category.find({})
   const bannerdata=await banner.find({status:"active"})
   console.log(bannerdata);
-  res.render('userhome',{username:userData.username,products:productData,category:CategoryData,count,wishcount,cart:carts,banners:bannerdata})
+  res.render('userhome',{username:userData?.username??null,products:productData,category:CategoryData,count,wishcount,cart:carts,banners:bannerdata})
   
 
 }
@@ -465,7 +474,7 @@ const resetpassword=async(req,res)=>{
     const updatedData=await user.findByIdAndUpdate({_id:id},{$set:{password:secure_password}})
   req.flash('Loginpage','Password reset successfuly')
   req.session.message="password changed successfully"
-    res.redirect('/')
+    res.redirect('/login')
     delete req.session.message
   }
   catch (error) {
@@ -497,11 +506,18 @@ const resendotp=async(req,res)=>{
   }
 }
 
+const logRedirect = async (req, res) => {
+  try {
+     res.redirect('/home')
+  } catch (error) {
+      console.log(error.message);
+  }
+}
 const userLogout = async (req, res) => {
     try {
       console.log(req.session.user,'ytftytfytfy');
         req.session.user=null
-        res.redirect('/');
+        res.redirect('/login');
 
     } catch (error) {
         console.log(error.message);
@@ -534,7 +550,7 @@ const productdetails=async(req,res)=>{
       req.session.count=count
       let wishcount=req.session.wishcount
       let relatedproducts=await product.find({})
-   res.render('productdetails',{products:productData,username:userdata.username,category:CategoryData,count,relatedproducts,wishcount})
+   res.render('productdetails',{products:productData,username:userdata?.username??null,category:CategoryData,count,relatedproducts,wishcount,search:req.query.search})
     }
     else{
       res.status(200).json({ message: 'Product is  not inside' });
@@ -554,21 +570,21 @@ const shoppage = async (req, res) => {
     
     let productQuery = {isVerified:true};
 
-    // Search
+    
     const search = req.query.search;
     if (search) {
       productQuery.productname = { $regex: new RegExp(search, "i") };
     }
 
-    // Category sorting
-    const sortCategory = req.query.id;
+    
+    const sortCategory = req.query.category;
     if (sortCategory) {
       console.log("hello guys");
       productQuery.Category = sortCategory;
       console.log(productQuery.Category,"jum jum barabar");
     }
 
-    // Price range
+    
     const priceRange = req.query.priceRange;
     if (priceRange) {
       if (priceRange === "greater than 50000") {
@@ -617,17 +633,36 @@ const shoppage = async (req, res) => {
      count=0
    }
    req.session.count=count
-   let wishcount=req.session.wishcount
-    // Apply filters
-    const totalNumberOfProducts = await product.find(productQuery).countDocuments();
+   
+    let username = null;
+
+
+    if (userId) {
+      const userdata = await user.findById(userId);
+      username = userdata?.username;
+
+      const cartdata = await Cart.aggregate([
+        { $match: { user_id: userId } },
+        { $unwind: "$cartItems" },
+        { $group: { _id: null, count: { $sum: "$cartItems.quantity" } } },
+      ]);
+      count = cartdata[0]?.count || 0;
+      req.session.count = count;
+
+      wishcount = req.session.wishcount || 0;
+    }
+      wishcount=req.session.wishcount||0
+    
+    const totalNumberOfProducts = await product.countDocuments(productQuery);
     const totalNumberOfPages = Math.ceil(totalNumberOfProducts / productsPerPage);
 
-    const productData = await product.find(productQuery).sort(sortcriteria)
+    const productData = await product.find(productQuery)
+      .sort(sortcriteria)
       .skip((page - 1) * productsPerPage)
       .limit(productsPerPage);
 
     const categoryData = await Category.find({});
-    
+
 
     if (productData && categoryData) {
       res.render("user-shop", {
@@ -636,12 +671,13 @@ const shoppage = async (req, res) => {
         page: page,
         totalNumberOfPages,
         currentPage: parseInt(page),
-        username:userdata.username,
+        username:userdata?.username??null,
         count,
-        wishcount,
+        wishcount:wishcount||0,
         priceRange,
         sort:sortoption,
-        search:req.query.search
+        search:req.query.search,
+        categoryId:req.query.category
       });
     }
   }  catch (error) {
@@ -736,7 +772,7 @@ const wishlistpage=async(req,res)=>{
    const userdata = await user.aggregate([{$match:{_id:new mongoose.Types.ObjectId(userid)}},{$lookup:{from:"products",localField:"wishlist",foreignField:"_id",as:"populatedwishlist"}}])
    console.log("wishlist",userdata);
    let wishcount=req.session.wishcount
-    res.render('wishlist',{username:userdata[0].username,count,wishlist:userdata[0].populatedwishlist,wishcount})
+    res.render('wishlist',{username:userdata[0].username,count,wishlist:userdata[0].populatedwishlist,wishcount,search:req.query.search})
   }
   catch(error)
   {
@@ -750,7 +786,9 @@ let productid =req.body.productId
 
 console.log("wishl",productid);
     let userid=req.session.user
-
+    if (!userid) {
+      return res.status(401).json({ success: false, message: "You must login" });
+  }
      const existuser = await user.findOne({ _id: userid, wishlist:{$in: [new mongoose.Types.ObjectId(productid)] }});
   
     console.log(existuser,'exist')
@@ -831,6 +869,7 @@ const errorpage=async(req,res)=>{
     wishlistpage,
     addtoWishlist,
     removewishlist,
-    errorpage
+    errorpage,
+    logRedirect
    
 }

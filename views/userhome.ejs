@@ -247,13 +247,17 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                    
                                 </li>
                                 <li class="dropdown nav-item">
-                                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"><%= username %></a>
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                                        <a class="dropdown-item" href="/profile" id="profile"><i class="material-icons md-perm_identity"></i>Profile</a>
-                                       
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item text-danger" href="/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
-                                    </div>
+                                    <% if(username!==null){ %>
+                                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"><%= username %></a>
+                                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                                            <a class="dropdown-item" href="/profile" id="profile"><i class="material-icons md-perm_identity"></i>Profile</a>
+                                           
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item text-danger" href="/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                                        <% } else { %>
+                                            <a class="dropdown-toggle" href="/" id="dropdownAccount">Signup/Login</a>
+                                            <% } %>
+                                         </div>
                                 </li>
                             </ul>
                         </div>
@@ -1404,16 +1408,26 @@ header-top header-top-ptb-1 d-none d-lg-block {
                     });
             }
             },
-            error: function (error) {
-                console.error("AJAX error:", error);
-
+            error: function (xhr) {
+            if (xhr.status === 401) { 
                 Swal.fire({
-                    title: 'Error!',
-                    text: 'Failed to add product to wishlist.',
-                    icon: 'error',
-                    timer: 3000
+                    title: 'Login Required!',
+                    text: 'You must login to add products to your Wishlist.',
+                    icon: 'warning',
+                    timer: 2000
+                }).then(() => {
+                    window.location.href = '/login';
                 });
+            } else {
+               
+Swal.fire({
+    title: 'Error!',
+    text: 'Failed to add product to wishlist.',
+    icon: 'error',
+    timer: 3000
+});
             }
+        }
         })
     }
 </script>
@@ -1449,16 +1463,26 @@ function addToCart(productId) {
                     });
                 }
             },
-            error: function (error) {
-                console.error("AJAX error:", error);
-
+            error: function (xhr) {
+            if (xhr.status === 401) { // Not authorized
                 Swal.fire({
-                    title: 'Error!',
-                    text: 'Failed to add product to cart.',
-                    icon: 'error',
-                    timer: 3000
+                    title: 'Login Required!',
+                    text: 'You must login to add products to your cart.',
+                    icon: 'warning',
+                    timer: 2000
+                }).then(() => {
+                    window.location.href = '/login';
                 });
+            } else {
+                
+Swal.fire({
+    title: 'Error!',
+    text: 'Failed to add product to cart.',
+    icon: 'error',
+    timer: 3000
+});
             }
+        }
         });
 }
 
