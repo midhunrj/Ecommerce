@@ -403,7 +403,7 @@ try{
 console.log("user",userData);
 
   req.session.user?true:false;
-  let count=0;
+   count=0;
   const wishlistdata = await user.aggregate([
     { $match: { _id: new mongoose.Types.ObjectId(req.session.user) } },
     { $group: { _id: null, wishcount: { $sum: { $size: "$wishlist" } } } }
@@ -412,7 +412,7 @@ console.log("user",userData);
 console.log(wishlistdata[0]?.wishcount,"wishdata");
 
  req.session.wishcount=wishlistdata[0]?.wishcount
- let wishcount=req.session.wishcount
+ wishcount=req.session.wishcount
   const cartdata=await Cart.aggregate([{$match:{user_id:req.session.user}},{$unwind:"$cartItems"},{$group:{_id:null,count:{"$sum":"$cartItems.quantity"}}}])
   console.log(cartdata[0]?.count);
   
@@ -428,7 +428,7 @@ console.log(wishlistdata[0]?.wishcount,"wishdata");
   req.session.count=count
   console.log(req.session.count,"req session");
   
-   
+   count=req.session.count
     const carts=await Cart.find({user_id:req.session.user}).populate('cartItems.product_id')
     console.log("========>",carts)
     carts.forEach(cart => {
