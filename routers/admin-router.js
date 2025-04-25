@@ -74,7 +74,7 @@ admin_route.get("/categories",auth.isLogin,categoryController.loadCategoriesPage
   admin_route.post("/update-banners",auth.isLogin,bannercontroller.updatebanners)
   admin_route.get('/bannerlist',auth.isLogin,bannercontroller.bannerlist)
   admin_route.get('/sales-report',auth.isLogin,adminController.salesreport);
-
+ // admin_route.get('/filter-sales-report',auth.isLogin,adminController.filtersalesreport);
   // Route to get sales report by week
 admin_route.get('/sales/weekly', auth.isLogin,adminController.salesweekly)
  
@@ -85,6 +85,7 @@ admin_route.get('/sales/monthly',auth.isLogin,adminController.salesmonthly);
 // Route to get sales report by year
 admin_route.get('/sales/yearly',auth.isLogin,adminController.salesyearly);
 admin_route.get('/sales/daily',auth.isLogin,adminController.salesdaily);
+admin_route.get('/sales/all',auth.isLogin,adminController.salesAlltime)
 admin_route.get('/new-coupon',auth.isLogin,adminController.couponpage);
 admin_route.post('/Add-new-coupon',auth.isLogin,adminController.newCoupon)
 admin_route.get('/coupons',auth.isLogin,adminController.Couponlist);

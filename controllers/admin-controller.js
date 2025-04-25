@@ -815,13 +815,85 @@ const deleteOrder = async (req, res) => {
   }
 };
 
+const filtersalesreport = async (req, res) => {
+  try {
+    console.log(req.query.page);
+    const page = req.query.page || 1;
+    console.log(page, "pages");
+    const ordersperpage = 8;
+    const timeRange = req.query.timeRange || 'yearly'; // Default to yearly if not provided
+    const statusFilter = req.query.status || 'All'; // Default to All if not provided
+    
+    console.log("Time Range Filter:", timeRange);
+    console.log("Status Filter:", statusFilter);
+    
+    
+    let dateFilter = {};
+    const now = moment();
+    
+    switch (timeRange) {
+      case 'daily':
+        dateFilter = { placedon: { $gte: now.startOf('day'), $lte: now.endOf('day') } };
+        break;
+        case 'weekly':
+          dateFilter = { placedon: { $gte: now.startOf('week'), $lte: now.endOf('week') } };
+          break;
+          case 'monthly':
+            dateFilter = { placedon: { $gte: now.startOf('month'), $lte: now.endOf('month') } };
+            break;
+            case 'yearly':
+              dateFilter = { placedon: { $gte: now.startOf('year'), $lte: now.endOf('year') } };
+              break;
+          case 'all':
+              dateFilter = {}; // No date filter for all-time
+              break;
+              default:
+              dateFilter = {};
+      }
+
+    
+      const totalNumberOfOrders = await Order.find({ Order_verified: true, $or: [{ Status: "Delivered" }], ...dateFilter }).countDocuments();
+      const totalNumberOfPages = Math.ceil(totalNumberOfOrders / ordersperpage);
+      console.log("totalpage", totalNumberOfPages);
+
+      const validpage = Math.max(1, Math.min(page, totalNumberOfPages));
+      
+      console.log("valid page", validpage);
+      
+      // Fetch the order data with the time filter applied
+      const orderdata = await Order.find({ Order_verified: true, $or: [{ Status: "Delivered" }], ...dateFilter })
+      .sort({ placedon: -1 })
+      .skip((validpage - 1) * ordersperpage)
+      .limit(ordersperpage);
+      
+      const userData = await user.findOne({ _id: req.session.admin });
+      const productdata = await product.find({ isVerified: true });
+      const catdata = await Category.find({});
+      
+      if (orderdata) {
+        res.render('sales-report', { 
+          username: userData.username,
+          totalNumberOfPages, 
+          page: validpage, 
+          products: productdata,
+          timeRange,
+          statusFilter,
+          orders: orderdata,
+          categories: catdata 
+        });
+      }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 const salesreport=async(req,res)=>{
   try{
     console.log(req.query.page);
     const page=req.query.page||1;
     console.log(page,"pages");
     const ordersperpage=8;
-    const timeRange = req.query.timeRange || 'yearly'; // Default to yearly if not provided
+    const timeRange = req.query.timeRange || 'all'; // Default to yearly if not provided
     const statusFilter = req.query.status || 'All'; // Default to All if not provided
     
     console.log("Time Range Filter:", timeRange);
@@ -857,7 +929,6 @@ const salesreport=async(req,res)=>{
     console.log(error.message);
   }
 }
-
 const salesweekly=async (req, res) => {
   try{
   console.log("hello week ");
@@ -873,10 +944,17 @@ const salesweekly=async (req, res) => {
      
   ]}).sort({placedon:-1})
        // Modify this to match your schema
- 
-
-  // Send the filtered orders to the frontend
-  res.json(weeklyOrders);
+       const page = parseInt(req.query.page) || 1;
+       const ordersPerPage=8
+       const totalNumberOfOrders = await Order.countDocuments({
+        $or: [
+          { placedon: { $gte: startOfWeek, $lte: endOfWeek }, Status: "Delivered" },
+         
+      ]});
+         const totalNumberOfPages = Math.ceil(totalNumberOfOrders / ordersPerPage);
+         const validPage = Math.min(page, Math.max(1, totalNumberOfPages));
+  res.json({orders:weeklyOrders,totalPages: totalNumberOfPages,
+    currentPage: validPage});
 }
 catch(error)
 {
@@ -899,9 +977,17 @@ const salesmonthly=async (req, res) => {
   ]}).sort({placedon:-1})
       // Modify this to match your schema
   
-
-  // Send the filtered orders to the frontend
-  res.json(monthlyOrders);
+      const page = parseInt(req.query.page) || 1;
+      const ordersPerPage=8
+      const totalNumberOfOrders = await Order.countDocuments({
+        $or: [
+          { placedon: { $gte: startOfMonth, $lte: endOfMonth }, Status: "Delivered" },
+         
+      ]});
+        const totalNumberOfPages = Math.ceil(totalNumberOfOrders / ordersPerPage);
+        const validPage = Math.min(page, Math.max(1, totalNumberOfPages));
+  res.json({orders:monthlyOrders,totalPages: totalNumberOfPages,
+    currentPage: validPage});
 }
 catch(error)
 {
@@ -922,11 +1008,42 @@ const salesyearly=async (req, res) => {
       { placedon: { $gte: startOfYear, $lte: endOfYear }, Status: "Delivered" },
      
   ]}).sort({placedon:-1})
-       // Modify this to match your schema
- 
 
-  // Send the filtered orders to the frontend
-  res.json(yearlyOrders);
+  const page = parseInt(req.query.page) || 1;
+  const ordersPerPage=8
+  const totalNumberOfOrders = await Order.countDocuments({
+    $or: [
+      { placedon: { $gte: startOfYear, $lte: endOfYear }, Status: "Delivered" },
+     
+  ]});
+    const totalNumberOfPages = Math.ceil(totalNumberOfOrders / ordersPerPage);
+    const validPage = Math.min(page, Math.max(1, totalNumberOfPages));
+  res.json({orders:yearlyOrders,totalPages: totalNumberOfPages,
+    currentPage: validPage});
+}
+catch(error)
+{
+  console.log(error.message);
+}}
+const salesAlltime=async (req, res) => {
+  try {
+    console.log("hello alltime");
+  const statusFilter = req.query.status || '';
+
+  
+  const alltimeOrders = await Order.find(
+      { Status: "Delivered" } 
+  ).sort({placedon:-1})
+       
+  const page = parseInt(req.query.page) || 1;
+  const ordersPerPage=8
+  const totalNumberOfOrders = await Order.countDocuments({ Status: "Delivered" });
+    const totalNumberOfPages = Math.ceil(totalNumberOfOrders / ordersPerPage);
+    const validPage = Math.min(page, Math.max(1, totalNumberOfPages));
+
+  
+  res.json({orders:alltimeOrders,totalPages: totalNumberOfPages,
+    currentPage: validPage});
 }
 catch(error)
 {
@@ -935,7 +1052,7 @@ catch(error)
 const salesdaily=async(req,res)=>{
   try{
     console.log("hello daily");
-
+     
     const startOfDay=moment().startOf('day');
     const endOfDay=moment().endOf('day')
 
@@ -943,7 +1060,14 @@ const salesdaily=async(req,res)=>{
       { placedon: { $gte: startOfDay, $lte: endOfDay }, Status: "Delivered" },
      
   ]}).sort({placedon:-1})
-    res.json(dailyorders)
+  const page = parseInt(req.query.page) || 1;
+  const ordersPerPage=8
+  const totalNumberOfOrders = await Order.countDocuments({$or: [
+    { placedon: { $gte: startOfDay, $lte: endOfDay }, Status: "Delivered" }]});
+    const totalNumberOfPages = Math.ceil(totalNumberOfOrders / ordersPerPage);
+    const validPage = Math.min(page, Math.max(1, totalNumberOfPages));
+    res.json({orders:dailyorders,totalPages: totalNumberOfPages,
+      currentPage: validPage,})
   }catch(error)
   {
     console.log(error.message);
@@ -1344,11 +1468,19 @@ const couponupdate=async(req,res)=>{
 const downloadpdf = async (req, res) => {
   try {
     const doc = new PDFDocument();
-    const timeRange = req.query.timeRange; // Get the time range from query parameters
+    const timeRange = req.query.timeRange;
 
-    // Define the filter based on the selected time range
+    const today=moment().startOf('day')
     let filter = {};
-    if (timeRange === 'monthly') {
+    if (timeRange === 'daily') {
+      const endOfDay = moment().endOf('day');
+      filter = { placedon: { $gte: today, $lte: endOfDay }, Status: "Delivered" };
+    } else if (timeRange === 'weekly') {
+      const startOfWeek = moment().startOf('week');
+      const endOfWeek = moment().endOf('week');
+      filter = { placedon: { $gte: startOfWeek, $lte: endOfWeek }, Status: "Delivered" };
+    }
+    else if (timeRange === 'monthly') {
       const startOfMonth = moment().startOf('month');
       const endOfMonth = moment().endOf('month');
       filter = {
@@ -1366,6 +1498,12 @@ const downloadpdf = async (req, res) => {
          
         ]
       };
+    }
+    else if(timeRange==="all")
+    {
+      filter={
+        Status:"Delivered"
+      }
     }
     console.log('Filter:', filter)
     const orderdata = await Order.find(
@@ -1419,11 +1557,19 @@ const downloadpdf = async (req, res) => {
 const downloadExcel=async(req,res)=>{
   try
   {
-    const timeRange = req.query.timeRange; // Get the time range from query parameters
+    const timeRange = req.query.timeRange; 
 
-    // Define the filter based on the selected time range
+    const today=moment().startOf('day')
     let filter = {};
-    if (timeRange === 'monthly') {
+    if (timeRange === 'daily') {
+      const endOfDay = moment().endOf('day');
+      filter = { placedon: { $gte: today, $lte: endOfDay }, Status: "Delivered" };
+    } else if (timeRange === 'weekly') {
+      const startOfWeek = moment().startOf('week');
+      const endOfWeek = moment().endOf('week');
+      filter = { placedon: { $gte: startOfWeek, $lte: endOfWeek }, Status: "Delivered" };
+    }
+    else if (timeRange === 'monthly') {
       const startOfMonth = moment().startOf('month');
       const endOfMonth = moment().endOf('month');
       filter = {
@@ -1441,6 +1587,10 @@ const downloadExcel=async(req,res)=>{
           
         ]
       };
+    }
+    else if(timeRange=="all")
+    {
+      filter={Status:"Delivered"}
     }
     console.log('Filter:', filter)
     const orderdata = await Order.find(
@@ -1562,7 +1712,9 @@ module.exports = {
   couponupdate,
   revenueChart,
   productCountChart,
-  ordersChart
+  ordersChart,
+  salesAlltime,
+  filtersalesreport
       
   // toggleUserStatus
 }

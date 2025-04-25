@@ -20,10 +20,11 @@
     <div class="col-md-2 col-6">
         <div class="custom_select">
             <select id="timeRangeFilter" class="form-select select-nice">
+                <option selected value="all">Alltime</option>
                 <option value="daily">Daily</option>
                 <option value="weekly">Weekly</option>
                 <option value="monthly">Monthly</option>
-                <option selected value="yearly">Yearly</option>
+                <option value="yearly">Yearly</option>
             </select>
         </div>
     </div>
@@ -113,19 +114,17 @@
 </div>
 <div class="pagination-area mt-30 mb-50">
 <nav aria-label="Page navigation example">
-<ul class="pagination justify-content-start">
+    <ul class="pagination justify-content-start" id="paginationLinks">
         <% for (let currentPage = 1; currentPage <= totalNumberOfPages; currentPage++) { %>
-            <li class="page-item <%= currentPage == page ? 'active' : '' %>">
-              <a class="page-link" href="/admin/sales-report?page=<%= currentPage %>"><%= currentPage %></a>
-              <% console.log(currentPage,'current') %>
-            </li>
-          <% } %>
-    </ul>
-
+        <li class="page-item <%= currentPage == page ? 'active' : '' %>">
+          <a class="page-link" href="#" data-page="<%= currentPage %>"><%= currentPage %></a>
+        </li>
+        <% } %>
+      </ul>
 </nav>
 </div>
 <div>
-<a href="/admin/home"></a>go to home page</div>
+<!-- <a href="/admin/home"></a>go to home page</div> -->
 <%- include("./layouts/Admin-footer.ejs") %>
  <script>
     function downloadmodal()
@@ -134,23 +133,35 @@
     }
  </script>
 <script>
+    // Initialize currentPage from server-rendered page variable
+  let currentPage =  1;
     document.getElementById('fetchDataButton').addEventListener('click', function(event) {
   event.preventDefault(); // Prevent the default behavior of the click event
+  currentPage = 1; //
   fetchFilteredOrders(); // Call the function to fetch filtered orders
 });
+
+document.getElementById('paginationLinks').addEventListener('click', function(event) {
+    event.preventDefault();
+    if (event.target.classList.contains('page-link')) {
+      currentPage = parseInt(event.target.getAttribute('data-page'));
+      fetchFilteredOrders();
+    }
+  });
 function fetchFilteredOrders() {
   const timeRange = document.getElementById('timeRangeFilter').value;
   console.log("Time range selected:", timeRange);
 
-  fetch(`/admin/sales/${timeRange}`)
+  fetch(`/admin/sales/${timeRange}?page=${currentPage}`)
   .then(response => {
       if (!response.ok) {
           throw new Error('Network response was not ok');
       }
       return response.json();
   })
-  .then(orders => {
-      renderOrders(orders);
+  .then(data => {
+      renderOrders(data.orders);
+      renderPagination(data.totalPages, data.currentPage);
       console.log("order", orders);
   })
   .catch(error => {
@@ -185,9 +196,78 @@ function renderOrders(orders) {
           </tr>`;
       orderTableBody.innerHTML += row;
   });
-}
   
-// Initial fetch on page load
+}
+function renderPagination(totalPages, currentPage) {
+    const paginationLinks = document.getElementById('paginationLinks');
+    paginationLinks.innerHTML = '';
+
+    for (let i = 1; i <= totalPages; i++) {
+      const isActive = i === currentPage ? 'active' : '';
+      paginationLinks.innerHTML += `
+        <li class="page-item ${isActive}">
+          <a class="page-link" href="#" data-page="${i}">${i}</a>
+        </li>`;
+    }
+  }
+  
+// document.getElementById('fetchDataButton').addEventListener('click', function(event) {
+//     event.preventDefault(); // Prevent the default behavior of the click event
+//     fetchFilteredOrders(); // Call the function to fetch filtered orders
+// });
+
+// function fetchFilteredOrders() {
+//     const timeRange = document.getElementById('timeRangeFilter').value;
+//     const currentPage = document.querySelector('.pagination .active').textContent || 1; // Get current active page
+
+//     console.log("Time range selected:", timeRange);
+
+//     fetch(`/admin/filter-sales-report?page=${currentPage}&timeRange=${timeRange}`)
+//         .then(response => {
+//             if (!response.ok) {
+//                 throw new Error('Network response was not ok');
+//             }
+//             return response.json();
+//         })
+//         .then(orders => {
+//             renderOrders(orders);
+//             console.log("orders", orders);
+//         })
+//         .catch(error => {
+//             console.error('Error fetching filtered orders:', error);
+//             alert('Error fetching filtered orders. Please try again later.');
+//         });
+// }
+
+// function renderOrders(orders) {
+//     const orderTableBody = document.getElementById('orderTableBody');
+//     orderTableBody.innerHTML = '';
+
+//     orders.forEach(order => {
+//         const row = `
+//         <tr>
+//             <td class="text-center">
+//                 <div class="form-check">
+//                     <input class="form-check-input" type="checkbox" id="transactionCheck02">
+//                     <label class="form-check-label" for="transactionCheck02"></label>
+//                 </div>
+//             </td>
+//             <td><a href="#" class="fw-bold">${order._id}</a></td>
+//             <td>${order.Address[0].name}</td>
+//             <td>${order.Date}</td>
+//             <td>${order.Totalprice}</td>
+//             <td><span class="badge badge-pill badge-soft-success">${order.paymentstatus}</span></td>
+//             <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i>${order.payment}</td>
+//             <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i>${order.Status}</td>
+//             <td><a href="/admin/order-detail?id=${order._id}" class="btn btn-xs">View details</a></td>
+//         </tr>`;
+//         orderTableBody.innerHTML += row;
+//     });
+// }
+
+// // Fetch initial data when the page loads (or after filter is applied)
+// fetchFilteredOrders();
+
 // fetchFilteredOrders();
 document.getElementById('downloadPDFButton').addEventListener('click', function(event) {
         event.preventDefault(); // Prevent the default behavior of the click event
