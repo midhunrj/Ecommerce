@@ -3,18 +3,18 @@ const product=require('../models/productmodel');
 const Category=require('../models/categorymodel')
 const Cart=require('../models/Cartmodel')
 const Coupon=require('../models/couponmodel')
-const bcrypt = require('bcrypt');
-const crypto=require('crypto')
-const  nodemailer=require('nodemailer')
+const bcrypt = require('bcrypt')
+const crypto = require('crypto')
+const nodemailer = require('nodemailer')
 const randomString = require('randomstring')
-const jwt = require('jsonwebtoken');
-const mongoose  = require('mongoose');
+const jwt = require('jsonwebtoken')
+const mongoose  = require('mongoose')
 const banner=require('../models/Bannermodel')
 
 const currentDate=new Date()
 
 
-// Function to generate a reset token
+
 const generateResetToken = (email) => {
   const secretKey = 'your_secret_key';
   const expiresIn = '1h'; // Token will expire in 1 hour
@@ -48,12 +48,12 @@ const securepassword = async (password) => {
 }
 
 const sendresetpasswordmail=async(username,email,_id,token)=>{
-  console.log("user -",username,"email-",email,"\nid-",_id,"\n token-",token);
+  console.log("user-",username,"email-",email,"\nid-",_id,"\n token-",token);
   const mailOptions = {
     from: 'mdnrj3600@gmail.com',
     to: email,
     subject: 'Email Verification',
-    html: '<p>Hi '+username+', please click here to <a href="https://www.tech-tique.store/forget-password-load?token='+token+'"Reset</a> your password</p>'
+    html: '<p>Hi '+username+', please click here to <a href="https://www.tech-tique.store/forget-password-load?token='+token+''
   };
 
   await transporter.sendMail(mailOptions);

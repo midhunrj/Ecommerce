@@ -9,10 +9,10 @@ const bcrypt = require('bcrypt');
 const exceljs=require("exceljs")
 const fs=require('fs')
 const moment = require('moment');
-const path = require('path');
+const path = require('path')
 const sharp=require("sharp")
-const PDFDocument=require("pdfkit-table");
-const { timeStamp } = require('console');
+const PDFDocument=require("pdfkit-table")
+const { timeStamp } = require('console')
 const dayjs=require('dayjs')
 // const randomString = require('randomstring')
 
@@ -357,16 +357,7 @@ const unblockUser = async (req, res) => {
 
 
 
-// const productslist = async (req, res) => {
-//   try {
-//     const productData = await product.find({ isVerified: true })
-//     const CategoryData=await Category.find({})
-//     res.render('admin-products', { products: productData,category:CategoryData })
-//   }
-//   catch (error) {
-//     console.log(error.message);
-//   }
-// }
+
 const productslist = async (req, res) => {
   try {
     const { page = 1, limit = 10, search = "" } = req.query; // Get query parameters
@@ -408,70 +399,14 @@ const Addproducts = async (req, res) => {
     console.log(error.message);
   }
 }
-// const insertproduct = async (req, res) => {
-//   try {
-//     const { productname, Color, price, description, stock, Brand, Category } = req.body;
-//     console.log("Adding new product");
-//     console.log("Request body:", req.body);
-//     console.log(req.files);
-    
-//     // Process each uploaded image to crop and save it
-//     const croppedImages = [];
-//     for (const file of req.files) {
-//       console.log(file, "file");
-      
-//       // Read the uploaded image
-//       const image = sharp(file.path);
-//       // console.log("Image metadata:", await image.metadata()); // Log image metadata
-      
-//       // Perform cropping (example: crop to 300x300 square)
-//       const croppedImageBuffer = await image
-//         .resize({ width: 650, height: 500, fit: 'outside' })  // Resize to 300x300 and maintain aspect ratio
-//         .toBuffer();  // Convert to buffer
-//       console.log("Cropped image buffer length:", croppedImageBuffer.length); // Log length of cropped image buffer
-      
-//       // Generate a unique filename for the cropped image
-//       const croppedImageFilename = `cropped_${Date.now()}_${file.originalname}`;
-         
-//       // Save the cropped image to the specified directory
-//       await sharp(croppedImageBuffer).toFile(path.join('public', 'productImage', croppedImageFilename));
-//       console.log("Cropped image saved:", croppedImageFilename); // Log filename of saved cropped image
-      
-//       // Store the filename of the cropped image
-//       croppedImages.push(croppedImageFilename);
-//     }
 
-//     console.log(Category);
-
-//     // Create a new product instance
-//     const newProduct = new product({
-//       productname,
-//       Color,
-//       price,
-//       description,
-//       stock,
-//       Brand,
-//       image: croppedImages,  // Use the filenames of the cropped images
-//       Category: Category
-//     });
-
-//     // Save the new product to the database
-//     await newProduct.save();
-
-//     // Respond to the client with a success message
-//     res.redirect('/products-list');
-//   } catch (error) {
-//     console.error('Error adding product:', error);
-//     res.status(500).json({ error: 'Failed to add product' });
-//   }
-// };
 const insertproduct = async (req, res) => {
   try {
 
       const { productname, Color, price, description, stock, Brand, Category } = req.body;
       const croppedImages = req.files.map(file => file.filename); // Extract filenames of cropped images from req.files array
 
-      // Create a new product instance
+
       const newProduct = new product({
           productname,
           Color,
@@ -479,7 +414,7 @@ const insertproduct = async (req, res) => {
           description,
           stock,
           Brand,
-          image: croppedImages, // Use the filenames of the cropped images
+          image: croppedImages, 
           Category
       });
 
