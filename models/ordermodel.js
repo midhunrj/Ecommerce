@@ -1,6 +1,6 @@
 const mongoose=require("mongoose");
 const { ref } = require("pdfkit");
-//mongoose.connect("mongodb://localhost:27017/E-Commerce")
+
 
 const orderSchema = new mongoose.Schema({
   products:{

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-//mongoose.connect("mongodb://localhost:27017/E-Commerce")
+
 const Couponschema=new mongoose.Schema({
 Couponcode:{
     type:String,

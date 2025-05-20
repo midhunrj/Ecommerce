@@ -1,15 +1,15 @@
-const user = require('../models/usermodel');
-const product=require('../models/productmodel');
-const Category=require('../models/categorymodel')
-const Cart=require('../models/Cartmodel')
-const Coupon=require('../models/couponmodel')
+const user = require('../../models/usermodel');
+const product=require('../../models/productmodel');
+const Category=require('../../models/categorymodel')
+const Cart=require('../../models/Cartmodel')
+const Coupon=require('../../models/couponmodel')
 const bcrypt = require('bcrypt')
 const crypto = require('crypto')
 const nodemailer = require('nodemailer')
 const randomString = require('randomstring')
 const jwt = require('jsonwebtoken')
 const mongoose  = require('mongoose')
-const banner=require('../models/Bannermodel')
+const banner=require('../../models/Bannermodel')
 
 const currentDate=new Date()
 
@@ -101,7 +101,7 @@ const verifyLogin = async (req, res) => {
       console.log(passwordmatch,'passwordmatch\n',password,'password\n',userdata.password,"userdata.password");
      
      
-      if (passwordmatch||password===userdata.password&&userdata.is_admin === 0 && userdata.is_blocked === 0) {
+      if ((passwordmatch||password===userdata.password)&&userdata.is_admin === 0 && userdata.is_blocked === 0) {
         console.log('User before referalcode',userdata.referalCode);
         if (!userdata.referalCode) {
          
@@ -118,15 +118,15 @@ const verifyLogin = async (req, res) => {
         }
         req.session.user = userdata._id;
         res.redirect('/home');
-      } else if (password===userdata.password&&userdata.is_admin === 0&&userdata.is_blocked===1) {
+      } else if ((passwordmatch||password===userdata.password) && userdata.is_admin === 0 && userdata.is_blocked===1) {
         console.log("Blocked");
-        res.render('Loginpage', { alert: "Your account is blocked" });
+        return res.render('Loginpage', { alert: "Your account is blocked" });
       
       } else if(password!==userdata.password||!passwordmatch) {
         console.log("Invalid password or user");
-        res.render('Loginpage', { alert: "Invalid password" });
+        return res.render('Loginpage', { alert: "Invalid password" });
       }else if (password===userdata.password&&userdata.is_admin === 1) {
-        res.render('Loginpage', { alert: "Invalid user" });
+        return res.render('Loginpage', { alert: "Invalid user" });
     }} 
     else {
       console.log("User not found");
@@ -764,76 +764,6 @@ const removeCoupon = async (req, res) => {
   }
 }
 
-const wishlistpage=async(req,res)=>{
-  try{
-    let userid=req.session.user
-    let count=req.session.count
-   // const userdata=await user.findOne({_id:userid}).populate('wishlist')//
-   const userdata = await user.aggregate([{$match:{_id:new mongoose.Types.ObjectId(userid)}},{$lookup:{from:"products",localField:"wishlist",foreignField:"_id",as:"populatedwishlist"}}])
-   console.log("wishlist",userdata);
-   let wishcount=req.session.wishcount
-    res.render('wishlist',{username:userdata[0].username,count,wishlist:userdata[0].populatedwishlist,wishcount,search:req.query.search})
-  }
-  catch(error)
-  {
-    console.log(error);
-  }
-}
-
-const  addtoWishlist=async(req,res)=>{
-  try{
-let productid =req.body.productId
-
-console.log("wishl",productid);
-    let userid=req.session.user
-    if (!userid) {
-      return res.status(401).json({ success: false, message: "You must login" });
-  }
-     const existuser = await user.findOne({ _id: userid, wishlist:{$in: [new mongoose.Types.ObjectId(productid)] }});
-  
-    console.log(existuser,'exist')
-    if(existuser)
-    {
-      console.log(existuser,"wishlist checking");
-      return res.status(200).json({red:true,message:"product is already added to wishlist"})
-    }
-    else
-    {
-      const userdata = await user.findOneAndUpdate(
-      { _id: userid },
-      { $addToSet: { wishlist: new mongoose.Types.ObjectId(productid) }}
-    );
-    
-    console.log(userdata);
-    return res.status(200).json({green:true,message:"product has been marked as favourite and added to wishlist"})
-    }
-  }
-    catch(error)
-    {
-      console.log(error);
-    }
-}
-
-const removewishlist=async(req,res)=>{
-  try{
-    console.log("i am about to remove wishlist");
-    let userid=req.session.user
-    let productid=req.params.pro
-    let productobj=new mongoose.Types.ObjectId(productid)
-    console.log(new mongoose.Types.ObjectId(productid,"objectwish"));
-    console.log(productobj,"reijjddgj");
-    console.log(productid,"pro");
-    let wishcount=req.session.wishcount
-    wishcount-=1
-    req.session.wishcount=wishcount
-    const userdata=await user.updateOne({_id:userid},{$pull:{wishlist:productobj}})
-    res.redirect('/wishlist')
-  }
-  catch(error)
-  {
-    console.log(error.message);
-  }
-}
 
 const errorpage=async(req,res)=>{
   try{
@@ -866,9 +796,7 @@ const errorpage=async(req,res)=>{
     resendotp,
     applycoupon,
     removeCoupon,
-    wishlistpage,
-    addtoWishlist,
-    removewishlist,
+
     errorpage,
     logRedirect
    

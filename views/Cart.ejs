@@ -319,27 +319,7 @@
 const newQuantity = currentQuantity + countAsNumber;
 
 console.log("cipher",newQuantity);
-    //             if (newQuantity==0 ) {
-    //                 console.log("jongiliyan");
-    //     // Initiate request to delete the item from the cart
-    //     $.ajax({
-    //         url: '/delete-cart?id=' + productId, // Pass productId to identify the item to be deleted
-    //         method: 'GET',
-    //         success: (response) => {
-    //             console.log(response);
-    //             // Handle any UI updates or reload the page after successful removal
-                
-    //             window.location.href='/cart'
-                 
-    //         },
-    //         error: (error) => {
-    //             console.error(error);
-               
-    //         }
-    //     });
-    //     return; // Return from the function after initiating removal process
-    // }
-
+    
     if (newQuantity <= 0) {
         Swal.fire({
             title: "Are you sure?",

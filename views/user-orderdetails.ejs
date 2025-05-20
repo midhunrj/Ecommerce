@@ -204,8 +204,8 @@
             </div>
         </div>
 
-    <% } %> <!-- card end// -->
-</section> <!-- content-main end// -->
+    <% } %> 
+</section> 
 <%- include("./layouts/footer.ejs") %>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -215,7 +215,7 @@
         var newStatus = $('#statusSelect').val();
         var orderID = '<%= orders._id %>';
 
-        // Send AJAX request to update order status
+        
         $.ajax({
             url: '/update-order-status',
             method: 'POST',
@@ -225,7 +225,7 @@
                 setTimeout(function () {
                     window.location.href = '/profile#orders';
                 }, 1000);
-                // Optionally update the UI to reflect the new status
+                
             },
             error: function (error) {
                 console.error('Error updating order status');
@@ -236,7 +236,7 @@
 
 <script>
     function downloadInvoice(orderId) {
-        // Send AJAX request to download the invoice PDF
+        
         $.ajax({
             url: `/download-invoice/${orderId}`,
             method: 'GET',
@@ -254,49 +254,7 @@
 </script>
 
 <script>
-    // function retryPayment(orderId, amount) {
-    //     fetch('/retry-payment', {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify({ orderId, amount })
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         var options = {
-    //             "key": data.razorpayKey,
-    //             "amount": data.amount,
-    //             "currency": "INR",
-    //             "name": "Movie Ticket Booking",
-    //             "description": "Retry Payment",
-    //             "order_id": data.orderId,
-    //             "handler": function (response) {
-    //                 fetch('/verify-payment', {
-    //                     method: 'POST',
-    //                     headers: { 'Content-Type': 'application/json' },
-    //                     body: JSON.stringify({
-    //                         orderId: orderId,
-    //                         paymentId: response.razorpay_payment_id,
-    //                         signature: response.razorpay_signature
-    //                     })
-    //                 })
-    //                 .then(response => response.json())
-    //                 .then(data => {
-    //                     if (data.success) {
-    //                         alert("Payment successful!");
-    //                         location.reload();
-    //                     } else {
-    //                         alert("Payment verification failed.");
-    //                     }
-    //                 });
-    //             },
-    //             "theme": { "color": "#3399cc" }
-    //         };
-    //         var rzp1 = new Razorpay(options);
-    //         rzp1.open();
-    //     })
-    //     .catch(error => console.error("Error:", error));
-    // }
-
+    
 function retryPayment(orderId) { 
     fetch(`/retry-payment/${orderId}`, { method: "POST" })
         .then(response => response.json())
@@ -310,11 +268,11 @@ function retryPayment(orderId) {
                     description: "Order Payment",
                     order_id: data.razorpayOrderId, // Razorpay order ID
                     handler: function (response) {
-                        fetch(`/verify-payment`, {  // 🔥 Changed to `/verify-payment`
+                        fetch(`/verify-payment`, {  
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({
-                                orderId: data.orderId, // Send the database order ID
+                                orderId: data.orderId, 
                                 data:{razorpay_payment_id: response.razorpay_payment_id,
                                 razorpay_order_id: response.razorpay_order_id,
                                 razorpay_signature: response.razorpay_signature,

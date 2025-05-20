@@ -1,5 +1,5 @@
 const mongoose=require("mongoose")
-//mongoose.connect("mongodb://localhost:27017/E-Commerce")
+
 
 const userSchema = new mongoose.Schema({
  username: {
@@ -73,7 +73,7 @@ history:{
 wishlist: [{
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'products' // Reference to the Product model
+    ref: 'products'
 }],
 referalCode: { type: String, unique: true }
 })

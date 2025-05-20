@@ -15,19 +15,19 @@
      <link href="/Admin-assets/css/main.css" rel="stylesheet" type="text/css"/>
      <link href="/dash.css">
      <style>
-     /* Style for pagination page items */
+
 .page-item {
-  background-color: #f8f9fa; /* Background color for page items */
-  border: 1px solid #dee2e6; /* Border color for page items */
-  color: #6c757d; /* Text color for page items */
-  margin-right: 5px; /* Adjust margin between page items */
+  background-color: #f8f9fa; 
+  border: 1px solid #dee2e6; 
+  color: #6c757d; 
+  margin-right: 5px; 
 }
 
-/* Style for active page item */
+
 .page-item.active {
-  background-color: #007bff; /* Background color for active page item */
-  border-color: #007bff; /* Border color for active page item */
-  color: #fff; /* Text color for active page item */
+  background-color: #007bff; 
+  border-color: #007bff; 
+  color: #fff; 
 }
 
     </style>
@@ -91,17 +91,16 @@
                     <td><%= users[i].email %></td>
                     <td><%= users[i].phone %></td>
                     
-                   <td> <% if (users[i].is_blocked==0) { %>
-                                         
-                                         <button type="submit" class="btn btn-success"> 
-                                            <a data-bs-toggle="modal" data-bs-target="#confirmationModal<%= i %>" onclick="confirmDelete('<%= users[i]._id %>') " style="color: white;">
-                                            </i>UnBlocked</a></button>
-                                        
-                                         <% } else { %>
-                                             <button type="submit" class="btn btn-danger"> 
-                                                <a href="/admin/unblock-user?id=<%= users[i]._id %>"style="color: white;">
-                                                 
-                                                </i>Blocked</a></button>
+                   <td> <% if (users[i].is_blocked==0) { %>                     
+
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmationModal<%= i %>">
+                      UnBlocked
+                      </button>
+                      <% } else { %>
+
+                        <button type="button" class="btn btn-danger"  onclick="toggleUserStatus('<%= users[i]._id %>', false, '<%=i%>')">
+      Blocked
+    </button>
                                                
                                             
                                          <% } %>
@@ -158,32 +157,72 @@
               <% console.log("thisssjsdfjkdfsd" + users[i]._id) %>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <a id="deleteButton<%= i %>" href="/admin/block-user?id=<%=users[i]._id %>" class="btn btn-danger">Block</a>
+                <button class="btn btn-danger"
+        onclick="toggleUserStatus('<%= users[i]._id %>', 'true' , '<%= i %>')"
+        data-bs-dismiss="modal">
+  Confirm
+</button>
+
               </div>
             </div>
           </div>
         </div>
       <% } %>
-<script>
-    function updateUserStatus(userId) {
-    console.log(userId);
+// <script>
+//     function updateUserStatus(userId) {
+//     console.log(userId);
   
-    $.ajax({
-      url:`/admin/users?id=${userId}`,
-      type: "PUT",
-      contentType: "application/json",
-      data: JSON.stringify({ is_blocked: 1 }),
-      success: function () {
-        console.log("User blocked successfully");
-        location.reload();
-      },
-      error: function (xhr, status, error) {
-        console.error("Failed to block user", error);
-      },
-    });
-  }</script>
+//     $.ajax({
+//       url:`/admin/users?id=${userId}`,
+//       type: "PUT",
+//       contentType: "application/json",
+//       data: JSON.stringify({ is_blocked: 1 }),
+//       success: function () {
+//         console.log("User blocked successfully");
+//         location.reload();
+//       },
+//       error: function (xhr, status, error) {
+//         console.error("Failed to block user", error);
+//       },
+//     });
+//   }</script>
   <script>
-    function confirmDelete(userId) {
+    function toggleUserStatus(userId,block,index)
+    {
+      $.ajax({
+        url:'/admin/toggle-user-status',
+        type:"PUT",
+        contentType:"application/json",
+        data:JSON.stringify({id:userId,block}),
+        success:function(response){
+          console.log(response.message);
+
+          const button=document.querySelectorAll("table .btn")[index];
+          if(block)
+        {
+          button.className="btn btn-danger"
+          button.innerText="Blocked";
+          button.setAttribute("onclick",`toggleUserStatus('${userId}',false,${index})`)
+            button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-target");
+        }
+        else{
+          button.className="btn btn-success";
+          button.innerText="UnBlocked";
+          //button.setAttribute("onclick",`toggleUserStatus('${userId}',true,${index})`)
+          button.setAttribute('data-bs-toggle','modal')
+           button.setAttribute('data-bs-target',`#confirmationModal${index}`)
+           button.removeAttribute('onclick')
+        }
+        },
+        error:function(xhr,status,error){
+          console.error("Error toggling block status:",error)
+        }
+      })
+    }
+    </script>
+  <script>
+    function confirmBlock(userId) {
     // Implement your logic to confirm deletion using the categoryId
     console.log('Confirming deletion of category:', userId);
 }</script>

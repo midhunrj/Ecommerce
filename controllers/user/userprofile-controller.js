@@ -1,8 +1,8 @@
-const User = require("../models/usermodel")
-const Product = require("../models/productmodel")
-const Address = require("../models/Addressmodel")
-const Order = require("../models/ordermodel")
-const Cart=require('../models/Cartmodel')
+const User = require("../../models/usermodel")
+const Product = require("../../models/productmodel")
+const Address = require("../../models/Addressmodel")
+const Order = require("../../models/ordermodel")
+const Cart=require('../../models/Cartmodel')
 const nodemailer = require("nodemailer")
 const bcrypt = require("bcrypt")
 const easyinvoice=require("easyinvoice")
@@ -62,7 +62,7 @@ const getprofilepage=async(req,res)=>{
   });
   
     let wishcount=req.session.wishcount
-    res.render('user-profile',{message:'',users:userdata,userAddress:Addressdata,orders,username:userdata.username,count,wishcount,currentPage: page,referalCode: userdata.referalCode||'n/a', // Pass current page to frontend for highlighting active page in pagination
+    res.render('user-profile',{message:'',users:userdata,userAddress:Addressdata,orders,username:userdata.username,count,wishcount,currentPage: page,referalCode: userdata.referalCode||'n/a',search:req.query.search ,// Pass current page to frontend for highlighting active page in pagination
     totalPages: Math.ceil(totalCount / limit)})
 }
 catch(error)
@@ -76,14 +76,14 @@ const edituserprofile = async (req, res) => {
         const userId = req.query.id;
 console.log(req.body,"user profile update",req.file)
 
-        // Extract other user details from the request body
+        
         const { name, email, mobile } = req.body;
 
-        // Extract cropped profile image data from the request file upload
+
         const croppedProfileImageData = req.file;
         console.log("=====>",croppedProfileImageData)
 
-        // Update user details in the database
+        
         await User.findByIdAndUpdate(userId, {
             username: name,
             email: email,
@@ -154,7 +154,7 @@ const getaddress=async(req,res)=>{
         const userdata=await User.findOne({_id:user})
         let wishcount=req.session.wishcount
         let count=req.session.count
-        res.render("Add-address",{username:userdata.username,count,wishcount})
+        res.render("Add-address",{username:userdata.username,count,wishcount,search:req.query.search})
     }
 
 catch(error)
@@ -349,7 +349,9 @@ catch(error)
                 if(updatedOrder.payment=="Online"||updatedOrder.payment=="Wallet")
                 {
                     console.log("hello it is userdata from refunding",userdata);
+
                     console.log("hello it is updatedorder data from refunding",updatedOrder);
+                    
                   userdata.wallet+=updatedOrder.Totalprice
                   updatedOrder.paymentstatus="refunded"
 
@@ -459,11 +461,7 @@ catch(error)
            
         },
     
-        // Customize enables you to provide your own templates
-        // Please review the documentation for instructions and examples
-        // "customize": {
-        //      "template": fs.readFileSync('template.html', 'base64') // Must be base64 encoded html 
-        // }
+
     };
     
     
@@ -500,10 +498,10 @@ catch(error)
 const generateOrderRazorpay = (amount) => {
     return new Promise((resolve, reject) => {
         const options = {
-            amount: amount*100, // Convert amount to paise
+            amount: amount*100, 
             currency: "INR",
-            receipt: `wallet_recharge_${Date.now()}`, // Unique receipt ID for wallet recharge
-            payment_capture: 1 // Automatically capture the payment
+            receipt: `wallet_recharge_${Date.now()}`, 
+            payment_capture: 1 
         };
 
         instance.orders.create(options, (err, order) => {
@@ -530,10 +528,10 @@ const verifyPayment = async (req, res) => {
         console.log("Generated Signature:", generatedSignature);
         
         if (generatedSignature === razorpay_signature) {
-            // Payment verified, update user's wallet balance
+
             const user = await User.findById(req.session.user);
-            const amount = parseInt(req.body.amount); // Parse the amount from the request body
-            user.wallet += amount; // No need to divide by 100 if amount is already in rupees
+            const amount = parseInt(req.body.amount); 
+            user.wallet += amount; 
             user.history.push({
                 amount:amount,
                 status:"Credit",

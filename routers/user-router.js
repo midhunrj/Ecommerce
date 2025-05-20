@@ -21,11 +21,11 @@ user_route.set('views', './views');
 const upload = require("../Multer/multer");
 ///user_route.use(upload.array("image", 4))
 
-const userController = require('../controllers/user-controller');
-const ProfileController=require('../controllers/userprofile-controller')
-const CartController=require('../controllers/Cart-controller')
-const OrderController=require('../controllers/order-controller')
-const CouponController=require("../controllers/admin-controller")
+const userController = require('../controllers/user/user-controller');
+const ProfileController=require('../controllers/user/userprofile-controller')
+const CartController=require('../controllers/user/Cart-controller')
+const OrderController=require('../controllers/user/order-controller')
+const wishlistController=require("../controllers/user/wishlist-controller")
 
 console.log("sdfsf");
 
@@ -79,8 +79,8 @@ user_route.post('/verify-signature',auth.isLogin,auth.isUserBlocked,ProfileContr
 user_route.post('/applyCoupon',auth.isLogin,auth.isUserBlocked,userController.applycoupon)
 user_route.post('/removeCoupon',auth.isLogin,auth.isUserBlocked,userController.removeCoupon)
 
-user_route.get('/wishlist',auth.isLogin,userController.wishlistpage)
-user_route.post('/addtowishlist',auth.isLogin,userController.addtoWishlist)
-user_route.get('/removewishlist/:pro',auth.isLogin,userController.removewishlist)
+user_route.get('/wishlist',auth.isLogin,wishlistController.wishlistpage)
+user_route.post('/addtowishlist',auth.isLogin,wishlistController.addtoWishlist)
+user_route.get('/removewishlist/:pro',auth.isLogin,wishlistController.removewishlist)
 user_route.post('/retry-payment/:orderId',auth.isLogin,OrderController.retryPayment)
 module.exports=user_route

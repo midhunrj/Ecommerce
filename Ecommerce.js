@@ -20,17 +20,17 @@ app.set('views', './views');
 app.use(nocache()) 
 
 app.use(flash())
-// Middleware to parse JSON requests
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));  
-const errorcontroller=require('./controllers/user-controller')
+const errorcontroller=require('./controllers/user/user-controller')
 
-// Sample route
+
 app.use(express.static('public'));
 const userRoute = require('./routers/user-router');
 app.use('/', userRoute);
 
-//admin route
+
 const adminRoute=require('./routers/admin-router');
 app.use('/admin',adminRoute);
 // app.use('*',errorcontroller.errorpage)

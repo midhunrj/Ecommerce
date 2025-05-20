@@ -80,10 +80,10 @@
             <input class="form-control" type="file"  name="image" accept="image/*" enctype="multipart/form-data" id="imageInput" value="<%=products.image.join(',')%>" onchange="displayImagePreview()" multiple>
             
             <div id="imageError" class="Error"></div>
-            <!-- Container to display added images -->
+
             <div id="addedImagesContainer" class="thumbnails-container"></div>
         </div>
-         <!-- card end// -->
+
     </div>
 
     <div class="col-lg-4">
@@ -172,12 +172,12 @@
     }
 }
   
-  // Assuming your delete link has an id like "deleteLink"
+
   const deleteLink = document.getElementById("deleteLink");
   
-  // Add a click event listener to the delete link
+
   deleteLink.addEventListener("click", function (event) {
-    event.preventDefault(); // Prevent the default anchor click behavior
+    event.preventDefault(); 
     deleteSingleImage(productId, filename);
   });
 </script>

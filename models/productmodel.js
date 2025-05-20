@@ -1,5 +1,5 @@
 const mongoose=require("mongoose")
-//mongoose.connect("mongodb://localhost:27017/E-Commerce")
+
 
 const productSchema = new mongoose.Schema({
 productname: {
@@ -38,10 +38,7 @@ stock:{
     type:Number,
     required:true,
 },
-// rating:{
-//     type:Number,
-//     required:true
-// },
+
 Color:{
     type:String,
     required:true

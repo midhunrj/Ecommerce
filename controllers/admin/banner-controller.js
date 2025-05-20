@@ -1,5 +1,5 @@
-const user = require('../models/usermodel')
-const Banner=require("../models/Bannermodel")
+const user = require('../../models/usermodel')
+const Banner=require("../../models/Bannermodel")
 
 const bannerupload=async(req,res)=>{
     try{

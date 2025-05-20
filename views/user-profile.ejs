@@ -9,7 +9,7 @@
 }
 
 #profile-pic-wrapper {
-    width: 120px; /* Default circular profile size */
+    width: 120px; 
     height: 120px;
     border-radius: 50%;
     overflow: hidden;
@@ -27,13 +27,13 @@
 }
 
 .profile-picture-container.image-selected #profile-pic-wrapper {
-    width: fit-content; /* Larger size when image is selected */
+    width: fit-content; 
     height: fit-content;
-    border-radius: 0; /* Remove circular effect */
+    border-radius: 0; 
 }
 
 .profile-picture-container.image-selected #profile-pic-preview {
-    object-fit: contain; /* Show full image */
+    object-fit: contain; 
     border-radius: 0;
 }
 
@@ -358,12 +358,12 @@
                         </div>
                     </div>
                     <div class="col-lg-5">
-                        <!-- Subscribe Form -->
+
                         <form class="form-subcriber d-flex wow fadeIn animated">
                             <input type="email" class="form-control bg-white font-small" placeholder="Enter your email">
                             <button class="btn bg-dark text-white" type="submit">Subscribe</button>
                         </form>
-                        <!-- End Subscribe Form -->
+
                     </div>
                 </div>
             </div>
@@ -453,7 +453,7 @@
             </div>
         </div>
     </footer>
-    <!-- Preloader Start -->
+
     <div id="preloader-active">
         <div class="preloader d-flex align-items-center justify-content-center">
             <div class="preloader-inner position-relative">
@@ -468,12 +468,12 @@
             </div>
         </div>
     </div>
-    <!-- Vendor JS-->
+    
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     
     <script>
         $(document).ready(function() {
-    // Check for hash fragment in URL
+    
     if (window.location.hash === '#orders') {
         // Activate the "Orders" tab
         $('#orders-tab').tab('show');
@@ -484,12 +484,12 @@
 });
     </script>
  <script>
-    // Function to open the modal dialog
+    
     function shareReferral() {
         $('#shareModal').modal('show');
     }
 
-    // Function to share via email
+    
     function shareViaEmail() {
         var referralCode = document.getElementById("referralCodeInput").value;
         var signupLink = "https://www.tech-tique.store/signup?ref=" + encodeURIComponent(referralCode);
@@ -499,7 +499,7 @@
         $('#shareModal').modal('hide');
     }
 
-    // Function to share via WhatsApp
+    
     function shareViaWhatsApp() {
         var referralCode = document.getElementById("referralCodeInput").value;
         var signupLink = "https://tech-tique.store/signup?ref=" + encodeURIComponent(referralCode);
@@ -509,7 +509,7 @@
         $('#shareModal').modal('hide');
     }
 
-    // Function to share via SMS
+    
     function shareViaSMS() {
         var referralCode = document.getElementById("referralCodeInput").value;
         var signupLink = "https://tech-tique.store/signup?ref=" + encodeURIComponent(referralCode);
@@ -521,50 +521,14 @@
 </script>
      <script>
         $(document).ready(function() {
-    // Check for hash fragment in URL
+    
     if (window.location.hash === '#address') {
-        // Activate the "Orders" tab
+        
         $('#address-tab').tab('show');
     }
 });
     </script>
-    <!-- <script>
-        // Handle form submission to add funds to the wallet
-        $('#addFundsForm').submit(function(e) {
-            e.preventDefault();
-            var formData = $(this).serialize();
-            $.ajax({
-                type: 'POST',
-                url: '/Add-money-to-Wallet', // Change the URL to your backend route for adding funds
-                data: formData,
-                success: function(response) {
-                    console.log(response);
-                    console.log(response.Wallet);
-                    // Update wallet balance display
-                    var walletbank=document.getElementById("balance").textContent
-                    console.log("current balance",walletbank);
-                    // walletbank =parseInt(walletbank)+(response.Wallet)
-                    walletbank=parseInt(response.Wallet)
-                    document.getElementById("balance").textContent=walletbank
-                    Swal.fire({
-        title: 'Money Added!',
-        text: response.message,
-        icon: 'success',
-        timer: 3000
-    });
-                },
-                error: function(err) {
-                    console.error(err);
-                    Swal.fire({
-                title: 'Error!',
-                text: 'Failed to Add money to wallet.',
-                icon: 'error',
-                timer: 3000
-            });
-                }
-            });
-        });
-    </script> -->
+    
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script>
@@ -573,12 +537,12 @@
         var formData = $(this).serialize();
         $.ajax({
             type: 'POST',
-            url: '/Add-money-to-Wallet', // Backend route to generate Razorpay order
+            url: '/Add-money-to-Wallet', 
             data: formData,
             success: function(response) {
                 console.log(response);
                 if (response.razorpayOrder) {
-                    // If Razorpay order is received, initiate payment
+
                     const options = {
                         key: response.razorId, 
                         amount: response.amount*100, // Amount is in currency subunits
@@ -590,9 +554,9 @@
                             verifyAndAddMoneyToWallet(response.razorpayOrder.receipt, response.amount,data);
                         },
                         prefill: {
-                            name: "customername", // Replace with user's name
-                            email: "customer@example.com", // Replace with user's email
-                            contact: "9000090000" // Replace with user's contact number
+                            name: "customername", 
+                            email: "customer@example.com",
+                            contact: "9000090000" 
                         },
                         notes: {
                             address: "Razorpay Corporate Office"
@@ -605,7 +569,7 @@
                     const rzp = new Razorpay(options);
                     rzp.open();
                 } else {
-                    // Handle other cases or errors
+
                 }
             },
             error: function(err) {
@@ -628,7 +592,7 @@
             success: function(response) {
                 console.log(response);
                 if (response.success) {
-                    // Update wallet balance display
+
                     var walletBalance = parseInt($("#balance").text());
                     walletBalance += parseInt(response.amount);
                     $("#balance").text(walletBalance);
@@ -676,78 +640,7 @@
 });
 
 </script>     
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-     -->
-     
-     <!-- <script>
-        let cropper;
-    
-        document.getElementById("profile-pic-upload").addEventListener("change", handleFileSelect);
-    
-        function handleFileSelect(event) {
-            event.preventDefault();
-    
-            const file = event.target.files[0];
-            const reader = new FileReader();
-    
-            reader.onload = function (e) {
-                const image = document.getElementById("profile-pic-preview");
-                image.src = e.target.result;
-    
-                if (cropper) {
-                    cropper.destroy(); // Destroy previous Cropper instance if exists
-                }
-    
-                cropper = new Cropper(image, {
-                    aspectRatio: 1, // Set aspect ratio as 1:1 for square cropping
-                    viewMode: 1, // Set view mode to 1: fit the container
-                    dragMode: 'move', // Enable drag mode for easier selection
-                    autoCropArea: 1, // Show the whole image by default
-                    checkOrientation: false, // Disable image orientation checking
-                    guides: true, // Show crop guides
-                    center: true, // Center the crop box
-                    highlight: true, // Highlight the crop box
-                    cropBoxMovable: true, // Allow the crop box to be moved
-                    cropBoxResizable: true, // Allow the crop box to be resized
-                    minCropBoxWidth: 100, // Minimum width of the crop box
-                    minCropBoxHeight: 100 // Minimum height of the crop box
-                });
-            };
-    
-            reader.readAsDataURL(file);
-        }
-    
-        document.getElementById("cropButton").addEventListener("click", function () {
-            if (cropper) {
-                // Get cropped canvas
-                const croppedCanvas = cropper.getCroppedCanvas();
-    
-                // Convert canvas to blob
-                croppedCanvas.toBlob(blob => {
-                    // Create a new FormData object
-                    const formData = new FormData(document.getElementById("userProfileForm"));
-    
-                    // Append the cropped blob to FormData
-                    formData.append('croppedProfileImageData', blob, 'cropped-profile-image.png');
-    
-                    // Now, you can send this formData to the server using Fetch or XMLHttpRequest
-                    // Example using Fetch:
-                    fetch('/edit-userdetails?id=<%= users._id %>', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => {
-                        // Handle response
-                        console.log(response);
-                    })
-                    .catch(error => {
-                        // Handle error
-                        console.error('Error uploading cropped profile image:', error);
-                    });
-                });
-            }
-        });
-    </script> -->
+   
     <script>
    let cropper;
 
@@ -757,12 +650,12 @@ const profilePicPreview = document.getElementById("profile-pic-preview");
 const cropButton = document.getElementById("cropButton");
 const profileContainer = document.querySelector(".profile-picture-container");
 
-// Open file selection
+
 profileButton.addEventListener("click", function () {
     fileInput.click();
 });
 
-// Handle file selection
+
 fileInput.addEventListener("change", function (event) {
     event.preventDefault();
     const file = event.target.files[0];
@@ -772,14 +665,14 @@ fileInput.addEventListener("change", function (event) {
 
         reader.onload = function (e) {
             profilePicPreview.src = e.target.result;
-            profileContainer.classList.add("image-selected"); // Change container to full preview mode
+            profileContainer.classList.add("image-selected"); 
 
             if (cropper) {
                 cropper.destroy();
             }
 
             cropper = new Cropper(profilePicPreview, {
-                aspectRatio: NaN, // Remove forced cropping ratio
+                aspectRatio: NaN, 
                 viewMode: 2,
                 dragMode: 'move',
                 autoCropArea: 1,
@@ -800,7 +693,7 @@ fileInput.addEventListener("change", function (event) {
     }
 });
 
-// Crop and upload image
+
 cropButton.addEventListener("click", function () {
     if (cropper) {
         const croppedCanvas = cropper.getCroppedCanvas();
@@ -837,13 +730,13 @@ cropButton.addEventListener("click", function () {
     reader.onload = function (e) {
         document.getElementById("profile-pic-preview").src = e.target.result;
 
-        // Show crop button only when image is chosen
+        
         document.getElementById("cropButton").style.display = "block";
     };
     reader.readAsDataURL(file);
 });
 
-// Hide "Choose Profile Picture" when user uploads an image
+
 document.getElementById("profile-pic-upload").addEventListener("click", function () {
     document.getElementById("chooseProfileButton").style.display = "none";
 });

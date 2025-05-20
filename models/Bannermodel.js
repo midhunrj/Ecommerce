@@ -19,7 +19,7 @@ const bannerSchema = new mongoose.Schema({
         
     },
     image: {
-        type: String, // Assuming you'll store the image path
+        type: String,
         required: true
     },
     status: {

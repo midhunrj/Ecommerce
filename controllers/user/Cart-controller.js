@@ -1,9 +1,9 @@
-const Cart = require('../models/Cartmodel');
-const Product = require('../models/productmodel');
-const Address = require('../models/Addressmodel');
-const Category=require('../models/categorymodel')
-const user=require('../models/usermodel')
-const Coupon=require("../models/couponmodel")
+const Cart = require('../../models/Cartmodel');
+const Product = require('../../models/productmodel');
+const Address = require('../../models/Addressmodel');
+const Category=require('../../models/categorymodel')
+const user=require('../../models/usermodel')
+const Coupon=require("../../models/couponmodel")
 const Razorpay=require("razorpay")
 const razorypay=new Razorpay({
     key_id:'process.env.RAZORPAY_ID_KEY',
@@ -36,7 +36,7 @@ const Cartpage=async(req,res)=>{
         if(!cartdata)
         {
             let CartIsEmpty="true"
-          return res.status(404).render("Cart",{Cart:cartdata,username:userdata.username,count,wishcount})
+          return res.status(404).render("Cart",{Cart:cartdata,username:userdata.username,count,wishcount,search:req.query.search})
         }
        
         const Cartlist=cartdata.cartItems.map(item=>item.product_id)
