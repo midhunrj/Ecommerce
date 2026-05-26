@@ -492,7 +492,7 @@
     
     function shareViaEmail() {
         var referralCode = document.getElementById("referralCodeInput").value;
-        var signupLink = "https://www.tech-tique.store/signup?ref=" + encodeURIComponent(referralCode);
+        var signupLink = "https://www.tech-tique.site/signup?ref=" + encodeURIComponent(referralCode);
         var emailBody = "Hey! Use my referral code: " + referralCode + ". Sign up using this link: " + signupLink;
         var emailLink = "mailto:?subject=Join and get rewarded&body=" + encodeURIComponent(emailBody);
         window.location.href = emailLink;
@@ -502,7 +502,7 @@
     
     function shareViaWhatsApp() {
         var referralCode = document.getElementById("referralCodeInput").value;
-        var signupLink = "https://tech-tique.store/signup?ref=" + encodeURIComponent(referralCode);
+        var signupLink = "https://tech-tique.site/signup?ref=" + encodeURIComponent(referralCode);
         var whatsappMessage = "Hey! Use my referral code: " + referralCode + ". Sign up using this link: " + signupLink;
         var whatsappLink = "https://wa.me/?text=" + encodeURIComponent(whatsappMessage);
         window.open(whatsappLink);
@@ -512,7 +512,7 @@
     
     function shareViaSMS() {
         var referralCode = document.getElementById("referralCodeInput").value;
-        var signupLink = "https://tech-tique.store/signup?ref=" + encodeURIComponent(referralCode);
+        var signupLink = "https://tech-tique.site/signup?ref=" + encodeURIComponent(referralCode);
         var smsMessage = "Hey! Use my referral code: " + referralCode + ". Sign up using this link: " + signupLink;
         var smsLink = "sms:?body=" + encodeURIComponent(smsMessage);
         window.location.href = smsLink;

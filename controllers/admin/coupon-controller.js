@@ -10,7 +10,7 @@ const couponpage=async(req,res)=>{
 }
 const newCoupon = async (req, res) => {
     try {
-        const { code, type,limit,startdate,expirydate, description, amount,miniamount} = req.body;
+        const { code,type,limit,startdate,expirydate,description,amount, miniamount} = req.body;
     
         // const expirydate=req.body[Expiry-date]
         
@@ -54,7 +54,7 @@ const coupondelete=async(req,res)=>{
   try{
     const coup=req.query.coupon
     
-    const { code, type,limit,expirydate, description, amount,miniamount} = req.body;
+    const {code, type,limit,expirydate, description, amount, miniamount} = req.body;
     await Coupon.findByIdAndDelete({coup})
   }
   catch(error)

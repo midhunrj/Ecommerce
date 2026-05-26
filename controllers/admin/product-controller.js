@@ -3,12 +3,13 @@ const Category = require('../../models/categorymodel')
 
 const productslist = async (req, res) => {
   try {
-    const { page = 1, limit = 10, search = "" } = req.query; // Get query parameters
+    
+    const { page = 1, limit = 10, search = "" } = req.query // Get query parameters
 
     const query = {
       isVerified: true,
       productname: { $regex: search, $options: "i" } // Case-insensitive search
-    };
+    }
 
     const totalProducts = await product.countDocuments(query);
     const productData = await product.find(query)
@@ -16,7 +17,7 @@ const productslist = async (req, res) => {
       .skip((page - 1) * limit)
       .exec();
 
-    const CategoryData = await Category.find({});
+    const CategoryData = await Category.find({})
 
     res.render('admin-products', {
       products: productData,

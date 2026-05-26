@@ -33,10 +33,13 @@ const addCategory = async (req, res) => {
     }
 
     // Case-insensitive search for existing category
-    const existingCategory = await Category.findOne({ catName: { $regex: new RegExp(`^${catName}$`, 'i') } });
+    const existingCategory = await Category.findOne({ catName: { $regex: new RegExp(`^${catName}$`, 'i') } })
+    
     if (existingCategory) {
-      const categoryData = await Category.find({});
-      return res.render("category-products", { message: "Category already exists", category: categoryData });
+
+      const categoryData = await Category.find({})
+
+      return res.render("category-products", { message: "Category already exists", category: categoryData })
     }
        
     const isListed = liOrUl === "list" ? false : true;

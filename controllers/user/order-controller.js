@@ -120,6 +120,7 @@ if (userCart) {
                }
                else 
                {
+                
                 userdata.wallet-=totalprice
                 userdata.history.push({
                     amount:totalprice,

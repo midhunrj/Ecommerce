@@ -53,7 +53,7 @@ const sendresetpasswordmail=async(username,email,_id,token)=>{
     from: 'mdnrj3600@gmail.com',
     to: email,
     subject: 'Email Verification',
-    html: '<p>Hi '+username+', please click here to <a href="https://www.tech-tique.store/forget-password-load?token='+token+''
+    html: '<p>Hi '+username+', please click here to <a href="https://www.tech-tique.site/forget-password-load?token='+token+''
   };
 
   await transporter.sendMail(mailOptions);

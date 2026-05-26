@@ -53,13 +53,13 @@ const wishlistpage=async(req,res)=>{
   
   const removewishlist=async(req,res)=>{
     try{
-      console.log("i am about to remove wishlist");
+      console.log("i am about to remove wishlist")
       let userid=req.session.user
       let productid=req.params.pro
       let productobj=new mongoose.Types.ObjectId(productid)
-      console.log(new mongoose.Types.ObjectId(productid,"objectwish"));
-      console.log(productobj,"reijjddgj");
-      console.log(productid,"pro");
+      console.log(new mongoose.Types.ObjectId(productid,"objectwish"))
+      console.log(productobj,"reijjddgj")
+      console.log(productid,"pro")
       let wishcount=req.session.wishcount
       wishcount-=1
       req.session.wishcount=wishcount

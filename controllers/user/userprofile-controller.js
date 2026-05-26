@@ -56,7 +56,7 @@ const getprofilepage=async(req,res)=>{
     }
   
     return {
-      ...order.toObject(), // ensure it's plain object to avoid Mongoose issues
+      ...order.toObject(), 
       formattedDate
     };
   });
@@ -97,7 +97,7 @@ console.log(req.body,"user profile update",req.file)
         console.error('Error updating user profile:', error);
         res.status(500).json({ error: 'Failed to update user profile' });
     }
-};
+}
 const editpassword=async(req,res)=>{
     try{
         const Userid=req.session.user
@@ -313,7 +313,7 @@ catch(error)
           const productIds = orderData.products.map(product => product.product);
           const productdata = await Product.find({ _id: { $in: productIds } });
           let count=req.session.count
-          res.render('user-orderdetails',{users:userdata,username:Userpro.username,orders:orderData,products:productdata,userAddress:Addressdata,count,wishcount})
+          res.render('user-orderdetails',{users:userdata,username:Userpro.username,orders:orderData,products:productdata,userAddress:Addressdata,count,wishcount,search:req.query.search})
           console.log("productdata",productdata);
           
         }
@@ -329,7 +329,8 @@ catch(error)
           const userdata=await User.findById(orderData.userId)
           const Userpro=await User.findOne({_id:user})
           let count=req.session.count
-          res.render('user-ordertracking',{users:userdata,username:Userpro.username,orders:orderData,count})
+           let wishcount=req.session.wishcount
+          res.render('user-ordertracking',{users:userdata,username:Userpro.username,orders:orderData,count,wishcount,search:req.query.search})
         }
         catch (error) {
           console.log(error.message);
@@ -351,7 +352,7 @@ catch(error)
                     console.log("hello it is userdata from refunding",userdata);
 
                     console.log("hello it is updatedorder data from refunding",updatedOrder);
-                    
+                   
                   userdata.wallet+=updatedOrder.Totalprice
                   updatedOrder.paymentstatus="refunded"
 
@@ -396,7 +397,7 @@ catch(error)
     const orderinfo = async (req, res) => {
         try {
             const orderId = req.params.orderId;
-            // Query the database for the specific order
+
             const order = await Order.findById(orderId).populate('products.product');
     console.log("download",order);
     console.log("order produt",order.products[0].product);
@@ -431,11 +432,11 @@ catch(error)
            
         },
         information: {
-            // Invoice number
+            
             number: order._id,
-            // Invoice data
+            
             date: order.Date,
-            // Invoice due date
+            
             dueDate: order.Date+7
         },
         // The products you would like to see on your invoice
@@ -456,7 +457,7 @@ catch(error)
             currency: "INR", // See documentation 'Locales and Currency' for more info. Leave empty for no currency.
                  
         },
-        // Translate your invoice to your preferred language
+        
         translate: {
            
         },

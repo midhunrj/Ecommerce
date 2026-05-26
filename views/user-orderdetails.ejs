@@ -46,18 +46,18 @@
 
                 <div class="card-body">
                     <div class="row mb-50 mt-20 order-info-wrap text-center">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <article class="icontext align-items-start">
                                 <div class="text">
                                     <h6 class="mb-1">Customer</h6>
                                     <p class="mb-1">
                                         <%= users.username %> <br> <%= users.email %> <br> +<%= users.phone %>
                                     </p>
-                                    <a href="#">View profile</a>
+                                    <a href="/profile">View profile</a>
                                 </div>
                             </article>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <article class="icontext align-items-start">
                                 <div class="text">
                                     <h6 class="mb-1">Order Status</h6>
@@ -78,7 +78,7 @@
                                 </div>
                             </article>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <article class="icontext align-items-start">
                                 <div class="text">
                                     <h6 class="mb-1">Order info</h6>
@@ -92,7 +92,7 @@
                                 </div>
                             </article>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <article class="icontext align-items-start">
                                 <div class="text">
                                     <h6 class="mb-1">Deliver to</h6>
@@ -105,7 +105,7 @@
                                         <%= orders.Address[0].country %> <%= orders.Address[0].pincode %><br>
                                         Mobile : <%= orders.Address[0].phone %>
                                     </p>
-                                    <a href="#">View profile</a>
+                                    <a href="/profile">View profile</a>
                                 </div>
                             </article>
                         </div>
@@ -197,9 +197,9 @@
                         </div>
                     </div>
 
-                    <div class="text-center mt-3">
+                    <!-- <div class="text-center mt-3">
                         <a class="btn btn-primary" href="/order-tracks?id=<%= orders._id %>">View Order Tracking</a>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

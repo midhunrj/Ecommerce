@@ -1,14 +1,16 @@
 <%- include("./layouts/Admin-header") %>
 <style>
-    /* Style for pagination page items */
 .page-item {
  background-color: #f8f9fa; 
  border: 1px solid #dee2e6; 
  color: #6c757d; 
  margin-right: 5px; 
-}
 
-/* Style for active page item */
+}
+.pagination-area{
+   margin-bottom: 100px;
+   /* margin-top:20px; */
+}
 .page-item.active {
  background-color: #007bff; 
  border-color: #007bff; 
@@ -85,7 +87,7 @@
                 <td><a href="#" class="fw-bold"><%=orders[i]._id %></a> </td>
                 <td><%= orders[i].Address[0].name %></td>
                 <td>
-                    <%=orders[i].Date %>
+                    <%=orders[i].formattedDate %>
                 </td>
                 <td>
                     <%= orders[i].Totalprice %>
@@ -109,9 +111,9 @@
         </tbody>
     </table>
 </div>
-</div> <!-- table-responsive end// -->
+</div> 
 </div>
-</div>
+
 <div class="pagination-area mt-30 mb-50">
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-start" id="paginationLinks">
@@ -123,8 +125,8 @@
       </ul>
 </nav>
 </div>
-<div>
-<!-- <a href="/admin/home"></a>go to home page</div> -->
+
+ <a href="/admin/home"></a>go to home page</div> 
 <%- include("./layouts/Admin-footer.ejs") %>
  <script>
     function downloadmodal()
@@ -133,12 +135,12 @@
     }
  </script>
 <script>
-    // Initialize currentPage from server-rendered page variable
+
   let currentPage =  1;
     document.getElementById('fetchDataButton').addEventListener('click', function(event) {
-  event.preventDefault(); // Prevent the default behavior of the click event
-  currentPage = 1; //
-  fetchFilteredOrders(); // Call the function to fetch filtered orders
+  event.preventDefault(); 
+  currentPage = 1; 
+  fetchFilteredOrders(); 
 });
 
 document.getElementById('paginationLinks').addEventListener('click', function(event) {
@@ -185,7 +187,7 @@ function renderOrders(orders) {
               </td>
               <td><a href="#" class="fw-bold">${order._id}</a></td>
               <td>${order.Address[0].name}</td>
-              <td>${order.Date}</td>
+              <td>${order.formattedDate}</td>
               <td>${order.Totalprice}</td>
               <td><span class="badge badge-pill badge-soft-success">${order.paymentstatus}</span></td>
               <td>
@@ -282,11 +284,11 @@ document.getElementById('downloadPDFButton').addEventListener('click', function(
     }
 
     document.getElementById('downloadExcelButton').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent the default behavior of the click event
-        downloadExcelReport(); // Call the function to download PDF report
+        event.preventDefault(); 
+        downloadExcelReport(); 
     });
 
-    // Function to download PDF report
+    
     function downloadExcelReport() {
         const timeRange = document.getElementById('timeRangeFilter').value;
         window.location.href = `/admin/download-excel?timeRange=${timeRange}`; // Route to download PDF report in backend

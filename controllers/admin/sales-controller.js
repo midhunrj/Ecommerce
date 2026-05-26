@@ -1,4 +1,8 @@
 const Order=require('../../models/ordermodel')
+const Category=require('../../models/categorymodel')
+const user = require('../../models/usermodel')
+const product = require('../../models/productmodel');
+const dayjs=require('dayjs')
 const _ = require('lodash');
 
 const moment = require('moment');
@@ -8,8 +12,8 @@ const filtersalesreport = async (req, res) => {
     const page = req.query.page || 1;
     console.log(page, "pages");
     const ordersperpage = 8;
-    const timeRange = req.query.timeRange || 'yearly'; // Default to yearly if not provided
-    const statusFilter = req.query.status || 'All'; // Default to All if not provided
+    const timeRange = req.query.timeRange || 'yearly'; 
+    const statusFilter = req.query.status || 'All'; 
     
     console.log("Time Range Filter:", timeRange);
     console.log("Status Filter:", statusFilter);
@@ -19,21 +23,27 @@ const filtersalesreport = async (req, res) => {
     const now = moment();
     
     switch (timeRange) {
+
       case 'daily':
-        dateFilter = { placedon: { $gte: now.startOf('day'), $lte: now.endOf('day') } };
+         dateFilter = { placedon: { $gte: now.startOf('day'), $lte: now.endOf('day') } };
         break;
+         
         case 'weekly':
           dateFilter = { placedon: { $gte: now.startOf('week'), $lte: now.endOf('week') } };
           break;
+          
           case 'monthly':
             dateFilter = { placedon: { $gte: now.startOf('month'), $lte: now.endOf('month') } };
             break;
+            
             case 'yearly':
               dateFilter = { placedon: { $gte: now.startOf('year'), $lte: now.endOf('year') } };
               break;
+
           case 'all':
               dateFilter = {}; // No date filter for all-time
               break;
+              
               default:
               dateFilter = {};
       }
@@ -43,11 +53,12 @@ const filtersalesreport = async (req, res) => {
       const totalNumberOfPages = Math.ceil(totalNumberOfOrders / ordersperpage);
       console.log("totalpage", totalNumberOfPages);
 
-      const validpage = Math.max(1, Math.min(page, totalNumberOfPages));
+      const validpage = Math.max(1, Math.min(page, totalNumberOfPages))
       
       console.log("valid page", validpage);
       
       // Fetch the order data with the time filter applied
+
       const orderdata = await Order.find({ Order_verified: true, $or: [{ Status: "Delivered" }], ...dateFilter })
       .sort({ placedon: -1 })
       .skip((validpage - 1) * ordersperpage)
@@ -59,6 +70,7 @@ const filtersalesreport = async (req, res) => {
       
       if (orderdata) {
         res.render('sales-report', { 
+
           username: userData.username,
           totalNumberOfPages, 
           page: validpage, 
@@ -67,6 +79,7 @@ const filtersalesreport = async (req, res) => {
           statusFilter,
           orders: orderdata,
           categories: catdata 
+
         });
       }
   } catch (error) {
@@ -105,11 +118,28 @@ const salesreport=async(req,res)=>{
   }).sort({placedon:-1}).skip((validpage - 1) * ordersperpage)
     .limit(ordersperpage);
      console.log("orderdata",orderdata);
+
+      let orders = orderdata.map(order => {
+         let formattedDate = order.Date;;
+       
+         if (order.Date) {
+           const parsedDate = dayjs(order.Date);
+           if (parsedDate.isValid()) {
+             formattedDate = parsedDate.format('DD/MM/YYYY');
+           }
+         }
+       
+         return {
+           ...order.toObject(), 
+           formattedDate
+         };
+       });
+      
      if(orderdata){
       
       res.render('sales-report', { username: userData.username,totalNumberOfPages,page:validpage,products:productdata,timeRange,statusFilter,
-        orders:orderdata,
-        categories:catdata, })
+        orders,
+        categories:catdata,})
       }
   }
   catch(error){
@@ -130,7 +160,24 @@ const salesweekly=async (req, res) => {
       { placedon: { $gte: startOfWeek, $lte: endOfWeek }, Status: "Delivered" },
      
   ]}).sort({placedon:-1})
-       // Modify this to match your schema
+
+   let orders = weeklyOrders.map(order => {
+      let formattedDate = order.Date;;
+    
+      if (order.Date) {
+        const parsedDate = dayjs(order.Date);
+        if (parsedDate.isValid()) {
+          formattedDate = parsedDate.format('DD/MM/YYYY');
+        }
+      }
+    
+      return {
+        ...order.toObject(), 
+        formattedDate
+      };
+    });
+   
+
        const page = parseInt(req.query.page) || 1;
        const ordersPerPage=8
        const totalNumberOfOrders = await Order.countDocuments({
@@ -140,7 +187,7 @@ const salesweekly=async (req, res) => {
       ]});
          const totalNumberOfPages = Math.ceil(totalNumberOfOrders / ordersPerPage);
          const validPage = Math.min(page, Math.max(1, totalNumberOfPages));
-  res.json({orders:weeklyOrders,totalPages: totalNumberOfPages,
+  res.json({orders,totalPages: totalNumberOfPages,
     currentPage: validPage});
 }
 catch(error)
@@ -156,13 +203,13 @@ const salesmonthly=async (req, res) => {
   const startOfMonth = moment().startOf('month');
   const endOfMonth = moment().endOf('month');
 
-  // Apply the status filter to your MongoDB query
+  
   const monthlyOrders = await Order.find({
     $or: [
       { placedon: { $gte: startOfMonth, $lte: endOfMonth }, Status: "Delivered" },
      
   ]}).sort({placedon:-1})
-      // Modify this to match your schema
+
   
       const page = parseInt(req.query.page) || 1;
       const ordersPerPage=8
@@ -173,7 +220,23 @@ const salesmonthly=async (req, res) => {
       ]});
         const totalNumberOfPages = Math.ceil(totalNumberOfOrders / ordersPerPage);
         const validPage = Math.min(page, Math.max(1, totalNumberOfPages));
-  res.json({orders:monthlyOrders,totalPages: totalNumberOfPages,
+         let orders = monthlyOrders.map(order => {
+            let formattedDate = order.Date;;
+          
+            if (order.Date) {
+              const parsedDate = dayjs(order.Date);
+              if (parsedDate.isValid()) {
+                formattedDate = parsedDate.format('DD/MM/YYYY');
+              }
+            }
+          
+            return {
+              ...order.toObject(), 
+              formattedDate
+            };
+          });
+         
+  res.json({orders,totalPages: totalNumberOfPages,
     currentPage: validPage});
 }
 catch(error)
@@ -189,7 +252,7 @@ const salesyearly=async (req, res) => {
   const startOfYear = moment().startOf('year');
   const endOfYear = moment().endOf('year');
 
-  // Apply the status filter to your MongoDB query
+  
   const yearlyOrders = await Order.find({
     $or: [
       { placedon: { $gte: startOfYear, $lte: endOfYear }, Status: "Delivered" },
@@ -205,37 +268,171 @@ const salesyearly=async (req, res) => {
   ]});
     const totalNumberOfPages = Math.ceil(totalNumberOfOrders / ordersPerPage);
     const validPage = Math.min(page, Math.max(1, totalNumberOfPages));
-  res.json({orders:yearlyOrders,totalPages: totalNumberOfPages,
+     let orders = yearlyOrders.map(order => {
+        let formattedDate = order.Date;;
+      
+        if (order.Date) {
+          const parsedDate = dayjs(order.Date);
+          if (parsedDate.isValid()) {
+            formattedDate = parsedDate.format('DD/MM/YYYY');
+          }
+        }
+      
+        return {
+          ...order.toObject(), 
+          formattedDate
+        };
+      });
+     
+  res.json({orders,totalPages: totalNumberOfPages,
     currentPage: validPage});
 }
 catch(error)
 {
   console.log(error.message);
 }}
-const salesAlltime=async (req, res) => {
-  try {
-    console.log("hello alltime");
-  const statusFilter = req.query.status || '';
+// const salesAlltime=async (req, res) => {
+//   try {
+//     console.log("hello alltime");
+//   const statusFilter = req.query.status || '';
 
   
-  const alltimeOrders = await Order.find(
-      { Status: "Delivered" } 
-  ).sort({placedon:-1})
+//   const alltimeOrders = await Order.find(
+//       { Status: "Delivered" } 
+//   ).sort({placedon:-1})
        
-  const page = parseInt(req.query.page) || 1;
-  const ordersPerPage=8
-  const totalNumberOfOrders = await Order.countDocuments({ Status: "Delivered" });
-    const totalNumberOfPages = Math.ceil(totalNumberOfOrders / ordersPerPage);
-    const validPage = Math.min(page, Math.max(1, totalNumberOfPages));
+//   const page = parseInt(req.query.page) || 1;
+//   const ordersPerPage=8
+//   const totalNumberOfOrders = await Order.countDocuments({ Status: "Delivered" });
+//     const totalNumberOfPages = Math.ceil(totalNumberOfOrders / ordersPerPage);
+//     const validPage = Math.min(page, Math.max(1, totalNumberOfPages));
 
-  
-  res.json({orders:alltimeOrders,totalPages: totalNumberOfPages,
-    currentPage: validPage});
-}
-catch(error)
-{
-  console.log(error.message);
-}}
+//    let orders = alltimeOrders.map(order => {
+//       let formattedDate = order.Date;;
+    
+//       if (order.Date) {
+//         const parsedDate = dayjs(order.Date);
+//         if (parsedDate.isValid()) {
+//           formattedDate = parsedDate.format('DD/MM/YYYY');
+//         }
+//       }
+    
+//       return {
+//         ...order.toObject(), 
+//         formattedDate
+//       };
+//     });
+   
+//   res.json({orders,totalPages: totalNumberOfPages,
+//     currentPage: validPage});
+// }
+// catch(error)
+// {
+//   console.log(error.message);
+// }}
+
+// const salesAlltime = async (req, res) => {
+//   try {
+//     const page = parseInt(req.query.page) || 1;
+//     const ordersPerPage = 8;
+//     const timeRange = req.query.timeRange || 'all';
+//     const statusFilter = req.query.status || 'All';
+
+//     // Build query based on timeRange
+//     let query = { Order_verified: true, Status: "Delivered" };
+//     if (timeRange !== 'all') {
+//       const now = dayjs();
+//       let startDate;
+//       if (timeRange === 'daily') startDate = now.startOf('day');
+//       else if (timeRange === 'weekly') startDate = now.startOf('week');
+//       else if (timeRange === 'monthly') startDate = now.startOf('month');
+//       else if (timeRange === 'yearly') startDate = now.startOf('year');
+//       query.Date = { $gte: startDate.toDate() };
+//     }
+
+//     const totalNumberOfOrders = await Order.countDocuments(query);
+//     const totalNumberOfPages = Math.ceil(totalNumberOfOrders / ordersPerPage);
+//     const validPage = Math.min(Math.max(1, page), totalNumberOfPages);
+
+//     const orders = await Order.find(query)
+//       .sort({ placedon: -1 })
+//       .skip((validPage - 1) * ordersPerPage)
+//       .limit(ordersPerPage)
+//       .then(orders => orders.map(order => ({
+//         ...order.toObject(),
+//         formattedDate: order.Date ? dayjs(order.Date).format('DD/MM/YYYY') : order.Date
+//       })));
+
+//     res.json({
+//       orders,
+//       totalPages: totalNumberOfPages,
+//       currentPage: validPage
+//     });
+//   } catch (error) {
+//     console.error('Error in salesAlltime:', error.message);
+//     res.status(500).json({ error: 'Failed to fetch orders' });
+//   }
+// };
+
+const salesAlltime = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const ordersPerPage = 8;
+    const timeRange = req.query.timeRange || 'all';
+    const statusFilter = req.query.status || 'All';
+
+    // Build query based on timeRange
+    let query = { Order_verified: true, Status: "Delivered" };
+    if (timeRange !== 'all') {
+      const now = dayjs();
+      let startDate;
+      if (timeRange === 'daily') startDate = now.startOf('day');
+      else if (timeRange === 'weekly') startDate = now.startOf('week');
+      else if (timeRange === 'monthly') startDate = now.startOf('month');
+      else if (timeRange === 'yearly') startDate = now.startOf('year');
+      query.Date = { $gte: startDate.toDate() };
+    }
+
+    const totalNumberOfOrders = await Order.countDocuments(query);
+    const totalNumberOfPages = Math.ceil(totalNumberOfOrders / ordersPerPage);
+    const validPage = Math.min(Math.max(1, page), totalNumberOfPages || 1);
+
+    const alltimeOrders = await Order.find(query)
+      .sort({ placedon: -1 })
+      .skip((validPage - 1) * ordersPerPage)
+      .limit(ordersPerPage)
+      // .then(orders => orders.map(order => ({
+      //   ...order,
+      //   formattedDate: order.Date ? dayjs(order.Date).format('DD/MM/YYYY') : 'N/A'
+      // })));
+
+         let orders = alltimeOrders.map(order => {
+      let formattedDate = order.Date;;
+    
+      if (order.Date) {
+        const parsedDate = dayjs(order.Date);
+        if (parsedDate.isValid()) {
+          formattedDate = parsedDate.format('DD/MM/YYYY');
+        }
+      }
+    
+      return {
+        ...order.toObject(), 
+        formattedDate
+      };
+    });
+    
+    res.json({
+      orders,
+      totalPages: totalNumberOfPages,
+      currentPage: validPage
+    });
+  } catch (error) {
+    console.error('Error in salesAlltime:', error.message);
+    res.status(500).json({ error: 'Failed to fetch orders' });
+  }
+};
+
 const salesdaily=async(req,res)=>{
   try{
     console.log("hello daily");
@@ -253,7 +450,23 @@ const salesdaily=async(req,res)=>{
     { placedon: { $gte: startOfDay, $lte: endOfDay }, Status: "Delivered" }]});
     const totalNumberOfPages = Math.ceil(totalNumberOfOrders / ordersPerPage);
     const validPage = Math.min(page, Math.max(1, totalNumberOfPages));
-    res.json({orders:dailyorders,totalPages: totalNumberOfPages,
+     let orders = dailyorders.map(order => {
+        let formattedDate = order.Date;;
+      
+        if (order.Date) {
+          const parsedDate = dayjs(order.Date);
+          if (parsedDate.isValid()) {
+            formattedDate = parsedDate.format('DD/MM/YYYY');
+          }
+        }
+      
+        return {
+          ...order.toObject(), 
+          formattedDate
+        };
+      });
+     
+    res.json({orders,totalPages: totalNumberOfPages,
       currentPage: validPage,})
   }catch(error)
   {
@@ -449,10 +662,20 @@ const ordersChart = async (req, res) => {
   }
 }
 
-
+const getCategoryNameById = async (categoryId) => {
+  try {
+    const category = await Category.findOne({_id:categoryId})
+    console.log(category,"category labels");
+    console.log(category.catName,"category name",typeof category.catName);
+    return category.catName
+  } catch (error) {
+    console.error('Error fetching category:', error);
+    return 'Unknown Category';
+  }
+};
 const productCountChart = async (req, res) => {
   try {
-    const timeRange = req.query.timeRange || 'monthly'; // Default to monthly if not provided
+    const timeRange = req.query.timeRange || 'monthly'; 
     let startDate;
     if (timeRange === 'weekly') {
       startDate = moment().startOf('year').toDate()
@@ -474,23 +697,23 @@ const productCountChart = async (req, res) => {
         }
       },
       {
-        $unwind: "$products" // Split each order into multiple documents, one for each product
+        $unwind: "$products" 
       },
       {
         $lookup: {
-          from: "products", // Assuming the name of your products collection is "products"
+          from: "products", 
           localField: "products.product",
           foreignField: "_id",
           as: "product"
         }
       },
       {
-        $unwind: "$product" // Unwind the product array
+        $unwind: "$product" 
       },
       {
         $group: {
           _id: {
-            category: "$product.Category", // Assuming category is a field in your products collection
+            category: "$product.Category", 
             date: {
               $cond: [
                 { $eq: [timeRange, 'weekly'] },
@@ -504,8 +727,8 @@ const productCountChart = async (req, res) => {
       },
       { $sort: { "_id.date": 1 } }
     ]);
-
-    // Group product counts by date
+       
+    
     const groupedData = _.groupBy(productCountData, '_id.date');
 
     // Format data for the frontend chart

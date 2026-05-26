@@ -19,7 +19,7 @@ const dayjs=require('dayjs')
 
 const securepassword = async (password) => {
   try {
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash = await bcrypt.hash(password, 10)
     return passwordHash;
   } catch (error) {
     console.log(error);
@@ -28,41 +28,54 @@ const securepassword = async (password) => {
 
 const loginload = async (req, res) => {
   try {
-    // res.setHeader("Cache-Control","no-store ,max-age=0");
-    console.log("Admin login page");
+    // res.setHeader("Cache-Control","no-store ,max-age=0")
+    console.log("Admin login page")
+
     if(req.session.admin) {
       res.redirect('/admin/home')
     }
     else{
+
     res.render('login', { title: "login page" })
-    console.log("hey i am going");
+
+    console.log("hey i am going")
  } } catch (error) {
     console.log(error.message);
   }
 }
 
 const verifyLogin = async (req, res) => {
-
   console.log('adminnnnnn');
   try {
+
     const Email = req.body.email
+
     const password = req.body.password
-    console.log(Email,"email");
+
+    console.log(Email,"email")
+
     const userdata = await user.findOne({email:Email})
-    console.log(userdata);
+
+    console.log(userdata)
+
     if (userdata) {
-      console.log("mir");
+      console.log("mir")
+
       // const passwordmatch = bcrypt.compare(password, userdata.password)
       console.log('joi')
 
-      if (password===userdata.password&&userdata.is_admin === 1) {
+      if (password===userdata.password && userdata.is_admin === 1) {
 
-        console.log('admin');
+        console.log('admin')
+
         req.session.admin = userdata._id
-        console.log("admin id",req.session.admin);
+
+        console.log("admin id",req.session.admin)
+
         console.log("hi")
         
         res.redirect('/admin/home')
+
         console.log('jk')
       }
       else if (password !== userdata.password) {
@@ -82,29 +95,29 @@ const verifyLogin = async (req, res) => {
 }
 const getRevenueData = async () => {
   try {
-      // Fetch revenue data from your database
+      
       const revenueData = await Order.aggregate([
           {
               $match: {
                   Order_verified: true,
-                  $or: [
+                  $or:[
                       { Status: "Delivered" },
-                      { paymentstatus: "paid" }
-                  ]
+                      { paymentstatus: "paid" } ]
               }
           },
           {
               $group: {
                   _id: null,
-                  totalRevenue: { $sum: "$Totalprice" } // Calculate total revenue
+                  totalRevenue: { $sum: "$Totalprice" } 
               }
           }
-      ]);
+      ])
 
-      return revenueData[0] ? revenueData[0].totalRevenue : 0; // Return total revenue
+      return revenueData[0] ? revenueData[0].totalRevenue : 0 
   } catch (error) {
+
       console.error('Error fetching revenue data:', error);
-      return 0; // Return 0 in case of error
+      return 0; 
   }
 };
 const getTopSellingProducts = async () => {
@@ -132,15 +145,15 @@ const getTopSellingProducts = async () => {
 };
 
 const getTopSellingProductsByCategory = async () => {
-  // Fetch all categories
+
   const categories = await Category.find({});
 
   // Initialize array to store top selling products by category
   const topSellingProductsByCategory = [];
 
-  // Loop through each category
+
   for (const category of categories) {
-      // Fetch products for the current category
+
       const products = await product.find({ Category: category._id, isVerified: true });
 
       // Aggregate order data to count occurrences of each product within the category
@@ -220,14 +233,14 @@ const loadhomepage = async (req, res) => {
             }
           
             return {
-              ...order.toObject(), // ensure it's plain object to avoid Mongoose issues
+              ...order.toObject(), 
               formattedDate
             };
           })
    
     const catdata = await Category.find({});
 
-    // Fetch revenue data
+    
     const revenue = await getRevenueData();
 
     res.render('homesample', {
@@ -498,10 +511,10 @@ const updateorderstatus = async (req, res) => {
               )
 
               await User.save()
+              updatedOrder.paymentstatus = 'refunded';
+            await updatedOrder.save();
             }
           }
-          updatedOrder.paymentstatus = 'refunded';
-        await updatedOrder.save();
       }
       else if(newStatus=="Delivered"&& updatedOrder)
       {
@@ -531,17 +544,7 @@ const deleteOrder = async (req, res) => {
   }
 };
 
-const getCategoryNameById = async (categoryId) => {
-  try {
-    const category = await Category.findOne({_id:categoryId})
-    console.log(category,"category labels");
-    console.log(category.catName,"category name",typeof category.catName);
-    return category.catName
-  } catch (error) {
-    console.error('Error fetching category:', error);
-    return 'Unknown Category';
-  }
-};
+
 
 const downloadpdf = async (req, res) => {
   try {

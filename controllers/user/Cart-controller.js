@@ -1,6 +1,6 @@
-const Cart = require('../../models/Cartmodel');
-const Product = require('../../models/productmodel');
-const Address = require('../../models/Addressmodel');
+const Cart = require('../../models/Cartmodel')
+const Product = require('../../models/productmodel')
+const Address = require('../../models/Addressmodel')
 const Category=require('../../models/categorymodel')
 const user=require('../../models/usermodel')
 const Coupon=require("../../models/couponmodel")
@@ -20,7 +20,7 @@ const Cartpage=async(req,res)=>{
         let count=0
 
         const cartData=await Cart.aggregate([{$match:{user_id:req.session.user}},{$unwind:"$cartItems"},{$group:{_id:null,count:{"$sum":"$cartItems.quantity"}}}])
-  console.log(cartData[0]?.count);
+  console.log(cartData[0]?.count)
   
   if(cartData.length>0)
   {
