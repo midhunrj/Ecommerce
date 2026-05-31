@@ -38,7 +38,7 @@
                             </ul>
                         </div>
                     </div>
-                    <!-- mobile menu start -->
+                    
                     <nav>
                         <ul class="mobile-menu">
                             <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/home">Home</a>
@@ -135,7 +135,7 @@
                             </li>
                         </ul>
                     </nav>
-                    <!-- mobile menu end -->
+                    
                 </div>
                 <div class="mobile-header-info-wrap mobile-header-border">
                     <div class="single-mobile-header-info mt-30">
@@ -178,7 +178,7 @@
                                 <div class="col-md-6 col-sm-12 col-xs-12 mx-auto">
                                     <div class="detail-gallery" >
                                         <span class="zoom-icon"><i class="fi-rs-search"></i></span>
-                                        <!-- MAIN SLIDES -->
+                                        
                                         <% console.log("this is  jdfsdjf"+products) %>
                                         <% console.log("this is prodcrt name "+products.productname) %>
                                         <% if(products){ %>
@@ -197,7 +197,7 @@
 </div>
 
                                         
-                                        <!-- THUMBNAILS -->
+                                        
                                         <div class="slider-nav-thumbnails pl-15 pr-15">
                                             <% if (products.image && Array.isArray(products.image) && products.image.length>0) { %>
                                                 <% for (let j = 0; j < products.image.length; j++) { %>
@@ -209,7 +209,7 @@
                                         </div>
                                         
                                     </div>
-                                    <!-- End Gallery -->
+                                    
                                 </div>
                                 <div class="col-md-6 col-sm-12 col-xs-12">
                                     <div class="detail-info">
@@ -303,7 +303,7 @@
                                             <li>Availability:<span class="in-stock text-success ml-5"><%= products.stock %> Items In Stock</span></li>
                                         </ul>
                                     </div>
-                                    <!-- Detail Info -->
+                                    
                                 </div>
                             </div>
                             <div class="row">
@@ -414,12 +414,12 @@
                         </div>
                     </div>
                     <div class="col-lg-5">
-                        <!-- Subscribe Form -->
+                        
                         <form class="form-subcriber d-flex wow fadeIn animated">
                             <input type="email" class="form-control bg-white font-small" placeholder="Enter your email">
                             <button class="btn bg-dark text-white" type="submit">Subscribe</button>
                         </form>
-                        <!-- End Subscribe Form -->
+                    
                     </div>
                 </div>
             </div>
@@ -509,7 +509,7 @@
             </div>
         </div>
     </footer>
-    <!-- Preloader Start -->
+    
     <div id="preloader-active">
         <div class="preloader d-flex align-items-center justify-content-center">
             <div class="preloader-inner position-relative">
@@ -524,8 +524,7 @@
             </div>
         </div>
     </div>
-    <!-- Vendor JS-->
-    <!-- Include SweetAlert library -->
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 
@@ -536,10 +535,10 @@
 <script>
     $(document).ready(function () {
         $("#addToCartButton").on("click", function () {
-            // Get the product ID from your data attributes or other sources
+            
             const productId = "<%= products._id %>";
 
-            // Make an AJAX POST request to your server
+            
             $.ajax({
                 url: '/Add-cart',
                 method: 'POST',
@@ -558,7 +557,7 @@
             var cartcount=parseInt(carticon.innerText)
             console.log(cartcount,"cartcount before")
              carticon.innerText=cartcount+1
-            // alert(carticon.innerText)
+            
             console.log(carticon.innerText);
                     } else {
                         Swal.fire({
@@ -570,7 +569,7 @@
                     }
                 },
                 error: function (xhr) {
-            if (xhr.status === 401) { // Not authorized
+            if (xhr.status === 401) { 
                 Swal.fire({
                     title: 'Login Required!',
                     text: 'You must login to add products to your cart.',
@@ -625,7 +624,7 @@
             }
             },
             error: function (xhr) {
-            if (xhr.status === 401) { // Not authorized
+            if (xhr.status === 401) { 
                 Swal.fire({
                     title: 'Login Required!',
                     text: 'You must login to add products to your wishlist.',
@@ -667,7 +666,7 @@
     <script src="assets/js/plugins/jquery.vticker-min.js"></script>
     <script src="assets/js/plugins/jquery.theia.sticky.js"></script>
     <script src="assets/js/plugins/jquery.elevatezoom.js"></script>
-    <!-- Template  JS -->
+
     <script src="./assets/js/main.js?v=3.4"></script>
     <script src="./assets/js/shop.js?v=3.4"></script>
 </body>

@@ -212,71 +212,13 @@ function renderPagination(totalPages, currentPage) {
         </li>`;
     }
   }
-  
-// document.getElementById('fetchDataButton').addEventListener('click', function(event) {
-//     event.preventDefault(); // Prevent the default behavior of the click event
-//     fetchFilteredOrders(); // Call the function to fetch filtered orders
-// });
-
-// function fetchFilteredOrders() {
-//     const timeRange = document.getElementById('timeRangeFilter').value;
-//     const currentPage = document.querySelector('.pagination .active').textContent || 1; // Get current active page
-
-//     console.log("Time range selected:", timeRange);
-
-//     fetch(`/admin/filter-sales-report?page=${currentPage}&timeRange=${timeRange}`)
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error('Network response was not ok');
-//             }
-//             return response.json();
-//         })
-//         .then(orders => {
-//             renderOrders(orders);
-//             console.log("orders", orders);
-//         })
-//         .catch(error => {
-//             console.error('Error fetching filtered orders:', error);
-//             alert('Error fetching filtered orders. Please try again later.');
-//         });
-// }
-
-// function renderOrders(orders) {
-//     const orderTableBody = document.getElementById('orderTableBody');
-//     orderTableBody.innerHTML = '';
-
-//     orders.forEach(order => {
-//         const row = `
-//         <tr>
-//             <td class="text-center">
-//                 <div class="form-check">
-//                     <input class="form-check-input" type="checkbox" id="transactionCheck02">
-//                     <label class="form-check-label" for="transactionCheck02"></label>
-//                 </div>
-//             </td>
-//             <td><a href="#" class="fw-bold">${order._id}</a></td>
-//             <td>${order.Address[0].name}</td>
-//             <td>${order.Date}</td>
-//             <td>${order.Totalprice}</td>
-//             <td><span class="badge badge-pill badge-soft-success">${order.paymentstatus}</span></td>
-//             <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i>${order.payment}</td>
-//             <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i>${order.Status}</td>
-//             <td><a href="/admin/order-detail?id=${order._id}" class="btn btn-xs">View details</a></td>
-//         </tr>`;
-//         orderTableBody.innerHTML += row;
-//     });
-// }
-
-// // Fetch initial data when the page loads (or after filter is applied)
-// fetchFilteredOrders();
-
-// fetchFilteredOrders();
+ 
 document.getElementById('downloadPDFButton').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent the default behavior of the click event
-        downloadPDFReport(); // Call the function to download PDF report
+        event.preventDefault();
+        downloadPDFReport(); 
     });
 
-    // Function to download PDF report
+
     function downloadPDFReport() {
         const timeRange = document.getElementById('timeRangeFilter').value; 
         window.location.href = `/admin/download-pdf?timeRange=${timeRange}`; 
@@ -291,7 +233,7 @@ document.getElementById('downloadPDFButton').addEventListener('click', function(
     
     function downloadExcelReport() {
         const timeRange = document.getElementById('timeRangeFilter').value;
-        window.location.href = `/admin/download-excel?timeRange=${timeRange}`; // Route to download PDF report in backend
+        window.location.href = `/admin/download-excel?timeRange=${timeRange}`; 
         $('#downloadModal').modal('hide')
     }
 

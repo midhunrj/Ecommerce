@@ -1,7 +1,7 @@
 const Category = require("../../models/categorymodel");
 const Product=require("../../models/productmodel")
 
-// Load Categories Page
+
 const loadCategoriesPage = async (req, res) => {
   try {
     const categoryData = await Category.find({});
@@ -23,7 +23,7 @@ const loadCategoriesPage = async (req, res) => {
   }
 };
 
-// Add Category
+
 const addCategory = async (req, res) => {
   try {
     const { catName, liOrUl, offer, offerType} = req.body;
@@ -32,7 +32,7 @@ const addCategory = async (req, res) => {
       return res.render("category-products",{message:"Category name is required",category:catdata})
     }
 
-    // Case-insensitive search for existing category
+
     const existingCategory = await Category.findOne({ catName: { $regex: new RegExp(`^${catName}$`, 'i') } })
     
     if (existingCategory) {
@@ -54,13 +54,13 @@ const addCategory = async (req, res) => {
     res.redirect("/admin/categories");
   } catch (error) {
     console.error("Error in addCategory:", error.message);
-    // Handle the error appropriately, such as sending an error response
+    
     res.status(500).send("Error adding category");
   }
 };
 
 
-// Delete Category
+
 const deleteCategory = async (req, res) => {
   try {
     console.log("entering ")
@@ -73,7 +73,7 @@ const deleteCategory = async (req, res) => {
   }
 };
 
-// Update Category
+
 const updateCategory = async (req, res) => {
   try {
     console.log(req.body)
@@ -118,9 +118,7 @@ console.log(categorylist,"categorylidt")
   }
 };
 
-// Assuming you're using Express.js for your server
 
-// Store the original price in a temporary storage (in-memory cache)
 let originalPriceCache = {};
 
 const addCategoryOffer = async (req, res) => {
@@ -128,7 +126,7 @@ const addCategoryOffer = async (req, res) => {
       const percentage = parseInt(req.body.percentage);
       const categoryId = req.body.categoryId;
 
-        // Check if the percentage exceeds the allowed limit
+
     if (percentage >= 90) {
        res.json({ status:false,message: "Offer can be applied only below 90 percent" });
     }
@@ -153,13 +151,13 @@ const addCategoryOffer = async (req, res) => {
       console.log(productData);
 
       for (const product of productData) {
-           product.originalprice = product.price; // Store original price
+           product.originalprice = product.price; 
            const originalprice=product.originalprice
           console.log("before offer", product.originalprice);
           product.price -= Math.floor(product.price * (percentage / 100));
           await product.save();
 
-          // Store the original price in the cache
+
           originalPriceCache[product._id.toString()] = originalprice.toString();
       }
 
@@ -187,7 +185,7 @@ const removerCategoryOffer = async (req, res) => {
             for (const product of productData) {
                 const originalprice =product.originalprice;
                 if (originalprice) {
-                    product.price = originalprice; // Use original price from cache
+                    product.price = originalprice; 
                     await product.save();
                 } else {
                     console.log("Original price not found for product:", product._id);
@@ -198,7 +196,7 @@ const removerCategoryOffer = async (req, res) => {
         findCategory.offer= 0;
         await findCategory.save();
 
-        // Clear the cache after use
+
         originalPriceCache = {};
 
         res.json({ status: true });

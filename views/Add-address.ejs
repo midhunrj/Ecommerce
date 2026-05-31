@@ -81,7 +81,7 @@
     function displayError(element, message) {
         const errorElement = document.getElementById(`${element.name}Error`);
         errorElement.innerHTML = message;
-        errorElement.style.color = 'red'; // Set error message color to red
+        errorElement.style.color = 'red'; 
         setTimeout(() => {
             errorElement.innerHTML = '';
         }, 5000);
@@ -93,12 +93,11 @@
 
         if (value === '') {
             errorElement.innerHTML = 'Field is required';
-            errorElement.style.color = 'red'; // Set error message color to red
+            errorElement.style.color = 'red'; 
         } else {
-            errorElement.innerHTML = ''; // Clear the "Field is required" message
-            errorElement.style.color = ''; // Reset error message color
+            errorElement.innerHTML = ''; 
+            errorElement.style.color = '';
 
-            // Additional validation based on the field name
             switch (element.name) {
                 case 'name':
                     if (!/^[A-Z]/.test(value)) {
@@ -116,7 +115,7 @@
                         displayError(element, 'Please enter a valid 10-digit phone number');
                     }
                     break;
-                // Add similar cases for other fields
+                
             }
         }
     }

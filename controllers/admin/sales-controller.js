@@ -41,8 +41,7 @@ const filtersalesreport = async (req, res) => {
               break;
 
           case 'all':
-              dateFilter = {}; // No date filter for all-time
-              break;
+              dateFilter = {};               break;
               
               default:
               dateFilter = {};
@@ -57,7 +56,7 @@ const filtersalesreport = async (req, res) => {
       
       console.log("valid page", validpage);
       
-      // Fetch the order data with the time filter applied
+
 
       const orderdata = await Order.find({ Order_verified: true, $or: [{ Status: "Delivered" }], ...dateFilter })
       .sort({ placedon: -1 })
@@ -93,8 +92,8 @@ const salesreport=async(req,res)=>{
     const page=req.query.page||1;
     console.log(page,"pages");
     const ordersperpage=8;
-    const timeRange = req.query.timeRange || 'all'; // Default to yearly if not provided
-    const statusFilter = req.query.status || 'All'; // Default to All if not provided
+    const timeRange = req.query.timeRange || 'all'; 
+        const statusFilter = req.query.status || 'All'; 
     
     console.log("Time Range Filter:", timeRange);
     console.log("Status Filter:", statusFilter);
@@ -154,7 +153,7 @@ const salesweekly=async (req, res) => {
   const startOfWeek = moment().startOf('week');
   const endOfWeek = moment().endOf('week');
 
-  // Apply the status filter to your MongoDB query
+
   const weeklyOrders = await Order.find({
     $or: [
       { placedon: { $gte: startOfWeek, $lte: endOfWeek }, Status: "Delivered" },
@@ -291,88 +290,6 @@ catch(error)
 {
   console.log(error.message);
 }}
-// const salesAlltime=async (req, res) => {
-//   try {
-//     console.log("hello alltime");
-//   const statusFilter = req.query.status || '';
-
-  
-//   const alltimeOrders = await Order.find(
-//       { Status: "Delivered" } 
-//   ).sort({placedon:-1})
-       
-//   const page = parseInt(req.query.page) || 1;
-//   const ordersPerPage=8
-//   const totalNumberOfOrders = await Order.countDocuments({ Status: "Delivered" });
-//     const totalNumberOfPages = Math.ceil(totalNumberOfOrders / ordersPerPage);
-//     const validPage = Math.min(page, Math.max(1, totalNumberOfPages));
-
-//    let orders = alltimeOrders.map(order => {
-//       let formattedDate = order.Date;;
-    
-//       if (order.Date) {
-//         const parsedDate = dayjs(order.Date);
-//         if (parsedDate.isValid()) {
-//           formattedDate = parsedDate.format('DD/MM/YYYY');
-//         }
-//       }
-    
-//       return {
-//         ...order.toObject(), 
-//         formattedDate
-//       };
-//     });
-   
-//   res.json({orders,totalPages: totalNumberOfPages,
-//     currentPage: validPage});
-// }
-// catch(error)
-// {
-//   console.log(error.message);
-// }}
-
-// const salesAlltime = async (req, res) => {
-//   try {
-//     const page = parseInt(req.query.page) || 1;
-//     const ordersPerPage = 8;
-//     const timeRange = req.query.timeRange || 'all';
-//     const statusFilter = req.query.status || 'All';
-
-//     // Build query based on timeRange
-//     let query = { Order_verified: true, Status: "Delivered" };
-//     if (timeRange !== 'all') {
-//       const now = dayjs();
-//       let startDate;
-//       if (timeRange === 'daily') startDate = now.startOf('day');
-//       else if (timeRange === 'weekly') startDate = now.startOf('week');
-//       else if (timeRange === 'monthly') startDate = now.startOf('month');
-//       else if (timeRange === 'yearly') startDate = now.startOf('year');
-//       query.Date = { $gte: startDate.toDate() };
-//     }
-
-//     const totalNumberOfOrders = await Order.countDocuments(query);
-//     const totalNumberOfPages = Math.ceil(totalNumberOfOrders / ordersPerPage);
-//     const validPage = Math.min(Math.max(1, page), totalNumberOfPages);
-
-//     const orders = await Order.find(query)
-//       .sort({ placedon: -1 })
-//       .skip((validPage - 1) * ordersPerPage)
-//       .limit(ordersPerPage)
-//       .then(orders => orders.map(order => ({
-//         ...order.toObject(),
-//         formattedDate: order.Date ? dayjs(order.Date).format('DD/MM/YYYY') : order.Date
-//       })));
-
-//     res.json({
-//       orders,
-//       totalPages: totalNumberOfPages,
-//       currentPage: validPage
-//     });
-//   } catch (error) {
-//     console.error('Error in salesAlltime:', error.message);
-//     res.status(500).json({ error: 'Failed to fetch orders' });
-//   }
-// };
 
 const salesAlltime = async (req, res) => {
   try {
@@ -381,7 +298,7 @@ const salesAlltime = async (req, res) => {
     const timeRange = req.query.timeRange || 'all';
     const statusFilter = req.query.status || 'All';
 
-    // Build query based on timeRange
+    
     let query = { Order_verified: true, Status: "Delivered" };
     if (timeRange !== 'all') {
       const now = dayjs();
@@ -401,10 +318,7 @@ const salesAlltime = async (req, res) => {
       .sort({ placedon: -1 })
       .skip((validPage - 1) * ordersPerPage)
       .limit(ordersPerPage)
-      // .then(orders => orders.map(order => ({
-      //   ...order,
-      //   formattedDate: order.Date ? dayjs(order.Date).format('DD/MM/YYYY') : 'N/A'
-      // })));
+      
 
          let orders = alltimeOrders.map(order => {
       let formattedDate = order.Date;;
@@ -475,10 +389,9 @@ const salesdaily=async(req,res)=>{
 }
 const saleschart = async (req, res) => {
   try {
-      // Get the time range (e.g., monthly, weekly, daily) from query params
-      const timeRange = req.query.timeRange || 'monthly'; // Default to monthly if not provided
 
-      // Calculate the start date based on the specified time range
+      const timeRange = req.query.timeRange || 'monthly'; 
+
       let startDate;
       if (timeRange === 'weekly') {
           startDate = moment().startOf('year').toDate();
@@ -488,7 +401,7 @@ const saleschart = async (req, res) => {
           startDate = moment().subtract(3, 'months').startOf('month').toDate();
       }
 
-      // Aggregate orders data based on the specified time range and start date
+
       const salesData = await Order.aggregate([
           {
               $match: {
@@ -496,25 +409,25 @@ const saleschart = async (req, res) => {
                   $or: [
                       { Status: "Delivered" }
                   ],
-                  placedon: { $gte: startDate } // Filter orders placed after the start date
+                  placedon: { $gte: startDate } 
               }
           },
           {
               $group: {
                   _id: {
-                      $cond: [ // Group by month, week, or day based on the specified time range
+                      $cond: [ 
                           { $eq: [timeRange, 'weekly'] },
-                          { $isoWeek: "$placedon" }, // Group by ISO week for weekly data
-                          { $cond: [{ $eq: [timeRange, 'daily'] }, { $dayOfMonth: "$placedon" }, { $month: "$placedon" }] } // Group by day for daily data, month for monthly data
+                          { $isoWeek: "$placedon" }, 
+                          { $cond: [{ $eq: [timeRange, 'daily'] }, { $dayOfMonth: "$placedon" }, { $month: "$placedon" }] } 
                       ]
                   },
-                  totalSales: { $sum: 1 } // Count the number of orders
+                  totalSales: { $sum: 1 } 
               }
           },
-          { $sort: { "_id": 1 } } // Sort by month, week, or day
+          { $sort: { "_id": 1 } } 
       ]);
 
-      // Format the fetched data as needed for the frontend chart
+      
       const labels = salesData.map(item => {
           if (timeRange === 'weekly') {
               return `Week ${item._id}`;
@@ -530,7 +443,7 @@ const saleschart = async (req, res) => {
           data: salesData.map(item => item.totalSales)
       }];
 
-      // Send the formatted sales data as a response
+
       res.json({ labels, datasets });
   } catch (error) {
       console.error('Error fetching sales chart data:', error);
@@ -539,7 +452,7 @@ const saleschart = async (req, res) => {
 }
 const revenueChart = async (req, res) => {
   try {
-    const timeRange = req.query.timeRange || 'monthly'; // Default to monthly if not provided
+    const timeRange = req.query.timeRange || 'monthly'; 
     let startDate;
     if (timeRange === 'weekly') {
       startDate = moment().startOf('year').toDate();
@@ -569,8 +482,8 @@ const revenueChart = async (req, res) => {
               { $cond: [{ $eq: [timeRange, 'daily'] }, { $dayOfMonth: "$placedon" }, { $month: "$placedon" }] }
             ]
           },
-          totalRevenue: { $sum: "$Totalprice" }, // Assuming total_price field contains the revenue for each order
-          totalOrders: { $sum: 1 } // Count the number of orders
+          totalRevenue: { $sum: "$Totalprice" }, 
+          totalOrders: { $sum: 1 } 
         }
       },
       { $sort: { "_id": 1 } }
@@ -604,7 +517,7 @@ const revenueChart = async (req, res) => {
 
 const ordersChart = async (req, res) => {
   try {
-      const timeRange = req.query.timeRange || 'monthly'; // Default to monthly if not provided
+      const timeRange = req.query.timeRange || 'monthly';
       let startDate;
       if (timeRange === 'weekly') {
           startDate = moment().startOf('year').toDate()
@@ -634,7 +547,7 @@ const ordersChart = async (req, res) => {
                           { $cond: [{ $eq: [timeRange, 'daily'] }, { $dayOfMonth: "$placedon" }, { $month: "$placedon" }] }
                       ]
                   },
-                  totalOrders: { $sum: 1 } // Count the number of orders
+                  totalOrders: { $sum: 1 } 
               }
           },
           { $sort: { "_id": 1 } }
@@ -722,7 +635,7 @@ const productCountChart = async (req, res) => {
               ]
             }
           },
-          count: { $sum: "$products.quantity" } // Count the quantity of each product
+          count: { $sum: "$products.quantity" }
         }
       },
       { $sort: { "_id.date": 1 } }
@@ -731,7 +644,7 @@ const productCountChart = async (req, res) => {
     
     const groupedData = _.groupBy(productCountData, '_id.date');
 
-    // Format data for the frontend chart
+
     const labels = Object.keys(groupedData).map(date => {
       if (timeRange === 'weekly') {
         return `Week ${date}`;
@@ -742,7 +655,7 @@ const productCountChart = async (req, res) => {
       }
     });
 
-    // Construct datasets containing the product counts for each category
+
     const categories = Array.from(new Set(productCountData.map(item => item._id.category))); 
     const categoryNamesPromises = categories.map(category => getCategoryNameById(category));
     const categoryNames = await Promise.all(categoryNamesPromises);

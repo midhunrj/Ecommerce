@@ -36,11 +36,11 @@
                             <a class="btn btn-primary" href="#" onclick="updateOrderStatus()">Save</a>
                            
                     </div>
-                </header> <!-- card-header end// -->
+                </header> 
                 <div class="steps-container">
                     <div class="steps d-flex flex-wrap flex-sm-nowrap justify-content-between">
                         <div class="step <%= orders.Status === 'Confirmed' ? 'completed' : '' %>">
-                            <!-- Confirmed Order -->
+                            
                             <div class="step-icon-wrap">
                                 <div class="step-icon"><i class="material-icons md-shopping_cart"></i></div>
                             </div>
@@ -48,7 +48,7 @@
                             <small class="text-muted text-sm">15 March 2022</small>
                         </div>
                         <div class="step <%= orders.Status === 'Processing' ? 'completed' : (orders.Status === 'Quality Check' ? 'completed' : '') %>">
-                            <!-- Processing Order -->
+                            
                             <div class="step-icon-wrap">
                                 <div class="step-icon"><i class="material-icons md-settings"></i></div>
                             </div>
@@ -56,7 +56,7 @@
                             <small class="text-muted text-sm">16 March 2022</small>
                         </div>
                         <div class="step <%= orders.Status === 'Quality Check' ? 'completed' : '' %>">
-                            <!-- Quality Check -->
+                            
                             <div class="step-icon-wrap">
                                 <div class="step-icon"><i class="material-icons md-shopping_bag"></i></div>
                             </div>
@@ -64,7 +64,7 @@
                             <small class="text-muted text-sm">17 March 2022</small>
                         </div>
                         <div class="step <%= orders.Status === 'Product Dispatched' ? 'dispatched' : '' %>">
-                            <!-- Product Dispatched -->
+                            
                             <div class="step-icon-wrap">
                                 <div class="step-icon"><i class="material-icons md-local_shipping"></i></div>
                             </div>
@@ -72,7 +72,7 @@
                             <small class="text-muted text-sm">18 March 2022</small>
                         </div>
                         <div class="step <%= orders.Status === 'Product Delivered' ? 'delivered' : '' %>">
-                            <!-- Product Delivered -->
+                            
                             <div class="step-icon-wrap">
                                 <div class="step-icon"><i class="material-icons md-check_circle"></i></div>
                             </div>
@@ -135,15 +135,15 @@
                             <a class="btn btn-primary" href="/order-details?id=<%= users._id %>">View Order Details</a>
                         </div>
                    </div>
-            </div> <!-- card end// -->
-        </section> <!-- content-main end// -->
+            </div> 
+        </section> 
         <%- include("./layouts/footer.ejs") %>
         <script>
             function updateOrderStatus() {
                 var newStatus = $('#statusSelect').val();
                 var orderID = '<%= orders._id %>';
         
-                // Send AJAX request to update order status
+                
                 $.ajax({
                     url: '/update-order-status',
                     method: 'POST',
@@ -153,7 +153,7 @@
                         setTimeout(function () {
                             window.location.href = '/profile#orders';
                         }, 1000);
-                        // Optionally update the UI to reflect the new status
+                        
                     },
                     error: function (error) {
                         console.error('Error updating order status');

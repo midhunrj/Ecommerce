@@ -75,7 +75,7 @@
 
 <script>
     function validate() {
-        // Input fields
+    
         const code = document.getElementById('couponcode');
         const type = document.getElementById('type');
         const expirydate = document.getElementById('expirydate');
@@ -84,7 +84,7 @@
         const miniamount = document.getElementById('miniAmount');
         const description = document.getElementById('description');
 
-        // Error fields
+
         const codeError = document.getElementById('codeError');
         const typeError = document.getElementById('typeError');
         const expirydateError = document.getElementById('expirydateError');
@@ -93,7 +93,6 @@
         const miniamountError = document.getElementById('miniamountError');
         const descriptionError = document.getElementById('descriptionError');
 
-        // Reset error messages
         codeError.innerHTML = '';
         typeError.innerHTML = '';
         expirydateError.innerHTML = '';
@@ -102,7 +101,6 @@
         miniamountError.innerHTML = '';
         descriptionError.innerHTML = '';
 
-        // Validate each field and display error messages if empty or invalid
         let isValid = true;
         if (!code.value.trim()) {
             codeError.innerHTML = 'Coupon code is required';
@@ -146,7 +144,6 @@
             isValid = false;
         }
 
-        // Return false if any field is empty or invalid, preventing form submission
         return isValid;
     }
 </script>

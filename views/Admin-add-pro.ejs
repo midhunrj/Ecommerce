@@ -8,7 +8,7 @@
                         <h2 class="content-title">Add New Product</h2>
                         
                         <div>
-                           <!-- // <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button> -->
+
                              <button class="btn btn-md rounded font-sm hover-up" type="button" onclick="save()" >Publish</button>
                             
                         </div>
@@ -40,7 +40,7 @@
                                 <div id="brandError" class="Error"></div>
                             </div>
                         </div>
-                    </div> <!-- card end// -->
+                    </div> 
                     <div class="card mb-4">
                         <div class="card-body">
                             <div>
@@ -49,7 +49,7 @@
                                 <div id="descriptionError" class="Error"></div>
                             </div>
                         </div>
-                    </div> <!-- card end// -->
+                    </div> 
                     <div class="card mb-4">
                         <div class="card-body">
                           <div>
@@ -61,7 +61,7 @@
                           <button type="button" id="cropButton" class="btn btn-primary">Crop Image</button>
                           <input type="hidden" name="croppedImageData" id="croppedImageData">
                         </div>
-                      </div>  <!-- card end// -->
+                      </div>  
                 </div>
                 
                 <div class="col-lg-3">
@@ -72,21 +72,7 @@
                                 <input type="text" id="price" name="price" placeholder="Type here" class="form-control">
                                 <div id="priceError" class="Error"></div>
                             </div>
-                        
-                            <!-- <div class="mb-4">
-                                <label class="form-label">Status</label>
-                                <select class="form-select">
-                                    <option>Published</option>
-                                    <option>Draft</option>
-                                </select>
-                            </div> -->
-                            <!-- <div class="mb-4">
-                                <label class="form-label">Tags</label>
-                                <input type="text" placeholder="Type here" class="form-control">
-                            </div>
-                            <a href="#" class="font-xs hover-up mr-15"><i class="font-xs material-icons md-close text-body"></i> Tech</a>
-                            <a href="#" class="font-xs hover-up mr-15"><i class="font-xs material-icons md-close text-body"></i> Mobile</a>
-                            <a href="#" class="font-xs hover-up mr-15"><i class="font-xs material-icons md-close text-body"></i> Apple</a> -->
+
                             <hr>
                             <h5 class="mb-3">Categories</h5>
                             <% for (let i = 0; i < category.length; i++) { %>
@@ -103,7 +89,7 @@
                             
                         </div>
                     
-                    </div> <!-- card end// -->
+                    </div> 
                 </div>
             </div>
         </form>
@@ -135,7 +121,7 @@
             event.preventDefault();
     
             const addedImagesContainer = document.getElementById("addedImagesContainer");
-            addedImagesContainer.innerHTML = ""; // Clear previous content
+            addedImagesContainer.innerHTML = ""; 
     
             const files = event.target.files;
     
@@ -149,7 +135,7 @@
                 img.src = URL.createObjectURL(file);
                 img.alt = file.name;
     
-                img.style.width = "100px"; // Adjust the width as needed
+                img.style.width = "100px"; 
                 img.style.height = "auto";
     
                 const removeIcon = document.createElement("span");
@@ -158,12 +144,12 @@
     
                 removeIcon.addEventListener("click", function () {
                     thumbnail.remove();
-                    // Remove the corresponding cropped image from the array
+                    
                     const index = croppedImages.findIndex(img => img.file === file);
                     if (index !== -1) {
                         croppedImages.splice(index, 1);
                     }
-                    // Destroy Cropper instance
+                
                     cropper.destroy();
                 });
     
@@ -249,7 +235,7 @@
                   isEmpty = true;
                   displayError(inputElement, 'Field is required');
               } else {
-                  errorElement.innerHTML = ''; // Clear previous error messages
+                  errorElement.innerHTML = ''; 
               }
           });
   
@@ -257,7 +243,7 @@
       }
         function validate() {
 
-// Input feilds
+
 const name = document.getElementById('productname');
    const color = document.getElementById('Color');
    const brand = document.getElementById('Brand');
@@ -266,16 +252,16 @@ const name = document.getElementById('productname');
    const stock = document.getElementById('stock');
    const image = document.getElementById('imageInput');
 
-   // Error fields
+   
    const nameError = document.getElementById('nameError');
    const descriptionError = document.getElementById('descriptionError');
-   const brandError = document.getElementById('brandError'); // Corrected ID
+   const brandError = document.getElementById('brandError'); 
    const priceError = document.getElementById('priceError');
    const colorError = document.getElementById('colorError');
    const stockError = document.getElementById('stockError');
    const imageError = document.getElementById('imageError');
 
-   // Regex
+   
    const nameRegex = /^[A-Za-z0-9]/;
    const descriptionRegex = /^[A-Za-z0-9]/;
    const colorRegex = /^[A-Za-z]/;
@@ -283,7 +269,7 @@ const name = document.getElementById('productname');
    const stockRegex = /^[0-9]/;
    const brandRegex = /^[A-Za-z]/;
 
-   // Name field
+   
    if (name.value.trim() === '') {
       nameError.innerHTML = 'Field is required';
       setTimeout(() => {
@@ -299,7 +285,7 @@ const name = document.getElementById('productname');
       return false;
    }
 
-   // Description field
+   
    if (description.value.trim() === '') {
       descriptionError.innerHTML = 'Field is required';
       setTimeout(() => {
@@ -315,7 +301,7 @@ const name = document.getElementById('productname');
       return false;
    }
 
-   // Brand field (Corrected variable name)
+   
    if (brand.value.trim() === '') {
       brandError.innerHTML = 'Field is required';
       setTimeout(() => {
@@ -324,7 +310,6 @@ const name = document.getElementById('productname');
       return false;
    }
 
-   // Stock field
    if (stock.value.trim() === '') {
       stockError.innerHTML = 'Field is required';
       setTimeout(() => {
@@ -340,7 +325,7 @@ const name = document.getElementById('productname');
       return false;
    }
 
-   // Image field
+   
    if (image.value.trim() === '') {
       imageError.innerHTML = 'Upload at least one image';
       setTimeout(() => {
@@ -349,7 +334,7 @@ const name = document.getElementById('productname');
       return false;
    }
 
-   // Color field
+   
    if (color.value.trim() === '') {
       colorError.innerHTML = 'Field is required';
       setTimeout(() => {
@@ -358,7 +343,6 @@ const name = document.getElementById('productname');
       return false;
    }
 
-   // Price field
    if (price.value.trim() === '') {
       priceError.innerHTML = 'Field is required';
       setTimeout(() => {
@@ -374,7 +358,7 @@ const name = document.getElementById('productname');
       return false;
    }
    const selectedCategory = document.querySelector('input[name="Category"]:checked');
-   const categoryError = document.getElementById('categoryError'); // Add this line
+   const categoryError = document.getElementById('categoryError'); 
 
    if (!selectedCategory) {
       categoryError.innerHTML = 'Please select a category';
@@ -383,26 +367,15 @@ const name = document.getElementById('productname');
       }, 5000);
       return false;
    }
-//    const croppedImageData = document.getElementById("croppedImageData").value;
-//     if (!croppedImageData) {
-//         const imageError = document.getElementById("imageError");
-//         imageError.innerHTML = "Please crop the image";
-//         setTimeout(() => {
-//             imageError.innerHTML = "";
-//         }, 5000);
-//         return false;
-//     }
-
 
    return true;
 }
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Get the current URL
+            
             const currentUrl = window.location.pathname;
            
-            // Define an array of menu items with their corresponding URLs
             const menuItems = [
                 { url: "/admin/home", id: "dashboard" },
                 { url: "/admin/users", id: "users" },
@@ -412,22 +385,21 @@ const name = document.getElementById('productname');
                 { url: "/admin/new-coupon", id: "coupons" },
                 { url: "/admin/Coupons", id: "coupons" },
                 {url:"/admin/categories",id:"categories"}
-                // Add more menu items as needed
+                
             ];
         
-            // Find the active menu item based on the current URL
+            
             const activeMenuItem = menuItems.find(item => item.url.includes(currentUrl));
         
         
             if (activeMenuItem) {
-                // Highlight the active menu item
+                
                 const activeMenuLink = document.querySelector(`.menu-item#${activeMenuItem.id}`);
                
                 if (activeMenuLink) {
                     activeMenuLink.classList.add("active");
                 }
         
-                // Store the ID of the active menu item in local storage
                 localStorage.setItem("activeMenuItem", activeMenuItem.id);
             }
         });
@@ -437,7 +409,7 @@ const name = document.getElementById('productname');
     <script src="Admin-assets/js/vendors/select2.min.js"></script>
     <script src="Admin-assets/js/vendors/perfect-scrollbar.js"></script>
     <script src="Admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
-    <!-- Main Script -->
+    
     <script src="Admin-assets/js/main.js" type="text/javascript"></script>
 </body>
 

@@ -5,7 +5,7 @@ const wishlistpage=async(req,res)=>{
     try{
       let userid=req.session.user
       let count=req.session.count
-     // const userdata=await user.findOne({_id:userid}).populate('wishlist')//
+
      const userdata = await user.aggregate([{$match:{_id:new mongoose.Types.ObjectId(userid)}},{$lookup:{from:"products",localField:"wishlist",foreignField:"_id",as:"populatedwishlist"}}])
      console.log("wishlist",userdata);
      let wishcount=req.session.wishcount

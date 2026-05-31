@@ -32,7 +32,7 @@ console.log("sdfsf");
 console.log("sdshhjhjh");
 user_route.get('/signup',userController.signuppage);
 
-// user_route.get('/Otp', userController.Otppage);
+
 user_route.post('/signup',userController.insertUser);
  user_route.post('/VerifyOtp',auth.isLogout,userController.Loadlog);
 user_route.post('/resendotp', userController.resendotp);
@@ -42,8 +42,6 @@ user_route.post('/forget-password',userController.Forget)
 user_route.get('/forget-password-load',userController.forgetpasswordload)
 user_route.post('/reset-password',userController.resetpassword)
 
-
-// user_route.get('/login',userController.Loginload);
 console.log("giraffe");
 
 user_route.post('/verify-login',userController.verifyLogin);
@@ -72,7 +70,6 @@ user_route.get('/change-password',auth.isLogin,auth.isUserBlocked,ProfileControl
 user_route.post('/change-password',auth.isLogin,auth.isUserBlocked,ProfileController.changepassword)
 user_route.get('/order-detail',auth.isLogin,auth.isUserBlocked,ProfileController.orderdetails)
 user_route.get('/download-invoice/:orderId',auth.isLogin,auth.isUserBlocked,ProfileController.orderinfo)
-// user_route.get('/order-tracks',auth.isLogin,auth.isUserBlocked,ProfileController.ordertracking)
 user_route.post('/update-order-status',auth.isLogin,auth.isUserBlocked,ProfileController.updateorderstatus)
 user_route.post('/Add-money-to-Wallet',auth.isLogin,auth.isUserBlocked,ProfileController.Addwallet)
 user_route.post('/verify-signature',auth.isLogin,auth.isUserBlocked,ProfileController.verifyPayment)

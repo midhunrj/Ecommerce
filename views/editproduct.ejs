@@ -3,7 +3,6 @@
 
         <form action="/admin/update-Product" method="POST" enctype="multipart/form-data" class="row g-3" onsubmit="return validate()" novalidate>
 
-            <!-- <input type="hidden" name="_method" value="PUT"> -->
             <% console.log( "this is "+ products._id ) %>
     <input type="hidden" name="id" value="<%= products._id %>">
     <div class="col-12">
@@ -52,7 +51,7 @@
                     <p class="text-danger" id="brandError"></p>
                 </div>
             </div>
-        </div> <!-- card end// -->
+        </div> 
         <div class="card mb-4">
             <div class="card-body">
                 <div>
@@ -62,7 +61,7 @@
                     <div id="descriptionError" class="Error"></div>
                 </div>
             </div>
-        </div> <!-- card end// -->
+        </div> 
         
         <div class="card-body">
             <div id="existingImagesContainer">
@@ -70,7 +69,7 @@
                     <div data-filename="<%= products.image[i] %>" class="image-container">
                         <img src="./productImage/<%= products.image[i] %>" alt="Existing Image" class="existing-image" style="max-width: 100px; max-height: 100px;">
                         <a onclick="deleteSingleImage('<%= products._id %>','<%= products.image[i] %>')">
-                            <span class="remove-icon">×</span> <!-- Use a simple '×' symbol -->
+                            <span class="remove-icon">×</span> 
                         </a>
                     </div>
                 <% } %>
@@ -89,18 +88,7 @@
     <div class="col-lg-4">
         <div class="card mb-4">
             <div class="card-body">
-                <!-- <div class="mb-3">
-                    <label class="form-label">Stock</label>
-                    <input  id="prod_stock" type="text" placeholder="Type here" name="productStock" class="form-control" value="<%= products.stock %>" required>
-                    <p class="text-danger" id="sotckError"></p>
-                </div> -->
-                <!-- <div class="mb-3">
-                    <label class="form-label">Status</label>
-                    <select class="form-select">
-                        <option>Published</option>
-                        <option>Draft</option>
-                    </select>
-                </div> -->
+                
                 <div class="mb-3">
                     <div class="mb-4">
                         <label class="form-label">category</label>
@@ -117,14 +105,14 @@
                             <% } %>
                     </div>
                 </div>
-                <!-- ... (unchanged) ... -->
+                
             </div>
-        </div> <!-- card end// -->
+        </div> 
     </div>
 </form>
 <script>
     function deleteSingleImage(productId, filename) {
-    // Fetch API to delete the image
+    
     fetch("/admin/delete-single-image", {
       method: "POST",
       headers: {
@@ -134,7 +122,7 @@
     })
       .then((response) => response.json())
       .then((data) => {
-        // Handle success or error
+        
         if (data.success) {
           removeImage(filename);
           validateRemainingImages();
@@ -153,17 +141,17 @@
     const imageError = document.getElementById('imageError');
 
     if (remainingImages.length === 0) {
-        // If no images remain, show error message
+
         imageError.innerHTML = 'Upload at least one image';
         setTimeout(() => {
             imageError.innerHTML = '';
         }, 5000);
     } else {
-        // If images remain, clear any previous error message
+
         imageError.innerHTML = '';
     }
 }
-  // remove the deleted image
+
   function removeImage(filename) {
     const imageElement = document.querySelector(`[data-filename="${filename}"]`);
 
@@ -186,42 +174,40 @@
       
       function handleFileSelect(event) {
         const addedImagesContainer = document.getElementById("addedImagesContainer");
-        addedImagesContainer.innerHTML = ""; // Clear previous content
+        addedImagesContainer.innerHTML = ""; 
     
         const files = event.target.files;
     
         for (let i = 0; i < files.length; i++) {
           const file = files[i];
     
-          // Create thumbnail element
           const thumbnail = document.createElement("div");
           thumbnail.classList.add("thumbnail");
     
-          // Create image element
           const img = document.createElement("img");
           img.src = URL.createObjectURL(file);
           img.alt = "thumbnail";
     
-          // Set a fixed width for the image
-          img.style.width = "50px"; // Adjust the width as needed
+
+          img.style.width = "50px"; 
           img.style.height = "auto";
     
-          // Create remove icon
+
           const removeIcon = document.createElement("span");
           removeIcon.classList.add("remove-icon");
-          removeIcon.innerHTML = "&times;"; // Multiplication symbol as a cross
+          removeIcon.innerHTML = "&times;"; 
     
-          // Event listener to remove the image on icon click
+
           removeIcon.addEventListener("click", function () {
             thumbnail.remove();
             updateInputField();
           });
     
-          // Append elements to thumbnail
+
           thumbnail.appendChild(img);
           thumbnail.appendChild(removeIcon);
     
-          // Append thumbnail to the container
+
           addedImagesContainer.appendChild(thumbnail);
         }
     
@@ -232,13 +218,13 @@
         const addedImagesContainer = document.getElementById("addedImagesContainer");
         const thumbnails = addedImagesContainer.getElementsByClassName("thumbnail");
     
-        // Get the names of the selected files and update the input field
+
         const fileNames = Array.from(thumbnails).map((thumbnail) => {
           const img = thumbnail.getElementsByTagName("img")[0];
-          return img.alt; // Assuming the alt attribute contains the file name
+          return img.alt; 
         });
     
-        // Update the input field with the file names
+
         const inputField = document.getElementById("imageInput");
         inputField.value = fileNames.join(", ");
       }
@@ -263,7 +249,7 @@
                   isEmpty = true;
                   displayError(inputElement, 'Field is required');
               } else {
-                  errorElement.innerHTML = ''; // Clear previous error messages
+                  errorElement.innerHTML = ''; 
               }
           });
   
@@ -272,7 +258,7 @@
 
       function validate() {
 
-        // Input fields
+
         const name = document.getElementById('name');
         const color = document.getElementById('Color');
         const brand = document.getElementById('Brand');
@@ -281,7 +267,7 @@
         const stock = document.getElementById('stock');
         const image = document.getElementById('imageInput');
 
-        // Error fields
+
         const nameError = document.getElementById('nameError');
         const descriptionError = document.getElementById('descriptionError');
         const brandError = document.getElementById('brandError');
@@ -290,7 +276,7 @@
         const stockError = document.getElementById('stockError');
         const imageError = document.getElementById('imageError');
 
-        // Regex
+
         const nameRegex = /^[A-Za-z0-9]/;
         const descriptionRegex = /^[A-Za-z0-9]/;
         const colorRegex = /^[A-Za-z]/;
@@ -298,7 +284,7 @@
         const stockRegex = /^[0-9]/;
         const brandRegex = /^[A-Za-z]/;
 
-        // Name field
+
         if (name.value.trim() === '') {
             nameError.innerHTML = 'Field is required';
             setTimeout(() => {
@@ -314,7 +300,7 @@
             return false;
         }
 
-        // Description field
+
         if (description.value.trim() === '') {
             descriptionError.innerHTML = 'Field is required';
             setTimeout(() => {
@@ -330,7 +316,7 @@
             return false;
         }
 
-        // Brand field
+
         if (brand.value.trim() === '') {
             brandError.innerHTML = 'Field is required';
             setTimeout(() => {
@@ -339,7 +325,7 @@
             return false;
         }
 
-        // Stock field
+
         if (stock.value.trim() === '') {
             stockError.innerHTML = 'Field is required';
             setTimeout(() => {
@@ -361,7 +347,7 @@
         
 
         if (remainingImages.length === 0 && imageInput.files.length === 0) {
-            // If no images are uploaded and no new images are selected, show error message
+
             imageError.innerHTML = 'Upload at least one image';
             setTimeout(() => {
                 imageError.innerHTML = '';
@@ -369,7 +355,6 @@
             return false;
         }
 
-        // Color field
         if (color.value.trim() === '') {
             colorError.innerHTML = 'Field is required';
             setTimeout(() => {
@@ -378,7 +363,6 @@
             return false;
         }
 
-        // Price field
         if (price.value.trim() === '') {
             priceError.innerHTML = 'Field is required';
             setTimeout(() => {
@@ -405,7 +389,7 @@
 <script src="Admin-assets/js/vendors/perfect-scrollbar.js"></script>
 <script src="Admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
 <script src="Admin-assets/js/vendors/chart.js"></script>
-<!-- Main Script -->
+
 <script src="Admin-assets/js/main.js" type="text/javascript"></script>
 <script src="Admin-assets/js/custom-chart.js" type="text/javascript"></script>
     </main>

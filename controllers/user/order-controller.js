@@ -25,15 +25,14 @@ const orderplaced = async (req, res) => {
         const totalprice=req.body.subtotal;
         console.log(("Total price",totalprice));
 
-        // Find the user's cart
-        // Find the user's cart
+
 const userCart = await Cart.findOne({ user_id: userId });
  const userdata=await user.findOne({_id:userId})
  
 
 if (userCart) {
 
-    // Extract relevant information from the user's cart
+
     const products = userCart.cartItems.map(item => ({
         product: item.product_id,
         quantity: item.quantity,
@@ -55,7 +54,7 @@ if (userCart) {
                 }
     }
 
-    // Additional information (you may need to adjust based on your requirements)
+
 
     const selectedAddressDetails = await Address.findOne({ 'userid': userId, 'Address._id': addressId });
 
@@ -67,21 +66,21 @@ if (userCart) {
                 {
                 const couponUsage = userdata.coupons.find(c => c.couponCode === coupon);
                 if (!couponUsage) {
-                    // If the user hasn't used the coupon before, create a new entry
+                    
                     
                     userdata.coupons.push({ couponCode: coupon, usageCount: 1 });
                   } else {
-                    // If the user has used the coupon before, increment the usage count
+                    
                   couponUsage.usageCount++;
                   }
                 
-                  // Save the changes to the user document
+
                   await userdata.save();
                 }
                 const newOrder = new Order({
                     products: products,
                     Totalprice: totalprice,
-                    Address: [selectedAddress], // Store only the selected address in an array
+                    Address: [selectedAddress], 
                     payment: paymentOption,
                     Status: 'Confirmed',
                     paymentstatus: "Pending",
@@ -89,15 +88,13 @@ if (userCart) {
                     placedon: new Date(),
                     Date:new Date().toISOString().split('T')[0],
                     
-                });            // If paymentOption is true
-        // Find the selected address in the array
+                });           
         if(paymentOption=="COD"){
       
             console.log("orderDetails", newOrder);
                 const orderData = await newOrder.save();
                  
 
-                // Clear the user's cart (assuming you want to empty the cart after placing an order)
                 userCart.cartItems = [];
                 userCart.totalSubtotal = 0;
                 await userCart.save();
@@ -134,7 +131,6 @@ if (userCart) {
                 const orderData = await newOrder.save();
                  
 
-                // Clear the user's cart (assuming you want to empty the cart after placing an order)
                 userCart.cartItems = [];
                 userCart.totalSubtotal = 0;
                 await userCart.save();
@@ -168,7 +164,6 @@ if (userCart) {
         const orderData = await newOrder.save();
          
 
-        // Clear the user's cart (assuming you want to empty the cart after placing an order)
         userCart.cartItems = [];
         userCart.totalSubtotal = 0;
         await userCart.save();
@@ -231,11 +226,11 @@ const generateOrderRazorpay = (orderId, total) => {
    const generatedsign=hmac.digest('hex')
    console.log("gen",generatedsign);
    if (generatedsign === razorpay_signature) {
-    // Payment verification successful
+    
     await Order.updateOne({ _id: orderId }, { $set: { paymentstatus: "Paid" } });
     res.status(200).json({ success: true, message: "Payment verified successfully" });
 } else {
-    // Payment verification failed
+    
     await Order.updateOne({ _id: orderId }, { $set: { paymentstatus: "Failed" } });
     res.status(400).json({ success: false, message: "Payment verification failed" });
 }
@@ -305,98 +300,5 @@ verifypayment,
 retryPayment
 };
 
-
-
-//   const retryPayment = async (req, res) => {
-//     try {
-//         const orderId = req.params.orderId;
-//         console.log("Retrying payment for order:", orderId);
-
-//         const order = await Order.findById(orderId);
-
-//         if (!order) {
-//             return res.status(404).json({ success: false, message: "Order not found" });
-//         }
-
-//         if (order.paymentstatus !== "Failed") {
-//             return res.status(400).json({ success: false, message: "Payment is already completed or not failed." });
-//         }
-
-//         if (!order.Totalprice || order.Totalprice <= 0) {
-//             return res.status(400).json({ success: false, message: "Invalid total price for order." });
-//         }
-
-//         // Creating a new Razorpay order for retrying payment
-//         const options = {
-//             amount: order.Totalprice * 100, // Amount in paisa (1 INR = 100 paisa)
-//             currency: "INR",
-//             receipt: `retry_receipt_${orderId}`,
-//             payment_capture: 1, // Automatically capture the payment
-//         };
-
-//         console.log("Creating Razorpay order with options:", options);
-
-//         instance.orders.create(options, (err, razorpayOrder) => {
-//             if (err) {
-//                 console.error("Error creating Razorpay order:", err);
-//                 return res.status(500).json({ success: false, message: "Failed to create Razorpay order." });
-//             }
-
-//             console.log("New Razorpay order created:", razorpayOrder);
-
-//             res.json({ 
-//                 success: true, 
-//                 amount: order.Totalprice, 
-//                 razorpayOrderId: razorpayOrder.id,
-//                 razorpayKey: process.env.RAZORPAY_ID_KEY // Sending Razorpay Key for frontend
-//             });
-//         });
-
-//     } catch (error) {
-//         console.error("Retry Payment Error:", error);
-//         res.status(500).json({ success: false, message: "Internal Server Error" });
-//     }
-// };
-
-
-// const retryPayment = async (req, res) => {
-//     try {
-//         const orderId = req.params.orderId;
-//         const order = await Order.findById(orderId);
-
-//         if (!order) {
-//             console.log("jonk");
-            
-//             return res.status(404).json({ success: false, message: "Order not found" });
-//         }
-
-//         if (order.paymentstatus !== "Failed") {
-//             console.log("jerki");
-            
-//             return res.status(400).json({ success: false, message: "Payment is already completed or not failed." });
-//         }
-// console.log("sfnsns",orderId);
-
-//         // Create a new Razorpay order
-//         const razorpayOrder = await instance.orders.create({
-//             amount: order.Totalprice * 100, // Amount in paise
-//             currency: "INR",
-//             receipt: `receipt_${orderId}`,
-//             payment_capture: 1, // Auto-capture payment
-//         });
-
-//         console.log(razorpayOrder,"nsnkl");
-        
-
-//         res.json({ 
-//             success: true, 
-//             amount: order.Totalprice, 
-//             razorpayOrderId: razorpayOrder.id 
-//         });
-//     } catch (error) {
-//         console.error("Retry Payment Error:", error);
-//         res.status(500).json({ success: false, message: "Internal Server Error" });
-//     }
-// };
 
       

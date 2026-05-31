@@ -1,22 +1,22 @@
 <%- include("./layouts/user-header.ejs") %>
 <style>
-    /* Style the coupon list container */
+    
     .coupon-list {
-        display: none; /* Hide the coupon list by default */
+        display: none; 
         border: 1px solid #ccc;
         padding: 10px;
         margin-top: 10px;
     }
 </style>
 <style>
-    /* Styling for the modal content */
+    
     .modal-content {
         background-color: #fff;
         border-radius: 10px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
 
-    /* Styling for the modal header */
+    
     .modal-header {
         background-color: #007bff;
         color: #fff;
@@ -24,13 +24,13 @@
         border-top-right-radius: 10px;
     }
 
-    /* Styling for the modal title */
+    
     .modal-title {
         font-size: 20px;
         font-weight: bold;
     }
 
-    /* Styling for the close button */
+    
     .close {
         color: #fff;
         font-size: 30px;
@@ -38,13 +38,13 @@
         transition: all 0.3s ease;
     }
 
-    /* Styling for the close button on hover */
+    
     .close:hover {
         color: #f8f9fa;
         transform: scale(1.1);
     }
 
-    /* Styling for the modal body */
+    
     .modal-body {
         padding: 20px;
     }
@@ -89,7 +89,7 @@
                             </ul>
                         </div>
                     </div>
-                    <!-- mobile menu start -->
+                    
                     <nav>
                         <ul class="mobile-menu">
                             <li class="menu-item-has-children"><span class="menu-expand"></span><a href="index.html">Home</a>
@@ -186,7 +186,7 @@
                             </li>
                         </ul>
                     </nav>
-                    <!-- mobile menu end -->
+                    
                 </div>
                 <div class="mobile-header-info-wrap mobile-header-border">
                     <div class="single-mobile-header-info mt-30">
@@ -222,10 +222,10 @@
         </div>
         <section class="mt-50 mb-50">
             <div class="container">
-                <div class="row justify-content-center"> <!-- Center align the content -->
+                <div class="row justify-content-center"> 
                     <div class="col-md-6">
                         <div class="order_review">
-                            <!-- Your Orders Section -->
+                            
                             <div class="mb-20">
                                 <h4>Your Orders</h4>
                             </div>
@@ -255,18 +255,18 @@
                                                     <% totalSubtotal += subtotal; %>
                                                 <% } %>
                                             <% } %>
-                                            <!-- Display Single Subtotal -->
+                                            
                                             <tr>
                                                 <th>SubTotal</th>
                                                 <td class="product-subtotal" colspan="2">₹<%= totalSubtotal %></td>
                                             </tr>
-                                            <!-- Display Shipping -->
+                                            
                                             <tr>
                                                 <th>Shipping</th>
                                                 <td colspan="2"><% let ship;if(totalSubtotal>=1000){ ship=0%><em>Free Shipping </em><% } else{ ship=40 %><em>₹<%= ship %></em><% } %></td>
                                                 <% console.log("ship",ship);%>
                                             </tr>
-                                            <!-- Display Total -->
+                                            
                                             <tr>
                                                 <th>Total</th>
                                                 <td colspan="2" class="product-subtotal" ><span class="font-xl text-brand fw-900" id="total-ship">₹<%= totalSubtotal+ship %></span>
@@ -274,7 +274,7 @@
                                                  </td>
                                                  </tr>
                                                  <tr><td colspan="3">
-                                                    <div id="appliedCouponMessage"></div> <!-- Moved the appliedCouponMessage inside a table row -->
+                                                    <div id="appliedCouponMessage"></div>
                                                     <div id="discountMessage" style="color: green; display: none;"></div>
                                                     <button id="removeCouponButton" class="btn btn-sm font-sm btn-info rounded" style="display: none;" onclick="removeCoupon()">Remove Coupon</button>
                                                 </td>
@@ -284,7 +284,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <!-- Add your Subtotal, Shipping, and Total rows here -->
+
                                 
                             </div>
                         </div>
@@ -294,7 +294,7 @@
                         <div class="mb-25">
                             <h4>Billing Details</h4>
                         </div>
-                        <!-- Billing Details Section -->
+
                         <% if(userAddress && userAddress.Address.length > 0){ %>
                             <% userAddress.Address.forEach((Address) => { %>
                                 <% console.log("Address array",Address._id); %>
@@ -337,7 +337,7 @@
                 </form>
                 <button id="showCouponsBtn" type="button" class="btn-dark" onclick="showCouponModal()">Apply Promo</button>
 
-<!-- Modal -->
+
 <div class="modal" id="couponModal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -348,7 +348,7 @@
         </button>
               </div>
       <div class="modal-body">
-        <!-- Loop through the available coupons and display them -->
+    
         <% if (Coupons && Coupons.length > 0) { %>
             <% Coupons.forEach(coupon => { %>
                 <p><%= coupon.Couponcode %> - <%= coupon.Description %> - <%= coupon.Coupontype %> - <%= coupon.Amount %> - <%= coupon.Usagelimit %> - <%= coupon.Expirydate %></p>
@@ -363,7 +363,7 @@
 </div>
 
                 </div>
-                <!-- Payment Section -->
+            
                 <div class="bt-1 border-color-1 mt-30 mb-30"></div>
                 <div class="payment_method">
                     <div class="mb-25">
@@ -391,13 +391,7 @@
                                 <p class="text-muted mt-5">Pay using your wallet balance.</p>
                             </div>
                         </div>
-                        <!-- <div class="custome-radio">
-                            <input class="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios5" checked="">
-                            <label class="form-check-label" for="exampleRadios5" data-bs-toggle="collapse" data-target="#paypal" aria-controls="paypal">Paypal</label>
-                            <div class="form-group collapse in" id="paypal">
-                                <p class="text-muted mt-5">Pay via PayPal; you can pay with your credit card if you don't have a PayPal account.</p>
-                            </div>
-                        </div> -->
+                        
                     </div>
                 </div>
                 <a  class="btn btn-fill-out btn-block mt-30" onclick="placeOrder()">Place Order</a>
@@ -427,12 +421,12 @@
                         </div>
                     </div>
                     <div class="col-lg-5">
-                        <!-- Subscribe Form -->
+                        
                         <form class="form-subcriber d-flex wow fadeIn animated">
                             <input type="email" class="form-control bg-white font-small" placeholder="Enter your email">
                             <button class="btn bg-dark text-white" type="submit">Subscribe</button>
                         </form>
-                        <!-- End Subscribe Form -->
+                        
                     </div>
                 </div>
             </div>
@@ -522,7 +516,7 @@
             </div>
         </div>
     </footer>
-    <!-- Preloader Start -->
+    
     <div id="preloader-active">
         <div class="preloader d-flex align-items-center justify-content-center">
             <div class="preloader-inner position-relative">
@@ -537,7 +531,7 @@
             </div>
         </div>
     </div>
-    <!-- Vendor JS-->
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -554,12 +548,10 @@
             return;
         }
 
-        window.originalTotal = totalSubtotal; // Store in window to prevent changes
+        window.originalTotal = totalSubtotal; 
 
-        // Calculate shipping
         window.ship = totalSubtotal >= 1000 ? 0 : 40;
 
-        // Check if coupon is already applied
         const couponCode = document.getElementById('coupon').value;
         if (couponCode) {
             displayAppliedCouponMessage(couponCode);
@@ -569,12 +561,6 @@
     }
 });
 
-//     document.addEventListener('DOMContentLoaded', function () {
-//     const couponCode = document.getElementById('coupon').value;
-//     if (couponCode) {
-//         displayAppliedCouponMessage(couponCode);
-//     }
-// });
 
     async function applyCoupon(event) {
 
@@ -674,12 +660,7 @@
     const data = await response.json();
     if (response.status === 200) {
       Swal.fire('Success', data.message, 'success');
-      // Reset the UI and update total amount
-    //   const appliedCouponMessage = document.getElementById('appliedCouponMessage');
-    //   appliedCouponMessage.innerHTML = '';
-    //   const removeCouponButton = document.getElementById('removeCouponButton');
-    //   removeCouponButton.style.display = 'none';
-    //   updateTotalAmount(originalTotal);
+     
     restoreOriginalSubtotal()
     document.getElementById('coupon').value = '';
       resetCouponUI()
@@ -703,15 +684,10 @@ function restoreOriginalSubtotal() {
 function resetCouponUI() {
     document.getElementById('appliedCouponMessage').innerHTML = '';
     document.getElementById('removeCouponButton').style.display = 'none';
-    document.getElementById('coupon').value = ''; // Clear coupon input
+    document.getElementById('coupon').value = ''; 
     document.getElementById('discountMessage').style.display = 'none';
 }
-    // function updateTotalAmount(totalSubtotal,discountedTotal,discount) {
-    //     const totalElements = document.querySelectorAll('.product-subtotal');
-    //     totalElements.forEach(element => {
-    //         element.innerText = `₹${discount}`;
-    //     });
-    // }
+    
     function updateTotalAmount(beforeDiscount, afterDiscount, discount) {
     const totalAmountElement = document.querySelector('.total-amount span');
     const discountMessage = document.getElementById('discountMessage');
@@ -733,7 +709,7 @@ function resetCouponUI() {
 </script>
       
          
-<!--     -->
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>                      
@@ -881,18 +857,18 @@ function showOrderSuccess() {
     }
     </script>
 <script>
-    // JavaScript function to select a coupon and populate the coupon code input field
+
     function selectCoupon(couponCode) {
         document.getElementById('coupon').value = couponCode;
         $('#couponModal').modal('hide')
     }
 
-    // JavaScript to toggle the visibility of the coupon list
+
     const showCouponsBtn = document.getElementById('showCouponsBtn');
     const couponList = document.getElementById('couponList');
 
     showCouponsBtn.addEventListener('click', () => {
-        // Toggle the display of the coupon list
+        
         if (couponList.style.display === 'none') {
             couponList.style.display = 'block';
         } else {
@@ -903,8 +879,8 @@ function showOrderSuccess() {
     
     function closeCouponModal() {
         $('#couponModal').fadeOut(300, function() {
-            $(this).modal('hide'); // Hide the modal after fading out
-            $('#showCouponsBtn').focus(); // Set focus back to the button that triggers the modal
+            $(this).modal('hide'); 
+            $('#showCouponsBtn').focus(); 
         });
     }
     
@@ -928,7 +904,7 @@ function showOrderSuccess() {
     <script src="assets/js/plugins/isotope.js"></script>
     <script src="assets/js/plugins/scrollup.js"></script>
     <script src="assets/js/plugins/jquery.vticker-min.js"></script>
-    <!-- Template  JS -->
+    
     <script src="./assets/js/main.js?v=3.4"></script>
     <script src="./assets/js/shop.js?v=3.4"></script>
     

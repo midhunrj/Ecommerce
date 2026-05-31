@@ -17,7 +17,7 @@ const currentDate=new Date()
 
 const generateResetToken = (email) => {
   const secretKey = 'your_secret_key';
-  const expiresIn = '1h'; // Token will expire in 1 hour
+  const expiresIn = '1h'; 
 
   const token = jwt.sign({ email }, secretKey, { expiresIn });
 
@@ -105,11 +105,11 @@ const verifyLogin = async (req, res) => {
         console.log('User before referalcode',userdata.referalCode);
         if (!userdata.referalCode) {
          
-         userdata.referalCode = crypto.randomBytes(5).toString('hex'); // Generates a unique referral code
+         userdata.referalCode = crypto.randomBytes(5).toString('hex'); 
          console.log(userdata.referalCode,"before saving referal code");
           
          try {
-            await userdata.save();  // Ensure the referral code is saved
+            await userdata.save(); 
             console.log(`Generated referral code: ${userdata.referalCode}`);
           } catch (err) {
             console.error("Error saving referral code:", err.message);
@@ -134,14 +134,13 @@ const verifyLogin = async (req, res) => {
     }
   } catch (error) {
     console.error(error.message);
-    throw error; // Propagate the error to the caller (e.g., controller)
+    throw error; 
   }
 };
 
 
 
 
-// controllers/authController.js
 
 
 
@@ -175,7 +174,7 @@ const insertUser = async (req, res) => {
     console.log(req.body)
     const {username,email,phone,password,confirmPassword,referalCode}=req.body
     try {
-        // Check if the phone number is already registered
+    
 
         const hashpassword=await bcrypt.hash(password,10)
         const confirmPassword=hashpassword
@@ -188,7 +187,7 @@ const insertUser = async (req, res) => {
          res.render('Signuppage',{message:'Two passwords are not same'})
         }
         const generateOTP = () => Math.floor(100000 + Math.random() * 900000);
-        // Generate OTP
+        
         const otp = generateOTP();
          const otpexpire=currentDate.getTime()+20000
         console.log(otpexpire);
@@ -244,14 +243,6 @@ const insertUser = async (req, res) => {
     }
     
 
-   
-
-  
-    
-   
-
-
-// Route for OTP verification
 const VerifyOtp= async (req, res) => {
   
     try {
@@ -260,11 +251,11 @@ const VerifyOtp= async (req, res) => {
   console.log(req.body);
     const enteredOTP = req.body.otp;
     console.log("entered value is",enteredOTP);
-      // Find user by phone number
+      
       const {username,email,phone,hashpassword,is_admin,
         isVerified,otp,referalCode,referalUserId}=req.session.tempdata
         console.log(email);
-        //console.log(referal,"referal userid");
+
         const newuser = await user.findOne({email:email});
     
     
@@ -299,7 +290,7 @@ const VerifyOtp= async (req, res) => {
         console.log(otpexpire)
         console.log("user is",User.otp);
         console.log("Entered is",enteredOTP);
-      // Verify entered OTP
+      
       if (enteredOTP==User.otp) {
         
           User.isVerified =true;
@@ -488,7 +479,7 @@ const resendotp=async(req,res)=>{
     const{username,email,mobile,password}=req.session.tempdata
 
     const generateOTP = () => Math.floor(100000 + Math.random() * 900000);
-        // Generate OTP
+        
         const otp = generateOTP();
     
     const mailOptions = {
@@ -693,29 +684,27 @@ const applycoupon = async (req, res) => {
     console.log(req.body,"req body");
     
      req.session.coupon=coupon
-    // Ensure totalSubtotal is parsed as a number
+
     const parsedTotalSubtotal = parseFloat(totalSubtotal);
     if (isNaN(parsedTotalSubtotal)) {
       return res.status(400).json({ error: 'Invalid total subtotal value' });
     }
 
-    // Query the database to find the coupon by code
     const couponDocument = await Coupon.findOne({ Couponcode: coupon });
 
     if (!couponDocument) {
-      // If coupon code is not found, return error response
+
       return res.status(409).json({ error: 'Coupon code not found' });
     }
 
-    // Check if the total subtotal is below the minimum amount required for the coupon
+
     if (parsedTotalSubtotal < couponDocument.Minimumamount) {
       return res.status(400).json({ error: 'Total subtotal is below the minimum amount required for this coupon',miniamount:couponDocument.Minimumamount });
     }
 
-    // Query the database to find the user
+
     const userdata = await user.findOne({ _id: userId });
 
-    // Check if the user has already used the coupon
     const couponUsage = userdata.coupons.find(c => c.couponCode === coupon);
     if (couponUsage && couponUsage.usageCount >= couponDocument.Usagelimit) {
       return res.status(404).json({ success: false, message: `You have already used this coupon. This coupon can be used only ${couponDocument.Usagelimit} times` });
@@ -723,8 +712,6 @@ const applycoupon = async (req, res) => {
     
     await userdata.save();
     
-    
-    // Calculate discounted total amount
     let discountedTotal = parsedTotalSubtotal - couponDocument.Amount;
 
     res.status(200).json({ 
@@ -742,14 +729,12 @@ const removeCoupon = async (req, res) => {
     const { coupon } = req.body;
     const userId = req.session.user;
 
-    // Query the database to find the user
     const userdata = await user.findOne({ _id: userId });
 
     if (!userdata) {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
 
-    // Find the coupon usage in the user's coupons array
     const couponUsageIndex = userdata.coupons.findIndex(c => c.couponCode === coupon);
       if(req.session.coupon)
       {

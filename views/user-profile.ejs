@@ -317,7 +317,7 @@
                                         </div>
                                     </div>
                                     
-                                    <!-- Modal -->
+
                                     <div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -475,7 +475,7 @@
         $(document).ready(function() {
     
     if (window.location.hash === '#orders') {
-        // Activate the "Orders" tab
+    
         $('#orders-tab').tab('show');
     }else if(window.location.hash === '#wallet')
     {
@@ -545,7 +545,7 @@
 
                     const options = {
                         key: response.razorId, 
-                        amount: response.amount*100, // Amount is in currency subunits
+                        amount: response.amount*100, 
                         currency: "INR",
                         name: "Tech tique",
                         description: "Adding Funds to Wallet",
@@ -711,9 +711,8 @@ cropButton.addEventListener("click", function () {
                 if (data.success) {
                     alert("Profile picture updated successfully!");
                     
-                    // After cropping, return to circular profile picture
                     profilePicPreview.src = croppedCanvas.toDataURL();
-                    profileContainer.classList.remove("image-selected"); // Revert to circular profile picture
+                    profileContainer.classList.remove("image-selected"); 
                 }
             })
             .catch(error => console.error('Error uploading cropped profile image:', error));
@@ -761,7 +760,7 @@ document.getElementById("profile-pic-upload").addEventListener("click", function
     <script src="assets/js/plugins/scrollup.js"></script>
     <script src="assets/js/plugins/jquery.vticker-min.js"></script>
     <script src="assets/js/plugins/jquery.theia.sticky.js"></script>
-    <!-- Template  JS -->
+    
     <script src="./assets/js/main.js?v=3.4"></script>
 </body>
 

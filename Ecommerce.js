@@ -15,7 +15,7 @@ const flash=require("connect-flash")
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-// ...
+
 
 app.use(nocache()) 
 

@@ -6,7 +6,7 @@ const session = require('express-session');
 const config=require('../configure/config');
 
 
-// const upload = multer({ dest: '../public/productImage' })
+
 
 admin_route.use(
     session({
@@ -28,9 +28,7 @@ const bannercontroller=require('../controllers/admin/banner-controller')
 const productController=require('../controllers/admin/product-controller')
 const salesController=require('../controllers/admin/sales-controller')
 const couponController=require('../controllers/admin/coupon-controller')
-// admin_route.get('/',adminController.loginload);
-// admin_route.get('/login',adminController.loginload);
-// admin_route.post('/login',adminController.verifyLogin)
+
 
 admin_route.get('/',adminController.loginload);
 
@@ -43,15 +41,11 @@ admin_route.get('/logout',auth.isLogin,adminController.logout);
 
 admin_route.get('/users',auth.isLogin,adminController.adminDashboard);
 
-// admin_route.get('/new-user',auth.isLogin,adminController.newUserLoad);
 
-// admin_route.post('/new-user',adminController.addUser);
-
-// admin_route.get('/edit-user',auth.isLogin,adminController.editUserLoad);
 
 admin_route.put('/toggle-user-status',adminController.updateUserBlockStatus);
 admin_route.get('/unblock-user',adminController.unblockUser);
-// admin_route.get('/delete-user',adminController.deleteUsers);
+
 admin_route.get('/products-list',auth.isLogin,productController.productslist)
 admin_route.get('/Add-product',auth.isLogin,productController.Addproducts)
 admin_route.post('/Add-product',auth.isLogin,uploader.array('image',4),productController.insertproduct)
@@ -77,15 +71,13 @@ admin_route.get("/categories",auth.isLogin,categoryController.loadCategoriesPage
   admin_route.post("/update-banners",auth.isLogin,bannercontroller.updatebanners)
   admin_route.get('/bannerlist',auth.isLogin,bannercontroller.bannerlist)
   admin_route.get('/sales-report',auth.isLogin,salesController.salesreport);
- // admin_route.get('/filter-sales-report',auth.isLogin,adminController.filtersalesreport);
-  // Route to get sales report by week
+ 
 admin_route.get('/sales/weekly', auth.isLogin,salesController.salesweekly)
  
 
-// Route to get sales report by month
 admin_route.get('/sales/monthly',auth.isLogin,salesController.salesmonthly);
 
-// Route to get sales report by year
+
 admin_route.get('/sales/yearly',auth.isLogin,salesController.salesyearly);
 admin_route.get('/sales/daily',auth.isLogin,salesController.salesdaily);
 admin_route.get('/sales/all',auth.isLogin,salesController.salesAlltime)
@@ -102,8 +94,5 @@ admin_route.get('/download-excel',auth.isLogin,adminController.downloadExcel);
 admin_route.post('/Add-productoffer',auth.isLogin,adminController.Addproductoffer);
 admin_route.post('/Remove-productOffer',auth.isLogin,adminController.removeproductoffer);
 admin_route.get('/logout',auth.isLogout,adminController.logout)
-// admin_route.get('*', function (req, res) {
-//     res.redirect('/login'))
-// });
 
 module.exports = admin_route;

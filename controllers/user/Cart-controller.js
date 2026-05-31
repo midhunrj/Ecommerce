@@ -55,49 +55,49 @@ const Cartpage=async(req,res)=>{
     try {
         const userId = req.session.user;
         const userdata=await user.findOne({_id:userId})
-        // Aggregation pipeline to fetch cart data with product details
+        
         let count=req.session.count
         const cartAggregate = await Cart.aggregate([
             { $match: { user_id: userId } },
-            { $unwind: "$cartItems" }, // Unwind to deconstruct cartItems array
+            { $unwind: "$cartItems" }, 
             {
                 $lookup: {
-                    from: "products", // Assuming the name of your product model collection
+                    from: "products", 
                     localField: "cartItems.product_id",
                     foreignField: "_id",
                     as: "product"
                 }
             },
-            { $unwind: "$product" }, // Unwind to deconstruct product array
+            { $unwind: "$product" }, 
             {
                 $group: {
-                    _id: "$_id", // Group by cart ID
-                    cartItems: { $push: "$cartItems" }, // Reconstruct cartItems array
-                    products: { $push: "$product" } // Reconstruct products array
+                    _id: "$_id", 
+                    cartItems: { $push: "$cartItems" }, 
+                    products: { $push: "$product" } 
                 }
             }
         ]);
 
-        // Extract required data from the aggregation result
-        const cartData = cartAggregate[0]; // Assuming there's only one cart per user
+
+        const cartData = cartAggregate[0]; 
         console.log(cartData,"cartdata sjfjhhshhdh");
         if (!cartData) {
-            // Handle the case where the cart is not found for the user
+
             return res.status(404).render('Check-out', {username:userdata.username,count});
         }
         const products = cartData.products;
         const cartItems = cartData.cartItems;
         const Coupondata=await Coupon.find({})
 
-        // Fetch user address data
+
         const addressData = await Address.findOne({ userid: userId });
         let wishcount=req.session.wishcount
-        // Render the checkout page with fetched data
+        
         res.render('Check-out', { products, Cart: cartData, cartdata: cartItems, userAddress: addressData,username:userdata.username,Coupons:Coupondata,count,wishcount,search:req.query.search });
 
     } catch (error) {
         console.log(error.message);
-        // Handle the error and send an appropriate response
+        
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
@@ -122,28 +122,28 @@ const addToCart = async (req, res) => {
             return res.status(404).json({ success: false, message: 'Product not found' });
         }
       console.log("products stock",productData.stock);
-        // Check if product is in stock
+        
         
         if (productData.stock < 1) {
             return res.status(200).json({ success: false, message: 'Product is out of stock' });
        }
 
-        // Check if the user has a cart
+        
         if (cartData) {
-            // Check if the product is already in the cart
+            
             const cartItem = cartData.cartItems.find(item => item.product_id == productId);
-           // console.log(cartData.cartItems[0].quantity,"cartitem");
+           
             
             if (cartItem) {
                 if (productData.stock < 1||cartItem.quantity+1>productData.stock) {
                     return res.status(200).json({ success: false, message: 'Product is out of stock' });
                 }    
-                // Update the quantity and calculate subtotal
+
                 cartItem.quantity += 1;
                 const subtotal = cartItem.quantity * cartItem.price;
                 cartItem.subtotal = subtotal;
             } else {
-                // Add a new item to cartItems
+                
                 console.log("hvhvhgv");
                 
                 if (productData.stock < 1) {
@@ -159,17 +159,17 @@ const addToCart = async (req, res) => {
                 cartData.cartItems.push(newItem);
             }
 
-            // Calculate the total subtotal for all items in the cart
+            
             const totalSubtotal = cartData.cartItems.reduce((total, item) => total + item.subtotal, 0);
 
-            // Update the total subtotal in the cart
+
             cartData.totalSubtotal = totalSubtotal;
 
-            // Save the updated cart data
+
             await cartData.save();
             res.status(200).json({success:true, message: 'Product added to cart successfully' });
         } else {
-            // If the user doesn't have a cart, create a new one
+
             const newCart = new Cart({
                 user_id: userId,
                 cartItems: [{
@@ -178,11 +178,11 @@ const addToCart = async (req, res) => {
                     price: productData.price,
                     Totalstock:productData.stock
                 }],
-                totalSubtotal: productData.price // Initial total subtotal
+                totalSubtotal: productData.price 
             });
             console.log("productdata stock",productData.stock);
             
-            // Save the new cart data
+
             {
             await newCart.save();
             res.status(200).json({ success:true,message: 'Product added to cart successfully' });
@@ -259,10 +259,10 @@ const updateQuantity = async (req, res) => {
                 console.log("productInCart.quantity", productInCart,productInCart.quantity);
 
                 if (newQuantity > 0 && newQuantity <= productInCart.Totalstock) {
-                    // Update the quantity in the array
+                    
                     productInCart.quantity = newQuantity;
                       
-                    // Save the updated userCart to MongoDB
+                    
                     await userCart.save();
 
                     const totalSubtotal = productInCart.price * newQuantity;
@@ -282,7 +282,7 @@ const updateQuantity = async (req, res) => {
                     })
                     console.log(TotPrice,"TOTPRICE");
 
-                    // Return the updated quantity and totalAmount to the frontend
+
                     return res.json({ status: true, quantityInput: newQuantity, count: count, tot:TotPrice, totalAmount:totalSubtotal });
                 } else {
                     return res.json({ status: false, error: 'Out of stock or invalid quantity' });
@@ -306,7 +306,7 @@ const DeleteCart = async (req, res) => {
         const cartId = req.query.id;
         const userId = req.session.user;
 
-        // Validate if cartId is a valid ObjectId
+
         if (!mongoose.Types.ObjectId.isValid(cartId)) {
             return res.status(400).json({ error: 'Invalid cart ID' });
         }
@@ -333,10 +333,10 @@ const DeleteCart = async (req, res) => {
             let CartIsEmpty="true"
             res.render('Cart',{CartIsEmpty,count})
         }
-        // res.redirect('/cart');
+
     } catch (error) {
         console.log(error.message);
-        // Handle the error and send an appropriate response
+
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };

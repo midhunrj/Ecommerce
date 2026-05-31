@@ -11,13 +11,13 @@
     <meta property="og:type" content="">
     <meta property="og:url" content="">
     <meta property="og:image" content="">
-    <!-- Favicon -->
+    
     <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/logo.png">
-    <!-- Template CSS -->
+
     <link rel="stylesheet" href="assets/css/main.css?v=3.4">
    <style>
 header-top header-top-ptb-1 d-none d-lg-block {
-    background-color: #ff0000; /* Change '#ff0000' to your desired color */
+    background-color: #ff0000; 
 }
 
 .home-slider {
@@ -92,7 +92,7 @@ header-top header-top-ptb-1 d-none d-lg-block {
                         <div class="col-md-6 col-sm-12 col-xs-12">
                             <div class="detail-gallery">
                                 <span class="zoom-icon"><i class="fi-rs-search"></i></span>
-                                <!-- MAIN SLIDES -->
+                                
                                 <div class="product-image-slider">
                                     <figure class="border-radius-10">
                                         <img src="assets/imgs/shop/product-16-2.jpg" alt="product image">
@@ -116,7 +116,7 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                         <img src="assets/imgs/shop/product-16-7.jpg" alt="product image">
                                     </figure>
                                 </div>
-                                <!-- THUMBNAILS -->
+                                
                                 <div class="slider-nav-thumbnails pl-15 pr-15">
                                     <div><img src="assets/imgs/shop/thumbnail-3.jpg" alt="product image"></div>
                                     <div><img src="assets/imgs/shop/thumbnail-4.jpg" alt="product image"></div>
@@ -127,7 +127,7 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                     <div><img src="assets/imgs/shop/thumbnail-9.jpg" alt="product image"></div>
                                 </div>
                             </div>
-                            <!-- End Gallery -->
+                            
                             <div class="social-icons single-share">
                                 <ul class="text-grey-5 d-inline-block">
                                     <li><strong class="mr-10">Share this:</strong></li>
@@ -178,11 +178,9 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                 <div class="attr-detail attr-size">
                                     <strong class="mr-10">Size</strong>
                                     <ul class="list-filter size-filter font-small">
-                                        <!-- <li><a href="#">S</a></li> -->
+                                        
                                         <li class="active"><a href="#"><%= products[i].stock %></a></li>
-                                        <!-- <li><a href="#">L</a></li>
-                                        <li><a href="#">XL</a></li>
-                                        <li><a href="#">XXL</a></li> -->
+                                       
                                     </ul>
                                 </div>
                                 <div class="bt-1 border-color-1 mt-30 mb-30"></div>
@@ -205,12 +203,11 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                 </ul>
                             </div>
                             <% } else { %>
-                                <!-- Handle the case when products[i] or products[i]._id is undefined or null -->
-                                <!-- You can provide a placeholder image or an alternative content -->
+
                                 <span>No product available</span>
                             <% } %>
                             <%} %>
-                            <!-- Detail Info -->
+
                         </div>
                     </div>
                 </div>        
@@ -697,7 +694,7 @@ header-top header-top-ptb-1 d-none d-lg-block {
                             </li>
                         </ul>
                     </nav>
-                    <!-- mobile menu end -->
+                    
                 </div>
                 <div class="mobile-header-info-wrap mobile-header-border">
                     <div class="single-mobile-header-info mt-30">
@@ -999,11 +996,10 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                         
                                         
                                        
-                                      <!-- xxxsssssdax--> 
                                     </div>
                                   
                                     </div>
-                        <!--End product-grid-4-->
+                        
                          <div class="tab-pane fade" id="tab-three" role="tabpanel" aria-labelledby="tab-three">
                             <div class="row product-grid-4">
                                 <% if(products&&products.length>0) %>
@@ -1086,24 +1082,19 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                 
                                 </div>
                                 <% } else { %>
-                                    <!-- Handle the case when products[i] or products[i]._id is undefined or null -->
-                                    <!-- You can provide a placeholder image or an alternative content -->
+
                                     <span>No product available</span>
                                 <% } %>
                                 <%} %>
                                 
                                 
                                
-                              <!-- xxxsssssdax--> 
                             </div>
-                            <!--End product-grid-4-->
+
                             </div>
-                    <!--En tab two (Popular)-->
-                    
-                       
-                    <!--En tab three (New added)-->
+
                 </div>
-                <!--End tab-content-->
+                
             </div>
         </section>
         <section class="banner-2 section-padding pb-0">
@@ -1157,7 +1148,7 @@ header-top header-top-ptb-1 d-none d-lg-block {
                           </div>
                           <div class="product-content-wrap">
                             <div class="product-category">
-                              <!-- Add your category data here -->
+
                             </div>
                             <h2><a href="shop-product-right.html" class="text-wrap"><%= products[i].productname %></a></h2>
                             <div class="rating-result" title="90%">
@@ -1168,7 +1159,7 @@ header-top header-top-ptb-1 d-none d-lg-block {
                               <span class="old-price">&#8377;<%= products[i].price + (i % 2 === 0 ? 7000 : 5000) %></span>
                             </div>
                             <div class="product-action-1 show">
-                              <!-- Add your Add To Cart button or other actions here -->
+
                             </div>
                           </div>
                         </div>
@@ -1348,7 +1339,7 @@ Swal.fire({
         })
     }
 </script>
-<!-- Your script handling the AJAX success callback -->
+
 <script>
 function addToCart(productId) {
     console.log("Product ID:", productId);
@@ -1356,16 +1347,16 @@ function addToCart(productId) {
     $.ajax({
         url: '/Add-cart',
         method: 'POST',
-        data: { productId: productId },  // Pass productId in the request payload
+        data: { productId: productId },  
     success: (response) => {
         console.log(response);
         if (response.success) {
-            // Show SweetAlert for success
+            
             Swal.fire({
                 title: 'Product Added!',
                 text: 'Product has been added to your cart.',
                 icon: 'success',
-                timer: 3000  // Optional: Close the alert after 3 seconds
+                timer: 3000  
             }); 
             var carticon=document.getElementById('cart-count')
             var cartcount=parseInt(carticon.innerText)
@@ -1381,7 +1372,7 @@ function addToCart(productId) {
                 }
             },
             error: function (xhr) {
-            if (xhr.status === 401) { // Not authorized
+            if (xhr.status === 401) {
                 Swal.fire({
                     title: 'Login Required!',
                     text: 'You must login to add products to your cart.',
@@ -1425,7 +1416,7 @@ Swal.fire({
     <script src="assets/js/plugins/jquery.vticker-min.js"></script>
     <script src="assets/js/plugins/jquery.theia.sticky.js"></script>
     <script src="assets/js/plugins/jquery.elevatezoom.js"></script>
-    <!-- Template  JS -->
+    
     <script src="./assets/js/main.js?v=3.4"></script>
     <script src="./assets/js/shop.js?v=3.4"></script>
     <script>
@@ -1443,15 +1434,7 @@ Swal.fire({
             }
         }
     
-        // function nextSlide() {
-        //     showSlides(slideIndex += 1);
-        // }
-    
-        // function prevSlide() {
-        //     showSlides(slideIndex -= 1);
-        // }
-    
-        // setInterval(nextSlide, 5000); // Auto slide every 5 seconds
+      
     </script>
    
 </body>

@@ -20,10 +20,10 @@ const insertBanner = async (req, res) => {
 
         const { name, bannerType, description, startDate, endDate, status } = req.body
         
-        const imageUrl = req.file.filename // Assuming the uploaded image is stored in a single file
+        const imageUrl = req.file.filename 
 console.log(req.body,"banner")
 
-        // Create a new banner instance
+
         const newBanner = new Banner({
             name,
             description,
@@ -35,15 +35,11 @@ console.log(req.body,"banner")
 
         });
 
-        // Save the new banner to the database
+
         await newBanner.save()
 
          
-        // Respond to the client with a success message or redirect to a success page
-     // res.status(200).json({status:true})
 
-
-        // Respond to the client with a success message or redirect to a success page
         res.redirect('/admin/bannerlist');
 
     } catch (error) {
@@ -68,9 +64,8 @@ const bannerlist=async(req,res)=>{
 
 const updatebanners=async (req, res) => {
     try {
-        const updatedBanners = req.body // Assuming req.body contains an array of updated banner objects
+        const updatedBanners = req.body 
 
-        // Update each banner in the database
         for (const updatedBanner of updatedBanners) {
             const { id, status, bannerType } = updatedBanner
             await Banner.findByIdAndUpdate(id, { status, bannerType });

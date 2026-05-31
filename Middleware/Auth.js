@@ -50,7 +50,7 @@ const isLogout = async (req, res, next) => {
 const isUserBlocked = async (req, res, next) => {
   try {
     const user = await getUserFromDatabase(req.session.user);
-    //  console.log("tgsu is",user);
+    
     if (user && user.is_blocked === 0) {
       next();
     } else {
@@ -71,7 +71,7 @@ const isUserBlockedOrGuest = async (req, res, next) => {
       return next()
     }
     const user = await getUserFromDatabase(req.session.user);
-    //  console.log("tgsu is",user);
+    
     if (user && user.is_blocked === 0) {
       next();
     } else {

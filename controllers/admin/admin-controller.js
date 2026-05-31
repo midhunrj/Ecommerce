@@ -14,7 +14,7 @@ const sharp=require("sharp")
 const PDFDocument=require("pdfkit-table")
 const { timeStamp } = require('console')
 const dayjs=require('dayjs')
-// const randomString = require('randomstring')
+
 
 
 const securepassword = async (password) => {
@@ -61,7 +61,7 @@ const verifyLogin = async (req, res) => {
     if (userdata) {
       console.log("mir")
 
-      // const passwordmatch = bcrypt.compare(password, userdata.password)
+
       console.log('joi')
 
       if (password===userdata.password && userdata.is_admin === 1) {
@@ -121,17 +121,17 @@ const getRevenueData = async () => {
   }
 };
 const getTopSellingProducts = async () => {
-  // Fetch all products
+  
   const products = await product.find({ isVerified: true });
 
-  // Aggregate order data to count occurrences of each product
+
   const topSellingProducts = await Order.aggregate([
       { $match: { Order_verified: true } },
       { $unwind: "$products" },
       { $group: { _id: "$products", ordersCount: { $sum: 1 } } }
   ]);
 
-  // Assign orders count to respective products
+
   for (const product of products) {
       const matchingProduct = topSellingProducts.find(item => item._id.toString() === product._id.toString());
       if (matchingProduct) {
@@ -148,7 +148,7 @@ const getTopSellingProductsByCategory = async () => {
 
   const categories = await Category.find({});
 
-  // Initialize array to store top selling products by category
+
   const topSellingProductsByCategory = [];
 
 
@@ -156,17 +156,17 @@ const getTopSellingProductsByCategory = async () => {
 
       const products = await product.find({ Category: category._id, isVerified: true });
 
-      // Aggregate order data to count occurrences of each product within the category
+
       const topSellingProducts = await Order.aggregate([
           { $match: { Order_verified: true } },
           { $unwind: "$products" },
           { $match: { "products.Category": category._id } },
           { $group: { _id: "$products", ordersCount: { $sum: 1 } } },
           { $sort: { ordersCount: -1 } },
-          { $limit: 3 } // Get top 3 selling products per category
+          { $limit: 3 }
       ]);
 
-      // Assign orders count to respective products
+      
       for (const product of products) {
           const matchingProduct = topSellingProducts.find(item => item._id.toString() === product._id.toString());
           if (matchingProduct) {
@@ -176,7 +176,7 @@ const getTopSellingProductsByCategory = async () => {
           }
       }
 
-      // Push category and its top selling products to the result array
+
       topSellingProductsByCategory.push({ category, products });
   }
 
@@ -201,7 +201,7 @@ const loadhomepage = async (req, res) => {
       { $group: { _id: "$products.product", totalQuantity: { $sum: "$products.quantity" } } },
       { $sort: { totalQuantity: -1 } },
       { $limit: 5 },
-      { $lookup: { from: "products", localField: "_id", foreignField: "_id", as: "product" } }, // Populate product details
+      { $lookup: { from: "products", localField: "_id", foreignField: "_id", as: "product" } },
       { $unwind: "$product" },
       { $project: { _id: "$product._id", productname: "$product.productname",image: "$product.image", totalQuantity: 1 } }
   ]);
@@ -210,7 +210,7 @@ const loadhomepage = async (req, res) => {
 
   
     const currentPage = parseInt(req.query.page) || 1; 
-    const perPage = 10; // 
+    const perPage = 10; 
 
    
     const totalOrders = await Order.countDocuments({ Order_verified: true });
@@ -272,21 +272,21 @@ const logout = async (req, res) => {
 }
 const adminDashboard = async (req, res) => {
   try {
-    const page = req.query.page || 1; // Default to page 1
-    const usersPerPage = 4; // Adjust the number of users per page as needed
+    const page = req.query.page || 1; 
+    const usersPerPage = 4; 
 
-    let userQuery = { is_admin: 0 }; // Query to filter non-admin users
+    let userQuery = { is_admin: 0 };
      
-    // Search
+    
     const search = req.query.search;
     if (search) {
-      userQuery.username = { $regex: new RegExp(search, "i") }; // Search by username
+      userQuery.username = { $regex: new RegExp(search, "i") }; 
     }
 
     const totalNumberOfUsers = await user.find(userQuery).countDocuments();
     const totalNumberOfPages = Math.ceil(totalNumberOfUsers / usersPerPage);
 
-    // Ensure the requested page does not exceed the total number of pages
+
     const validPage = Math.min(page, totalNumberOfPages);
 
     const userData = await user.find(userQuery)
@@ -299,12 +299,12 @@ const adminDashboard = async (req, res) => {
         
         page: validPage,
         totalNumberOfPages,
-        searchQuery: search, // Pass the search query to the view
+        searchQuery: search,
       });
     }
   } catch (error) {
     console.log(error.message);
-    // Handle error appropriately, e.g., send an error response
+
     res.status(500).send('Error loading user list');
   }
 };
@@ -392,13 +392,13 @@ const unblockUser = async (req, res) => {
 const Orderlistpage = async (req, res) => {
   try {
     console.log(req.query.page,"current page");
-    const page = req.query.page || 1; // Default to page 1
-    const ordersPerPage = 5; // Adjust the number of orders per page as needed
+    const page = req.query.page || 1;
+    const ordersPerPage = 5; 
 
     const totalNumberOfOrders = await Order.find({ Order_verified: true }).countDocuments();
     const totalNumberOfPages = Math.ceil(totalNumberOfOrders / ordersPerPage);
 
-    // Ensure the requested page does not exceed the total number of pages
+    
     const validPage = Math.min(page, totalNumberOfPages);
 
     const orderData = await Order.find({ Order_verified: true })
@@ -418,7 +418,7 @@ const Orderlistpage = async (req, res) => {
           }
         
           return {
-            ...order.toObject(), // ensure it's plain object to avoid Mongoose issues
+            ...order.toObject(), 
             formattedDate
           };
         })
@@ -432,7 +432,7 @@ const Orderlistpage = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
-    // Handle error appropriately, e.g., send an error response
+
     res.status(500).send('Error loading order list');
   }
 };
@@ -533,10 +533,10 @@ const deleteOrder = async (req, res) => {
     const orderId = req.query.id;
     const page = req.query.page;
 
-    // Delete the order from the database
+
     await Order.findByIdAndDelete(orderId);
 
-    // Redirect to the order list page with the current page number
+
     res.redirect(`/admin/orderlist?page=${page}`);
   } catch (error) {
     console.log(error.message);
@@ -603,7 +603,7 @@ const downloadpdf = async (req, res) => {
     doc.fontSize(12).text(`Sales Report - ${currentdate.toLocaleDateString()}`, { align: 'center' }).moveDown();
 
     
-    const columnWidths = [150, 150, 100, 80, 120, 120, 120]; // Adjust widths as needed
+    const columnWidths = [150, 150, 100, 80, 120, 120, 120]; 
 
     
     const table = {
@@ -719,9 +719,9 @@ const Addproductoffer = async (req, res) => {
       return res.json({ success: false, message: "Product offer should be applied below 90" });
     }
     const productdata = await product.findOne({ _id: productid });
-    const originalprice = productdata.price; // Access original price from productdata
+    const originalprice = productdata.price; 
     productdata.offer = parseInt(Offer);
-    productdata.originalprice = originalprice; // Save original price
+    productdata.originalprice = originalprice;
     productdata.price -= Math.floor(productdata.price * (Offer / 100));
     await productdata.save();
     console.log(productdata, "productdata");
@@ -739,8 +739,8 @@ const removeproductoffer = async (req, res) => {
     const productdata = await product.findOne({ _id: productid });
     console.log(productdata, "productdata");
     productdata.offer = 0;
-    const originalprice = productdata.originalprice; // Access original price from productdata
-    productdata.price = originalprice; // Reset price to original
+    const originalprice = productdata.originalprice; 
+    productdata.price = originalprice; 
     console.log(productdata.price, "djshfsdjf");
     await productdata.save();
     return res.json({ success: true });
@@ -755,7 +755,6 @@ const removeproductoffer = async (req, res) => {
 
 module.exports = {
   loginload,
-  // loadLogin,
   verifyLogin,
   loadhomepage,
   logout,
@@ -779,5 +778,5 @@ module.exports = {
 
 
       
-  // toggleUserStatus
+  
 }

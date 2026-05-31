@@ -38,7 +38,7 @@
                             </ul>
                         </div>
                     </div>
-                    <!-- mobile menu start -->
+
                     <nav>
                         <ul class="mobile-menu">
                             <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/home">Home</a>
@@ -98,7 +98,7 @@
                             </li>
                         </ul>
                     </nav>
-                    <!-- mobile menu end -->
+                    
                 </div>
                 <div class="mobile-header-info-wrap mobile-header-border">
                     <div class="single-mobile-header-info mt-30">
@@ -171,7 +171,7 @@
                                                 <td class="image product-thumbnail"><img src="./productImage/<%= products[i].image[0] %>" alt="#"></td>
                                                 <td class="product-des product-name">
                                                     <h5 class="product-name"><a href="shop-product-right.html"><%= products[i].productname %></a></h5>
-                                                    <!-- Adjust the path to the actual property in your product data -->
+                                                    
                                                     <p class="font-xs"><%= products[i].Brand %></p>
                                                 </td>
                                                 <td class="price" data-title="Price"><span> ₹<%= Cart.cartItems[i].price %> </span></td>
@@ -220,7 +220,7 @@
                             
                         </div>
                         <div class="cart-action text-end">
-                            <!-- <a class="btn  mr-10 mb-sm-15"><i class="fi-rs-shuffle mr-10"></i>Update Cart</a> -->
+
                             <a class="btn " href="/shop"><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
                         </div>
                         
@@ -253,7 +253,7 @@
                             
                             <% } else { %>
                                 
-                                <!-- Handle case when the cart is empty -->
+
                                 <p>Your cart is empty.</p>
                                 <div class="container mt-5">
                                     <div class=" text-center">
@@ -271,7 +271,7 @@
         </section>
     </main>
     <%- include("./layouts/footer.ejs") %>
-    <!-- Vendor JS-->
+    
     <script>
    let totalSubtotal=0
         function updateQuantity(productId, cartQuantity, count, productPrice, i, productQuantity) {
@@ -345,7 +345,7 @@ console.log("cipher",newQuantity);
                     }
                 });
             } else {
-                cartProductQuantityElement.value = 1; // Reset quantity to 1 if the user cancels
+                cartProductQuantityElement.value = 1; 
             }
         });
         return;
@@ -371,7 +371,6 @@ console.log("cipher",newQuantity);
 
 
 
- // Update subtotal dynamically
  const newSubtotal = newQuantity * productPrice;
         if (count == 1) {
         
@@ -382,7 +381,6 @@ console.log("cipher",newQuantity);
         }
         console.log("newSubtotal",newSubtotal);
 
-        // Recalculate totalSubtotal
         totalSubtotal += newSubtotal;
         const totalElements = document.getElementById('total').innerHTML;
         console.log("totalsubtotal",totalSubtotal);
@@ -418,10 +416,10 @@ console.log("cipher",newQuantity);
         }
         console.log("newSubtotal",newSubtotal);
 
-        // Recalculate totalSubtotal
+        
         totalSubtotal += newSubtotal;
 
-        // Update totalSubtotal on the page
+        
          document.getElementById('total').innerHTML=response.tot;
          document.getElementById('totalPrice').innerHTML=response.tot;
         
@@ -434,27 +432,12 @@ console.log("cipher",newQuantity);
 </script>
 <script>
 function handleDelete(event) {
-    // Prevent the default behavior of the anchor tag
+
     event.preventDefault();
     
-    // Get the href attribute which contains the URL to delete the item from the cart
-    const url = event.currentTarget.getAttribute('href'); // Use currentTarget instead of target
-    console.log("url", url);
     
-    // // Initiate request to delete the item from the cart
-    // $.ajax({
-    //     url: url,
-    //     method: 'GET',
-    //     success: (response) => {
-    //         console.log(response);
-    //         // Reload the page after successful removal
-    //         location.reload();
-    //     },
-    //     error: (error) => {
-    //         console.error(error);
-    //         // Handle error case if needed
-    //     }
-    // });
+    const url = event.currentTarget.getAttribute('href'); 
+    console.log("url", url);
 
     Swal.fire({
         title: "Are you sure?",
@@ -472,7 +455,7 @@ function handleDelete(event) {
                 method: 'GET',
                 success: (response) => {
                     Swal.fire("Deleted!", "The item has been removed from your cart.", "success")
-                        .then(() => location.reload()); // Reload after deletion
+                        .then(() => location.reload()); 
                 },
                 error: (error) => {
                     console.error(error);
@@ -503,7 +486,7 @@ function handleDelete(event) {
     <script src="assets/js/plugins/isotope.js"></script>
     <script src="assets/js/plugins/scrollup.js"></script>
     <script src="assets/js/plugins/jquery.vticker-min.js"></script>
-    <!-- Template  JS -->
+    
     <script src="./assets/js/main.js?v=3.4"></script>
     <script src="./assets/js/shop.js?v=3.4"></script>
 </body>

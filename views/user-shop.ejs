@@ -177,7 +177,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- ... (repeat for other products) ... -->
+                            
                         </div>
     
                         <div class="banner-img wow fadeIn mb-45 animated d-lg-block d-none">
@@ -293,7 +293,7 @@
                             <% } %>
                           <% } %>
                   
-                          <!--pagination-->
+                          
                           <div class="pagination-area mt-20 mb-20">
                             <nav aria-label="Page navigation">
                                 <ul class="pagination justify-content-center">
@@ -329,15 +329,7 @@
     <%- include("./layouts/footer.ejs") %>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-<!-- 
-<script>
-    function handleCategoryClick(categoryId) {
-      const url = new URL(window.location.origin + "/shop");
-      url.searchParams.set("category", categoryId);
-      url.searchParams.set("page", 1); // reset to first page
-      window.location.href = url.href;
-    }
-  </script> -->
+
   
 <script>
     function addToCart(productId) {
@@ -346,7 +338,7 @@
         $.ajax({
             url: '/Add-cart',
             method: 'POST',
-            data: { productId: productId },  // Pass productId in the request payload
+            data: { productId: productId },  
         success: (response) => {
             console.log(response);
             if (response.success) {
@@ -375,7 +367,7 @@
                     }
                 },
                 error: function (xhr) {
-            if (xhr.status === 401) { // Not authorized
+            if (xhr.status === 401) {
                 Swal.fire({
                     title: 'Login Required!',
                     text: 'You must login to add products to your cart.',
@@ -412,7 +404,7 @@ Swal.fire({
 
 <script>
     function applyFilters() {
-      // Gather selected filters
+      
       const selectedCategories = $('input[name="Category"]:checked').map(function () {
         return this.value;
       }).get();
@@ -421,19 +413,17 @@ Swal.fire({
         return this.value;
       }).get();
   
-      // Add more lines to gather other filters (brands, price range, etc.)
-  
-      // Make an AJAX request
+
       $.ajax({
         type: 'GET',
         url: '/apply-filters',
         data: {
           categories: selectedCategories.join(','),
           colors: selectedColors.join(',')
-          // Add more lines to include other filters in the request
+          
         },
         success: function (data) {
-          // Update the product list with the filtered results
+          
           $('#product-list-container').html(data);
         },
         error: function (error) {
@@ -442,7 +432,7 @@ Swal.fire({
       });
     }
   
-    // Attach the applyFilters function to the filter button click event
+
     $('#filter-button').on('click', function () {
       applyFilters();
     });
@@ -479,7 +469,7 @@ Swal.fire({
             }
             },
             error: function (xhr) {
-            if (xhr.status === 401) { // Not authorized
+            if (xhr.status === 401) { 
                 Swal.fire({
                     title: 'Login Required!',
                     text: 'You must login to add products to your wishlist.',
@@ -529,24 +519,24 @@ Swal.fire({
         const sortOptions = document.getElementById("sortOptions");
         const selectedSortOption = localStorage.getItem("selectedSortOption");
         
-        // Check if there's a selected option stored in local storage
+
         if (selectedSortOption) {
-            // Move the selected option to the top
+            
             const selectedOption = document.querySelector(`#sortOptions li a[href="/shop?sort=${selectedSortOption}"]`).closest("li");
             sortOptions.insertBefore(selectedOption, sortOptions.firstChild);
-            // Update the displayed selected option
+        
             document.getElementById("selectedSortOption").textContent = selectedOption.textContent;
         }
 
         sortOptions.addEventListener("click", function(event) {
             const selectedOption = event.target.closest("li");
             if (selectedOption) {
-                // Move the selected option to the top
+                
                 sortOptions.insertBefore(selectedOption, sortOptions.firstChild);
-                // Update the displayed selected option
+                
                 const selectedText = selectedOption.textContent;
                 document.getElementById("selectedSortOption").textContent = selectedText;
-                // Store the selected option in local storage
+                
                 const selectedSortOptionValue = selectedOption.querySelector("a").getAttribute("href").split("=")[1];
                 localStorage.setItem("selectedSortOption", selectedSortOptionValue);
             }
@@ -565,34 +555,10 @@ Swal.fire({
     function clearSearch() {
       const input = document.getElementById('searchInput');
       input.value = '';
-      window.location.href = '/shop'; // redirect to remove all query params
+      window.location.href = '/shop'; 
     }
   </script>
   
-
-     <!-- <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
-    <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
-    <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
-    <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/plugins/slick.js"></script>
-    <script src="assets/js/plugins/jquery.syotimer.min.js"></script>
-    <script src="assets/js/plugins/wow.js"></script>
-    <script src="assets/js/plugins/jquery-ui.js"></script>
-    <script src="assets/js/plugins/perfect-scrollbar.js"></script>
-    <script src="assets/js/plugins/magnific-popup.js"></script>
-    <script src="assets/js/plugins/select2.min.js"></script>
-    <script src="assets/js/plugins/waypoints.js"></script>
-    <script src="assets/js/plugins/counterup.js"></script>
-    <script src="assets/js/plugins/jquery.countdown.min.js"></script>
-    <script src="assets/js/plugins/images-loaded.js"></script>
-    <script src="assets/js/plugins/isotope.js"></script>
-    <script src="assets/js/plugins/scrollup.js"></script>
-    <script src="assets/js/plugins/jquery.vticker-min.js"></script>
-    <script src="assets/js/plugins/jquery.theia.sticky.js"></script>
-    <script src="assets/js/plugins/jquery.elevatezoom.js"></script>
-    Template  JS 
-    <script src="./assets/js/main.js?v=3.4"></script>
-    <script src="./assets/js/shop.js?v=3.4"></script> -->
 </body>
 
 </html>

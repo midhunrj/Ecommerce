@@ -66,7 +66,7 @@
                                         <% let currentTime = new Date().getTime(); %>
                                         <% let paymentTime = new Date(orders.placedon).getTime(); %>
                                         <% let timeDiff = currentTime - paymentTime; %>
-                                        <% let retryLimit = 24 * 60 * 60 * 1000; %> <!-- 24 hours -->
+                                        <% let retryLimit = 24 * 60 * 60 * 1000; %> 
                                         <% if (timeDiff < retryLimit) { %>
                                             <button class="btn btn-warning" onclick="retryPayment('<%= orders._id %>')">Retry Payment</button>
                                         <% } else { %>
@@ -197,9 +197,7 @@
                         </div>
                     </div>
 
-                    <!-- <div class="text-center mt-3">
-                        <a class="btn btn-primary" href="/order-tracks?id=<%= orders._id %>">View Order Tracking</a>
-                    </div> -->
+
                 </div>
             </div>
         </div>
@@ -261,12 +259,12 @@ function retryPayment(orderId) {
         .then(data => {
             if (data.success) {
                 var options = {
-                    key: data.razorpayKey, // Use key from backend
-                    amount: data.amount, // Directly use the amount
+                    key: data.razorpayKey, 
+                    amount: data.amount, 
                     currency: "INR",
                     name: "Your Company Name",
                     description: "Order Payment",
-                    order_id: data.razorpayOrderId, // Razorpay order ID
+                    order_id: data.razorpayOrderId, 
                     handler: function (response) {
                         fetch(`/verify-payment`, {  
                             method: "POST",

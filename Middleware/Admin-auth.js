@@ -13,7 +13,7 @@ async function getUserFromDatabase(userId) {
 const isLogin = async (req, res, next) => {
   try {
     const admin = await getUserFromDatabase(req.session.admin);
-    //  console.log("tgsu is",user);
+    
     if (admin && admin.is_admin === 1) {
       console.log('Admin here');
       next();
@@ -29,7 +29,7 @@ const isLogout = async (req, res, next) => {
   try {
     if(req.session.admin){
        const admin = await getUserFromDatabase(req.session.admin);
-    //  console.log("tgsu is",user);
+    
     if (admin && admin.is_admin === 1) {
       next();
     }else{

@@ -10,7 +10,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(to right, #3498db, #e74c3c); /* Gradient background */
+      background: linear-gradient(to right, #3498db, #e74c3c); 
       height: 100vh;
       display: flex;
       justify-content: center;
@@ -18,7 +18,7 @@
     }
 
     .login-container {
-      background:black; /* Slightly opaque white background */
+      background:black; 
       padding: 40px;
       border-radius: 15px;
       text-align: center;
@@ -28,7 +28,7 @@
       width: 100%;
       /* height:100%; */
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-      animation: fadeIn 0.8s ease-in-out; /* Fade in animation */
+      animation: fadeIn 0.8s ease-in-out; 
     }
 
     @keyframes fadeIn {
@@ -37,10 +37,10 @@
     }
 
      #choc{
-      color:chocolate; /* White color for headings */
+      color:chocolate; 
       margin-bottom: 20px;
-      font-size: 2em; /* Larger font size */
-      letter-spacing: 2px; /* Add letter spacing */
+      font-size: 2em; 
+      letter-spacing: 2px; 
     }
 
     input {
@@ -50,14 +50,14 @@
       box-sizing: border-box;
       border:groove;
       border-color:chocolate;
-      background-color: rgba(255, 255, 255, 0.8); /* Slightly opaque white background */
+      background-color: rgba(255, 255, 255, 0.8); 
       border-radius: 8px;
       outline: none;
-      color: #333; /* Dark text color */
+      color: #333; 
     }
 
     input::placeholder {
-      color: #777; /* Lighter placeholder text color */
+      color: #777; 
     }
     #email,#password{
    text-align: center;
@@ -129,7 +129,7 @@
 }
 
     #jammer {
-      background: linear-gradient(to right, #6f3ce7, #c02bb4); /* Gradient button background */
+      background: linear-gradient(to right, #6f3ce7, #c02bb4); 
       font-size: 18px;
       border: 2px solid rgb(164, 169, 19);
       border-radius:3rem;
@@ -139,15 +139,15 @@
       transition: all .3s ease-in-out;
       padding: 1rem 3rem;
 
-      transition: background 0.5s ease-in-out; /* Smooth background color transition */
+      transition: background 0.5s ease-in-out; 
     }
 
     #jammer:hover {
       background: linear-gradient(to right, #c02ba2, #720799);
-      border:2px solid rgb(19, 124, 169) /* Darker gradient on hover */
+      border:2px solid rgb(19, 124, 169) 
     }
 
-    /* Add a subtle shake animation on hover for the button */
+    
     #jammer:hover {
       animation: shake 0.5s;
     }
@@ -234,7 +234,7 @@
       
     
       <% if(locals.message) { %>
-        <!-- <h2>Your acoount has been Created Successfully</h2> -->
+
         <h4><%= message %></h4>
       <% } %>
       
@@ -247,8 +247,7 @@
     <input type="password" id="password" placeholder="Password" name="password" >
     <div id="passwordError" class="Error"></div>
     <button type="submit" id="jammer">Log In</button>
-    <!-- <a href="/forget-password" id="forgot"><br>Forgot Password</a> -->
-    <!-- <span><br><br>Don't have an Account?<br></span><Button id="jammer"><a href="/signup" id="siren" method="get">Signup</a></Button> -->
+
   </form>
 </div>
 <script>setTimeout(()=>{document.getElementById("alert").style.display="none"},3000);</script>
@@ -271,7 +270,7 @@ const inputElement = document.getElementById(field);
 if (inputElement.value.trim() === '') {
 displayError(inputElement, 'Field is required');
 isEmpty = true;
-// Stop further checking if an empty field is found
+
 return false;
 }
 });
@@ -284,37 +283,31 @@ return !isEmpty;
 
 function validate() {
   if (!checkEmptyFields()) {
-     return false; // Stop validation if empty fields are found
+     return false; 
   }
 
-  // Regex patterns
  
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
  
 
-  // Input fields
   
   const email = document.getElementById('email');
   const password = document.getElementById('password');
   
 
-  // Error fields
   
   const emailError = document.getElementById('emailError');
   const passwordError = document.getElementById('passwordError');
   
 
-  // Validate name field
-
-  // Validate email field
   if (!emailRegex.test(email.value)) {
      displayError(email, 'Please enter a valid email');
      return false;
   }
   
 
-  // All fields passed validation
+
   return true;
 }
 </script>   

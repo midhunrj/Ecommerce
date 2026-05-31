@@ -83,7 +83,7 @@
     function displayError(element, message) {
         const errorElement = document.getElementById(`${element.name}Error`);
         errorElement.innerHTML = message;
-        errorElement.style.color = 'red'; // Set error message color to red
+        errorElement.style.color = 'red'; 
     }
 
     function clearError(element) {
@@ -94,7 +94,6 @@
     function validateField(element) {
         const value = element.value.trim();
 
-        // Clear previous error messages
         clearError(element);
 
         if (value === '') {
@@ -102,7 +101,6 @@
             return false;
         }
 
-        // Additional validation based on the field name
         switch (element.name) {
             case 'name':
                 if (!/^[A-Z]/.test(value)) {
@@ -123,7 +121,7 @@
                     return false;
                 }
                 break;
-            // Add similar cases for other fields
+            
         }
 
         return true;

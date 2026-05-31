@@ -79,7 +79,7 @@
 
 <script>
     function validate() {
-        // Input fields
+        
         const code = document.getElementById('couponcode');
         const type = document.getElementById('type');
         const expirydate = document.getElementById('expirydate');
@@ -89,7 +89,7 @@
         const miniamount = document.getElementById('miniAmount');
         const description = document.getElementById('description');
 
-        // Error fields
+    
         const codeError = document.getElementById('codeError');
         const typeError = document.getElementById('typeError');
         const startdateError = document.getElementById('startdateError');
@@ -99,7 +99,7 @@
         const miniamountError = document.getElementById('miniamountError');
         const descriptionError = document.getElementById('descriptionError');
 
-        // Reset error messages
+    
         codeError.innerHTML = '';
         typeError.innerHTML = '';
         startdateError.innerHTML=''
@@ -109,7 +109,7 @@
         miniamountError.innerHTML = '';
         descriptionError.innerHTML = '';
 
-        // Validate each field and display error messages if empty or invalid
+
         let isValid = true;
         if (!code.value.trim()) {
             codeError.innerHTML = 'Coupon code is required';
@@ -138,21 +138,7 @@
             limitError.innerHTML = 'Usage limit must be a number';
             isValid = false;
         }
-        // if (!amount.value.trim()) {
-        //     amountError.innerHTML = 'Discount amount is required';
-        //     isValid = false;
-        // }
-        // if (!miniamount.value.trim()) {
-        //     miniamountError.innerHTML = 'minimum amount is required';
-        //     isValid = false;
-        //  } else if (!/^\d+(\.\d{1,2})?$/.test(amount.value)) {
-        //     amountError.innerHTML = 'Invalid discount amount';
-        //     isValid = false;
-        // }
-        // else if (!/^\d+(\.\d{1,2})?$/.test(miniamount.value)) {
-        //     miniamountError.innerHTML = 'Invalid minimum amount';
-        //     isValid = false;
-        // }
+  
         if (!amount.value.trim()) {
 
     amountError.innerHTML = 'Discount amount is required';
@@ -183,7 +169,7 @@ if (!miniamount.value.trim()) {
             isValid = false;
         }
 
-        // Return false if any field is empty or invalid, preventing form submission
+
         return isValid;
     }
 </script>

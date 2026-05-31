@@ -60,7 +60,7 @@
             <label for="ReferalCode">Referal Code (Optional):</label>
             <div class="input-container"><input type="text" name="referalCode" id="ReferalCode" placeholder="Enter referral code (if any)"></div>
         </div> 
-            <!-- Error messages will be displayed here -->
+            
             <div id="errorMessage" class="Error"></div>
 
             <button type="submit">Signup</button>
@@ -90,7 +90,7 @@
             isEmpty = true;
             displayError(inputElement, 'Field is required');
           } else {
-            errorElement.innerHTML = ''; // Clear previous error messages
+            errorElement.innerHTML = ''; 
           }
         });
       
@@ -99,53 +99,53 @@
       
       function validate() {
         if (!checkEmptyFields()) {
-          return false; // Stop validation if empty fields are found
+          return false; 
         }
       
-        // Regex patterns
+        
         const nameRegex = /^[A-Z]/;
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
         const phoneRegex = /^[0-9]{10}$/;
       
-        // Input fields
+        
         const name = document.getElementById('name');
         const email = document.getElementById('email');
         const password = document.getElementById('password');
         const confirmPassword = document.getElementById('confirmPassword');
         const phone = document.getElementById('phone');
       
-        // Validate name field
+        
         if (!nameRegex.test(name.value)) {
           displayError(name, 'First letter should be capital');
           return false;
         }
       
-        // Validate email field
+      
         if (!emailRegex.test(email.value)) {
           displayError(email, 'Please enter a valid email');
           return false;
         }
       
-        // Validate password field
+        
         if (!passwordRegex.test(password.value)) {
           displayError(password, 'Password must be strong');
           return false;
         }
       
-        // Validate confirm password field
+      
         if (password.value !== confirmPassword.value) {
           displayError(confirmPassword, 'Passwords do not match');
           return false;
         }
       
-        // Validate phone field
+
         if (!phoneRegex.test(phone.value)) {
           displayError(phone, 'Please enter a valid 10-digit phone number');
           return false;
         }
       
-        // All fields passed validation
+
         return true;
       }
   </script>

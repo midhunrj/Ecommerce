@@ -9,9 +9,9 @@
     <meta property="og:type" content="">
     <meta property="og:url" content="">
     <meta property="og:image" content="">
-     <!-- Favicon -->
+     
      <link rel="shortcut icon" type="image/x-icon" href="/assets/imgs/theme/logo.png?v=2">
-     <!-- Template CSS -->
+     
      <link href="/Admin-assets/css/main.css" rel="stylesheet" type="text/css"/>
      <link href="/dash.css">
      <style>
@@ -168,24 +168,7 @@
           </div>
         </div>
       <% } %>
-// <script>
-//     function updateUserStatus(userId) {
-//     console.log(userId);
-  
-//     $.ajax({
-//       url:`/admin/users?id=${userId}`,
-//       type: "PUT",
-//       contentType: "application/json",
-//       data: JSON.stringify({ is_blocked: 1 }),
-//       success: function () {
-//         console.log("User blocked successfully");
-//         location.reload();
-//       },
-//       error: function (xhr, status, error) {
-//         console.error("Failed to block user", error);
-//       },
-//     });
-//   }</script>
+
   <script>
     function toggleUserStatus(userId,block,index)
     {
@@ -209,7 +192,7 @@
         else{
           button.className="btn btn-success";
           button.innerText="UnBlocked";
-          //button.setAttribute("onclick",`toggleUserStatus('${userId}',true,${index})`)
+
           button.setAttribute('data-bs-toggle','modal')
            button.setAttribute('data-bs-target',`#confirmationModal${index}`)
            button.removeAttribute('onclick')
@@ -223,7 +206,7 @@
     </script>
   <script>
     function confirmBlock(userId) {
-    // Implement your logic to confirm deletion using the categoryId
+  
     console.log('Confirming deletion of category:', userId);
 }</script>
   <script src="../public/userblock.js"></script>
@@ -233,7 +216,7 @@
 <script src="/Admin-assets/js/vendors/perfect-scrollbar.js"></script>
 <script src="/Admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
 <script src="/Admin-assets/js/vendors/chart.js"></script>
-<!-- Main Script -->
+
 <script src="/Admin-assets/js/main.js" type="text/javascript"></script>
 <script src="/Admin-assets/js/custom-chart.js" type="text/javascript"></script>
     

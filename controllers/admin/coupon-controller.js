@@ -12,7 +12,7 @@ const newCoupon = async (req, res) => {
     try {
         const { code,type,limit,startdate,expirydate,description,amount, miniamount} = req.body;
     
-        // const expirydate=req.body[Expiry-date]
+        
         
         
         console.log('Coupon code:', code);

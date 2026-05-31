@@ -62,7 +62,7 @@ const getprofilepage=async(req,res)=>{
   });
   
     let wishcount=req.session.wishcount
-    res.render('user-profile',{message:'',users:userdata,userAddress:Addressdata,orders,username:userdata.username,count,wishcount,currentPage: page,referalCode: userdata.referalCode||'n/a',search:req.query.search ,// Pass current page to frontend for highlighting active page in pagination
+    res.render('user-profile',{message:'',users:userdata,userAddress:Addressdata,orders,username:userdata.username,count,wishcount,currentPage: page,referalCode: userdata.referalCode||'n/a',search:req.query.search ,
     totalPages: Math.ceil(totalCount / limit)})
 }
 catch(error)
@@ -234,9 +234,6 @@ const editaddress=async(req,res)=>{
     let count=req.session.count
     res.render('edit-address',{userAddress:Addressdata,username:userdata.username,count,wishcount})
 }
-// else{
-//     console.log(error.message)
-// }
    
 catch(error)
 {
@@ -406,15 +403,15 @@ catch(error)
             }
     
     var data = {
-        apiKey: "free", // Please register to receive a production apiKey: https://app.budgetinvoice.com/register
-        mode: "development", // Production or development, defaults to production   
+        apiKey: "free", 
+        mode: "development",   
         images: {
-            // The logo on top of your invoice
+            
             logo: "https://public.budgetinvoice.com/img/logo_en_original.png",
-            // The invoice background
+        
             background: "https://public.budgetinvoice.com/img/watermark-draft.jpg"
         },
-        // Your own data
+        
         sender: {
             company: "Sample Corp",
             address: "Sample Street 123",
@@ -422,7 +419,7 @@ catch(error)
             city: "Sampletown",
             country: "Samplecountry"
                     },
-        // Your recipient
+        
         client: {
             company: order.Address[0].name,
             address: order.Address[0].address,
@@ -439,8 +436,7 @@ catch(error)
             
             dueDate: order.Date+7
         },
-        // The products you would like to see on your invoice
-        // Total values are being calculated automatically
+
         products: [
             {
                 quantity: order.quantity,
@@ -450,11 +446,11 @@ catch(error)
             },
             
         ],
-        // The message you would like to display on the bottom of your invoice
+
         bottomNotice: "Kindly pay your invoice within 15 days.",
-        // Settings to customize your invoice
+    
         settings: {
-            currency: "INR", // See documentation 'Locales and Currency' for more info. Leave empty for no currency.
+            currency: "INR", 
                  
         },
         
@@ -465,8 +461,6 @@ catch(error)
 
     };
     
-    
-            // Generate the invoice PDF
             const pdfBuffer = await easyinvoice.createInvoice(data);
     
                         res.status(200).json(pdfBuffer);
@@ -486,7 +480,7 @@ catch(error)
             return res.status(400).json({success:false,message:"failed to add money"})
         }
         const generatedOrder = await generateOrderRazorpay(amount);
-        // userdata.wallet+=parseInt(amount)
+        
          
          res.status(200).json({ success:true,message: "Money has been added to wallet successfully",Wallet:userdata.wallet,razorpayOrder: generatedOrder,amount, razorId: process.env.RAZORPAY_ID_KEY  });
     }
@@ -540,7 +534,7 @@ const verifyPayment = async (req, res) => {
                 timestamp:new Date()
     
               })
-            // await userdata.save()
+
             await user.save();
 
             res.status(200).json({ success: true, message: "Payment verified and wallet updated successfully",amount });

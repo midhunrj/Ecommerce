@@ -44,10 +44,10 @@
                                         <% } %>
                             </select>
                             <a class="btn btn-primary" href="#" onclick="updateOrderStatus()">Save</a>
-                            <!-- <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print"></i></a> -->
+                           
                         </div>
                     </div>
-                </header> <!-- card-header end// -->
+                </header> 
                 <div class="card-body">
                     <div class="row mb-50 mt-20 order-info-wrap text-center">
                         
@@ -58,10 +58,10 @@
                                         <p class="mb-1">
                                             <%= users.username %> <br> <%= users.email %> <br> +<%= users.phone %>
                                         </p>
-                                        <!-- <a href="#">View profile</a> -->
+                                        
                                     </div>
                                 </article>
-                            </div> <!-- col// -->
+                            </div> 
                             <div class="col-md-4">
                                 <article class="icontext align-items-start">
                                     <div class="text">
@@ -69,10 +69,10 @@
                                         <p class="mb-1">
                                             Shipping: Fargo express <br> Pay method: <%= orders.paymentstatus %> <br> Status: <%= orders.Status %>
                                         </p>
-                                        <!-- <a href="#">Download info</a> -->
+                                        
                                     </div>
                                 </article>
-                            </div> <!-- col// -->
+                            </div> 
                             <div class="col-md-4">
                                 <article class="icontext align-items-start">
                                     <div class="text">
@@ -86,10 +86,10 @@
                                             <%= orders.Address[0].country %> <%= orders.Address[0].pincode %><br>
                                            Mobile : <%= orders.Address[0].phone %>
                                         </p>
-                                        <!-- <a href="#">View profile</a> -->
+                                        
                                     </div>
                                 </article>
-                            </div> <!-- col// -->
+                            </div> 
                         
                     </div>
                     <div class="row">
@@ -164,16 +164,16 @@
                                        
                                     </tbody>
                                 </table>
-                            </div> <!-- table-responsive// -->
+                            </div> 
                             <a class="btn btn-primary" href="/admin/order-tracks?id=<%= orders._id %>">View Order Tracking</a>
-                        </div> <!-- col// -->
+                        </div> 
                         <div class="col-lg-1"></div>
                         <div class="col-lg-4">
                             <div class="box shadow-sm bg-light">
                                 <h6 class="mb-15">Payment info</h6>
                                 <p>
                                     <%if(orders.payment=="COD"){ %>Cash on Delivery <% }else if(orders.payment="Online"){  %> Online payment <% } %><br>
-                                    <!-- Business name: Grand Market LLC <br> -->
+                                    
                                     Phone: +1 (800) 555-154-52
                                 </p>
                             </div>
@@ -184,12 +184,12 @@
                                 </div>
                                 <button class="btn btn-primary">Save note</button>
                             </div>
-                        </div> <!-- col// -->
+                        </div> 
                     </div>
-                </div> <!-- card-body end// -->
+                </div>
             </div>
-            <% } %> <!-- card end// -->
-        </section> <!-- content-main end// -->
+            <% } %>
+        </section> 
         <%- include("./layouts/Admin-footer.ejs") %>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
@@ -198,7 +198,7 @@
                 var newStatus = $('#statusSelect').val();
                 var orderID = '<%= orders._id %>';
         
-                // Send AJAX request to update order status
+                
                 $.ajax({
                     url: '/admin/update-order-status',
                     method: 'POST',
@@ -208,7 +208,7 @@
                         setTimeout(function () {
                     window.location.href = '/admin/orderlist';
                     }, 1000);
-                        // Optionally update the UI to reflect the new status
+                        
                     },
                     error: function (error) {
                         console.error('Error updating order status');

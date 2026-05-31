@@ -18,13 +18,13 @@
                         <option value="Home Banner">Home Banner</option>
                         <option value="Side Banner">Side Banner</option>
                         <option value="Middle Banner">middle Banner</option>
-                        <!-- Add more options as needed -->
+                        
                     </select>
                     <div id="bannerTypeError" class="Error"></div>
                 </div>
             </div>
         </div>
-        <!-- Existing form fields -->
+        
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
@@ -61,9 +61,7 @@
             <div id="imagePreviewContainer" class="mt-3"></div> 
         </div>
         <div class="row mt-3">
-            <!-- <div class="col-md-6">
-                <button id="cropButton" type="button" class="btn btn-primary btn-block">Crop Image</button>  Crop button -->
-            <!-- </div>   --> 
+
             <div class="col-md-6">
                 <button type="submit" class="btn btn-primary btn-block" id="submitButton">Submit</button> 
             </div>
@@ -72,7 +70,6 @@
     </form>
 </div>
 
-<!-- <script src="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.js"></script> -->
 
  <script>
     document.getElementById("bannerImage").addEventListener("change", handleFileSelect);
@@ -97,7 +94,7 @@
         document.getElementById("imagePreviewContainer").innerHTML = ""; 
         document.getElementById("imagePreviewContainer").appendChild(thumbnail);
 
-        // Initialize Cropper.js on the selected image
+
         cropper = new Cropper(img, {
             // aspectRatio: 16 / 9,
             viewMode: 1,
@@ -176,7 +173,7 @@
                 errorElement.innerHTML = 'Field is required';
                 isValid = false;
             } else {
-                errorElement.innerHTML = ''; // Clear previous error messages
+                errorElement.innerHTML = ''; 
             }
         });
 
