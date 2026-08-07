@@ -724,6 +724,8 @@ header-top header-top-ptb-1 d-none d-lg-block {
             <div id="carousel" class="hero-slider-1 dot-style-1 dot-style-1-position-1">
                 <% const reversedbanners=banners.reverse().slice(0,4) %>
                 <% reversedbanners.forEach((banner, index) => { %>
+                    <% console.log(banner,"");
+                     %>
                 <div class="single-hero-slider single-animation-wrap">
                     <div class="container-fluid p-0">
                         <div class="row align-items-center justify-content-center slider-animated-1" >
@@ -736,7 +738,7 @@ header-top header-top-ptb-1 d-none d-lg-block {
                             </div>
                             <div class="col-12">
                                 <div class="single-slider-img single-slider-img-1">
-                                    <img class="animated slider-<%= index + 1 %>" src="./productImage/<%= banner.image %>"
+                                    <img class="animated slider-<%= index + 1 %>" src="/productImage/<%= banner.image %>"
                                         alt="<%= banner.name %>" >
                                 </div>
                             </div>
