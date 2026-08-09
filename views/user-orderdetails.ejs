@@ -219,7 +219,7 @@
             method: 'POST',
             data: { orderID: orderID, newStatus: newStatus },
             success: function (response) {
-                console.log('Order status updated successfully');
+                
                 setTimeout(function () {
                     window.location.href = '/profile#orders';
                 }, 1000);
@@ -240,7 +240,7 @@
             method: 'GET',
             
             success: async function(response) {
-                console.log(response);
+                
                
               await  easyinvoice.download(`order-invoice-${orderId}`, response.pdf);
             },

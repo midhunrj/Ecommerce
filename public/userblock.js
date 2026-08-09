@@ -1,5 +1,5 @@
 function updateUserStatus(userId) {
-    console.log(userId);
+    
   
     $.ajax({
       url:`/admin/users/${userId}/block`,

@@ -33,7 +33,7 @@ app.use('/', userRoute);
 
 const adminRoute=require('./routers/admin-router');
 app.use('/admin',adminRoute);
-// app.use('*',errorcontroller.errorpage)
+
 app.use("*", (req, res, next) => {
   
   res.status(404).render("404");

@@ -212,7 +212,7 @@
               <div class="modal-body">
                 <p>Are you sure you want to delete this item?</p>
               </div>
-              <% console.log("thisssjsdfjkdfsd" + category[i]._id) %>
+              
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 <a id="deleteButton<%= i %>" href="/admin/delete-category?id=<%=category[i]._id %>" class="btn btn-danger">Delete</a>
@@ -276,7 +276,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 <script>
    function validate() {
-    console.log("Validating add category form...");
+    
     var catName = document.getElementById("category_name").value.trim();
     var listRadio = document.getElementById("listRadio").checked;
     var unlistRadio = document.getElementById("unlistRadio").checked;
@@ -302,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function editCatvalidate(event) {
     
     
-    console.log("Validatng edit category form...");
+    
     var editCatName = document.getElementById("editCategoryName").value.trim();
     var editListRadio = document.getElementById("edit-listRadio").checked;
     var editUnlistRadio = document.getElementById("edit-unlistRadio").checked;

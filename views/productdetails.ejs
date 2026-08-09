@@ -179,8 +179,6 @@
                                     <div class="detail-gallery" >
                                         <span class="zoom-icon"><i class="fi-rs-search"></i></span>
                                         
-                                        <% console.log("this is  jdfsdjf"+products) %>
-                                        <% console.log("this is prodcrt name "+products.productname) %>
                                         <% if(products){ %>
 <div class="mx-auto">
     <div class="product-image-slider zoom-container ">
@@ -217,7 +215,7 @@
                                     
                                             
                                         <h2 class="title-detail"><%= products.productname %></h2>
-                                        <% console.log(products.productname); %>
+                                        
                                         <div class="product-detail-rating">
                                             <div class="pro-details-brand">
                                                 <span> Brands: <a href="shop-grid-right.html"><%= products.Brand %></a></span>
@@ -234,13 +232,13 @@
                                             <div class="product-price primary-color float-left">
                                                 <% if(category&&category.length>0){ %>
                                                     <% for(let j=0; j<category.length; j++){ %>
-                                                        <% console.log(category[j]._id); %>
+                                                        
                                                         <% if(products.Category.toString() === category[j]._id.toString()){ %>
-                                                            <% console.log("before offer discounted",category[j].offer); %>
+                                                            
                                                             <% if(category[j].offer > 0||products.offer>0){ %>
                                                                 <% let discounted = products.price - (products.price * category[j].offer / 100); %>
                                                                 <% let disco_amount = (products.price * category[j].offer / 100); %>
-                                                                <% console.log("discounted",discounted); %>
+                                                                
                                                                 
                                                                 <ins><span class="text-brand">&#8377;<%= products.price %></span></ins>
                                                                 <ins><span class="old-price font-md ml-15">&#8377;<%= products.originalprice  %></span></ins>
@@ -544,7 +542,7 @@
                 method: 'POST',
                 data: { productId: productId },
                 success: function (response) {
-                    console.log("Response:", response);
+                    
 
                     if (response.success) {
                         Swal.fire({
@@ -555,10 +553,10 @@
                         });
                         var carticon=document.getElementById('cart-count')
             var cartcount=parseInt(carticon.innerText)
-            console.log(cartcount,"cartcount before")
+            
              carticon.innerText=cartcount+1
             
-            console.log(carticon.innerText);
+            
                     } else {
                         Swal.fire({
                             title: 'Error!',
@@ -600,7 +598,7 @@
             method:"POST",
             data:{productId},
             success:(response)=>{
-                console.log(response);
+                
                 if (response.green)
                 {
                 Swal.fire({

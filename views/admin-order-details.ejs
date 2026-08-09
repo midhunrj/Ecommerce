@@ -118,7 +118,7 @@
                                                             <% if (product) { %>
                                                                 <a class="itemside" href="#">
                                                                     <div class="left">
-                                                                        <% console.log("product image",product.image[0]); %>
+
                                                                             <img src="/productImage/<%= product.image[0] %>" width="40" height="40" class="img-xs" alt="product">
                                                                       
                                                                     </div>
@@ -204,7 +204,7 @@
                     method: 'POST',
                     data: { orderID: orderID, newStatus: newStatus },
                     success: function (response) {
-                        console.log('Order status updated successfully');
+                        
                         setTimeout(function () {
                     window.location.href = '/admin/orderlist';
                     }, 1000);

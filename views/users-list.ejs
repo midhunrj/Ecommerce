@@ -154,7 +154,7 @@
               <div class="modal-body">
                 <p>Are you sure you want to block this user</p>
               </div>
-              <% console.log("thisssjsdfjkdfsd" + users[i]._id) %>
+              
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 <button class="btn btn-danger"
@@ -178,7 +178,7 @@
         contentType:"application/json",
         data:JSON.stringify({id:userId,block}),
         success:function(response){
-          console.log(response.message);
+          
 
           const button=document.querySelectorAll("table .btn")[index];
           if(block)
@@ -207,7 +207,7 @@
   <script>
     function confirmBlock(userId) {
   
-    console.log('Confirming deletion of category:', userId);
+    
 }</script>
   <script src="../public/userblock.js"></script>
 <script src="/Admin-assets/js/vendors/jquery-3.6.0.min.js"></script>

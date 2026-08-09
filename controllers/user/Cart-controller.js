@@ -15,17 +15,17 @@ const Cartpage=async(req,res)=>{
         const User=req.session.user
         const cartdata=await Cart.findOne({user_id:User})
         const userdata=await user.findOne({_id:User})
-        console.log(req.session.count,"cart count in cart page");
+
   
         let count=0
 
         const cartData=await Cart.aggregate([{$match:{user_id:req.session.user}},{$unwind:"$cartItems"},{$group:{_id:null,count:{"$sum":"$cartItems.quantity"}}}])
-  console.log(cartData[0]?.count)
+  
   
   if(cartData.length>0)
   {
      count=cartData[0].count
-     console.log(count,'countcart')
+     
   }
   else
   {
@@ -80,7 +80,7 @@ const Cartpage=async(req,res)=>{
 
 
         const cartData = cartAggregate[0]; 
-        console.log(cartData,"cartdata sjfjhhshhdh");
+        
         if (!cartData) {
 
             return res.status(404).render('Check-out', {username:userdata.username,count});
@@ -106,7 +106,7 @@ const addToCart = async (req, res) => {
     try {
         const productId = req.body.productId;
         const userId = req.session.user;
-        console.log("hello",productId);
+        
         if (!userId) {
             return res.status(401).json({ success: false, message: "You must login" });
         }
@@ -116,12 +116,12 @@ const addToCart = async (req, res) => {
         
         
         const productData = await Product.findOne({ _id: productId });
-        console.log("pro-price",productData.price)
+        
 
         if (!productData) {
             return res.status(404).json({ success: false, message: 'Product not found' });
         }
-      console.log("products stock",productData.stock);
+
         
         
         if (productData.stock < 1) {
@@ -144,7 +144,7 @@ const addToCart = async (req, res) => {
                 cartItem.subtotal = subtotal;
             } else {
                 
-                console.log("hvhvhgv");
+
                 
                 if (productData.stock < 1) {
                     return res.status(200).json({ success: false, message: 'Product is out of stock' });
@@ -180,7 +180,7 @@ const addToCart = async (req, res) => {
                 }],
                 totalSubtotal: productData.price 
             });
-            console.log("productdata stock",productData.stock);
+
             
 
             {
@@ -192,12 +192,12 @@ const addToCart = async (req, res) => {
         }
     
         const cartdata=await Cart.aggregate([{$match:{user_id:req.session.user}},{$unwind:"$cartItems"},{$group:{_id:null,count:{"$sum":"$cartItems.quantity"}}}])
-        console.log(cartdata[0]?.count);
+        
         
         if(cartdata.length>0)
         {
            count=cartdata[0].count
-           console.log(count,'countcart in addtocart')
+           
         }
         else
         {
@@ -217,16 +217,16 @@ const updateQuantity = async (req, res) => {
         const productId = req.body.productId;
         const userId = req.session.user;
         const count = req.body.count;
-        console.log("productId", productId, "\nuserId", userId, "count", count);
+
 
         const userCart = await Cart.findOne({ user_id: userId });
 
         if (userCart) {
             const productInCart = userCart.cartItems.find(item => item.product_id.toString() === productId);
-              console.log(productInCart.quantity);
+              
             if (productInCart) {
                 let newQuantity;
-                console.log("newQuantity", newQuantity);
+
                 if (count == 1) {
                     newQuantity = productInCart.quantity + 1;
                 } else if (count == -1) {
@@ -235,7 +235,7 @@ const updateQuantity = async (req, res) => {
                 } else {
                     return res.status(400).json({ status: false, error: "Invalid count" });
                 }
-                console.log("newQuantity", newQuantity);
+
                 if(newQuantity==0)
                     {
                         const updatedCart = await Cart.findOneAndUpdate(
@@ -256,7 +256,7 @@ const updateQuantity = async (req, res) => {
             req.session.count=count
         }
                     }
-                console.log("productInCart.quantity", productInCart,productInCart.quantity);
+
 
                 if (newQuantity > 0 && newQuantity <= productInCart.Totalstock) {
                     
@@ -267,11 +267,10 @@ const updateQuantity = async (req, res) => {
 
                     const totalSubtotal = productInCart.price * newQuantity;
 
-                    console.log("totalSubtotal", totalSubtotal);
+
                     let TotPrice=0
                     await Cart.find({user_id:userId}).then((data)=>{
-                        console.log(data,"dataa");
-                        console.log(data[0].cartItems,"itema");
+
                         for(i=0;i<data[0].cartItems.length;i++){
                             TotPrice+=data[0].cartItems[i].quantity*data[0].cartItems[i].price
                             if(TotPrice<=0)
@@ -280,7 +279,7 @@ const updateQuantity = async (req, res) => {
                             }
                         }
                     })
-                    console.log(TotPrice,"TOTPRICE");
+
 
 
                     return res.json({ status: true, quantityInput: newQuantity, count: count, tot:TotPrice, totalAmount:totalSubtotal });

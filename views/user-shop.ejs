@@ -253,16 +253,16 @@
                                     <div class="product-price">
                                         <% if(category&&category.length>0){ %>
                                             <% for(let j=0; j<category.length; j++){ %>
-                                                <% console.log(category[j]._id); %>
+                                                
                                                 <% if(products[i].Category.toString() === category[j]._id.toString()){ %>
-                                                    <% console.log("before offer discounted", category[j].offer); %>
+                                                    
                                                 <% let productprice=products[i].price %>
                                                 <% let productoffer=products[i].offer %>
                                                 <% let categoryoffer=category[j].offer %>
                                                 <% if(category[j].offer > 0|| products[i].offer>0){ %>
                                                     <% let originalPrice = Math.floor(productprice / (1 - categoryoffer+productoffer / 100)); %>
 
-                                                    <% console.log("original price", originalPrice); %>
+                                                
                                                     <div class="price mb-2">
                                                         <span>&#8377;<%= products[i].price %></span>
                                                         <span class="old-price">&#8377;<%= products[i].originalprice %></span>
@@ -333,14 +333,14 @@
   
 <script>
     function addToCart(productId) {
-        console.log("Product ID:", productId);
+        
    
         $.ajax({
             url: '/Add-cart',
             method: 'POST',
             data: { productId: productId },  
         success: (response) => {
-            console.log(response);
+            
             if (response.success) {
                 
                 Swal.fire({
@@ -352,10 +352,10 @@
                
              var carticon=document.getElementById('cart-count')
             var cartcount=parseInt(carticon.innerText)
-            console.log(cartcount,"cartcount before")
+            
              carticon.innerText=cartcount+1
-             //alert(carticon.innerText)
-            console.log(carticon.innerText);
+             
+            
             
                } else {
                         Swal.fire({
@@ -445,7 +445,7 @@ Swal.fire({
             method:"POST",
             data:{productId},
             success:(response)=>{
-                console.log(response);
+                
                 if (response.green)
                 {
                 Swal.fire({

@@ -16,12 +16,11 @@ const bannerupload=async(req,res)=>{
 const insertBanner = async (req, res) => {
     try {
 
-        console.log("hello its banner time")
 
         const { name, bannerType, description, startDate, endDate, status } = req.body
         
         const imageUrl = req.file.filename 
-console.log(req.body,"banner")
+
 
 
         const newBanner = new Banner({

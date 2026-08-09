@@ -37,26 +37,25 @@
                         <% for(let i=0; i<products.length; i++){ %>
                         <div class="col">
                             <div class="card card-product-grid">
-                                <% console.log("productlist images", products[i].image[0]); %>
+                                
                                 <a href="#" class="img-wrap"> <img  src="./productImage/<%= products[i].image[0] %>" alt="Product" style="height:200px"> </a>
                                 <div class="info-wrap">
                                     <a href="#" class="title text-truncate">
                                         <%= products[i].productname %>
                                     </a>
-                                    <% console.log(products[i].Category,"category ids \n"); %>
-                                    <% console.log("jugfrrddrfd", category); %>
+                                  
                                     <% if(category && category.length > 0){ %>
                                         <% for(let j=0; j<category.length; j++){ %>
-                                            <% console.log(category[j]._id); %>
+                                            
                                             <% if(products[i].Category.toString() === category[j]._id.toString()){ %>
-                                                <% console.log("before offer discounted", category[j].offer); %>
+                                                
                                                 <% let productprice=products[i].price %>
                                                 <% let productoffer=products[i].offer %>
                                                 <% let categoryoffer=category[j].offer %>
                                                 <% if(category[j].offer > 0|| products[i].offer>0){ %>
                                                     <% let originalPrice = Math.floor(productprice / (1 - categoryoffer+productoffer / 100)); %>
 
-                                                    <% console.log("original price", originalPrice); %>
+                                                
                                                     <div class="price mb-2 " style="display: flex; align-items: center; gap: 5px;" >
                                                         <span style="color:rgb(10, 79, 10);">&#8377;<%= products[i].price %></span>
                                                         <span class="old-price" style="text-decoration: line-through; color:gray;">&#8377;<%= products[i].originalprice %></span>
@@ -210,7 +209,7 @@
             method:"post",
             data:{productId,offerPercentage},
             success:(response)=>{
-                console.log(response);
+                
                 if(response.success==true)
                 {
                     location.reload()
@@ -234,13 +233,13 @@
     
             $('#productOfferModal' + productId).modal('hide');
     
-            console.log('Applying ' + offerPercentage + '% offer for product with ID:', productId);
+            
         }
 
         function removeOffer(productId) {
 
     try {
-        console.log(productId,"jkjk");
+        
         Swal.fire({
             title: 'Remove Offer',
             text: 'Are you sure you want to remove this offer?',
@@ -260,7 +259,7 @@
                         productId:productId
                     },
                     success: (response) => {
-                    console.log(response);
+                    
                     if (response.success === true) {
 
                         location.reload()

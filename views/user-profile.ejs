@@ -182,7 +182,7 @@
                                     </div>
                                     <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
                                         <div class="row">
-                                            <% console.log(userAddress,"useraaada mwone!!!!") %>
+                                            
                                             <% if(userAddress){ %>
                                             <% userAddress.Address.forEach((Address) => { %>
                                             <div class="col-lg-6">
@@ -540,7 +540,7 @@
             url: '/Add-money-to-Wallet', 
             data: formData,
             success: function(response) {
-                console.log(response);
+                
                 if (response.razorpayOrder) {
 
                     const options = {
@@ -590,7 +590,7 @@
             method: 'POST',
             data: { orderId, amount,data },
             success: function(response) {
-                console.log(response);
+                
                 if (response.success) {
 
                     var walletBalance = parseInt($("#balance").text());

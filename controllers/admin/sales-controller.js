@@ -8,15 +8,14 @@ const _ = require('lodash');
 const moment = require('moment');
 const filtersalesreport = async (req, res) => {
   try {
-    console.log(req.query.page);
+    
     const page = req.query.page || 1;
-    console.log(page, "pages");
+    
     const ordersperpage = 8;
     const timeRange = req.query.timeRange || 'yearly'; 
     const statusFilter = req.query.status || 'All'; 
     
-    console.log("Time Range Filter:", timeRange);
-    console.log("Status Filter:", statusFilter);
+
     
     
     let dateFilter = {};
@@ -50,11 +49,11 @@ const filtersalesreport = async (req, res) => {
     
       const totalNumberOfOrders = await Order.find({ Order_verified: true, $or: [{ Status: "Delivered" }], ...dateFilter }).countDocuments();
       const totalNumberOfPages = Math.ceil(totalNumberOfOrders / ordersperpage);
-      console.log("totalpage", totalNumberOfPages);
+      
 
       const validpage = Math.max(1, Math.min(page, totalNumberOfPages))
       
-      console.log("valid page", validpage);
+      
       
 
 
@@ -88,27 +87,25 @@ const filtersalesreport = async (req, res) => {
 
 const salesreport=async(req,res)=>{
   try{
-    console.log(req.query.page);
+    
     const page=req.query.page||1;
-    console.log(page,"pages");
+
     const ordersperpage=8;
     const timeRange = req.query.timeRange || 'all'; 
         const statusFilter = req.query.status || 'All'; 
     
-    console.log("Time Range Filter:", timeRange);
-    console.log("Status Filter:", statusFilter);
 
     const totalNumberOfOrders=await Order.find({Order_verified:true,$or: [
       {Status: "Delivered" },
      
   ]}).countDocuments()
     const totalNumberOfPages=Math.ceil(totalNumberOfOrders/ordersperpage)
-    console.log("totalpage",totalNumberOfPages);
+    
     const userData=await user.findOne({_id:req.session.admin})
     const productdata=await product.find({isVerified:true})
     const catdata=await Category.find({})
     const validpage=Math.min(page,totalNumberOfPages)
-    console.log("valid pag",validpage);
+    
     const orderdata = await Order.find({
       Order_verified: true,
       $or: [
@@ -116,7 +113,7 @@ const salesreport=async(req,res)=>{
       ]
   }).sort({placedon:-1}).skip((validpage - 1) * ordersperpage)
     .limit(ordersperpage);
-     console.log("orderdata",orderdata);
+     
 
       let orders = orderdata.map(order => {
          let formattedDate = order.Date;;
@@ -147,7 +144,7 @@ const salesreport=async(req,res)=>{
 }
 const salesweekly=async (req, res) => {
   try{
-  console.log("hello week ");
+  
   const statusFilter = req.query.status || '';
 
   const startOfWeek = moment().startOf('week');
@@ -196,7 +193,7 @@ catch(error)
 
 const salesmonthly=async (req, res) => {
   try{
-    console.log("hello month");
+    
   const statusFilter = req.query.status || '';
 
   const startOfMonth = moment().startOf('month');
@@ -245,7 +242,7 @@ catch(error)
 }
 const salesyearly=async (req, res) => {
   try {
-    console.log("hello yearly");
+    
   const statusFilter = req.query.status || '';
 
   const startOfYear = moment().startOf('year');
@@ -349,7 +346,7 @@ const salesAlltime = async (req, res) => {
 
 const salesdaily=async(req,res)=>{
   try{
-    console.log("hello daily");
+    
      
     const startOfDay=moment().startOf('day');
     const endOfDay=moment().endOf('day')
@@ -507,7 +504,6 @@ const revenueChart = async (req, res) => {
       data: revenueData.map(item => item.totalOrders)
     }];
 
-    console.log(labels,datasets,"revenue charts");
     res.json({ labels, datasets });
   } catch (error) {
     console.error('Error fetching revenue chart data:', error);
@@ -578,8 +574,7 @@ const ordersChart = async (req, res) => {
 const getCategoryNameById = async (categoryId) => {
   try {
     const category = await Category.findOne({_id:categoryId})
-    console.log(category,"category labels");
-    console.log(category.catName,"category name",typeof category.catName);
+
     return category.catName
   } catch (error) {
     console.error('Error fetching category:', error);
@@ -667,7 +662,6 @@ const productCountChart = async (req, res) => {
         return categoryData ? categoryData.count : 0;
       })
     }));
-    console.log(labels,datasets,"product count based category");
     res.json({ labels, datasets });
   } catch (error) {
     console.error('Error fetching product count chart data:', error);

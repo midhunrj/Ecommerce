@@ -15,11 +15,6 @@ const newCoupon = async (req, res) => {
         
         
         
-        console.log('Coupon code:', code);
-        console.log('Coupon type:', type);
-        console.log('Expiry date: ',expirydate);
-        console.log('Description:', description);
-        console.log('Amount:', amount);
      
         const coupon=new Coupon({
         Couponcode:code,

@@ -15,7 +15,7 @@ const isLogin = async (req, res, next) => {
     const admin = await getUserFromDatabase(req.session.admin);
     
     if (admin && admin.is_admin === 1) {
-      console.log('Admin here');
+      
       next();
     } else {
       res.redirect('/admin');

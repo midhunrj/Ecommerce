@@ -96,11 +96,11 @@
 
 
         cropper = new Cropper(img, {
-            // aspectRatio: 16 / 9,
+            
             viewMode: 1,
             zoomable: false,
         });
-        console.log("Cropper initialized:", cropper)
+        
     }
 
     async function cropSave() {
@@ -111,7 +111,7 @@
             
             
             const croppedCanvas = cropper.getCroppedCanvas();
-            console.log(croppedCanvas,'CROPED Img');
+        
             if (!croppedCanvas) {
                 reject("Failed to get cropped canvas");
             }
@@ -124,7 +124,7 @@
                 
                
                 const file = new File([blob], 'cropped-image.png', { type: blob.type });
-                console.log(file,'THIS IS FILE------');
+                
                 resolve(file);
             });
         });
@@ -147,7 +147,7 @@
                 body: formData,
             });
 
-            console.log(response,'THIS IS RESPONSE');
+            
             if (response.status == 200) {
                 window.location.href = '/admin/bannerlist';
             }

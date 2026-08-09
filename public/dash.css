@@ -17,7 +17,7 @@ th, td {
     }
 
 .edit {
-      background-color:green; /* Green */
+      background-color:green;
       color: white;
       padding: 8px;
       text-align: center;
@@ -27,7 +27,7 @@ th, td {
     }
 
     .delete {
-      background-color: red; /* Red */
+      background-color: red; 
       color: white;
       padding: 8px;
       text-align: center;

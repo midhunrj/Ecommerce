@@ -166,7 +166,7 @@
                                             <% if(products[i]&&products[i]._id){ %>
                                                 <% var x=0 %>
                                                
-                                                <% console.log("Cartpage") %>
+                                                
                                             <tr>
                                                 <td class="image product-thumbnail"><img src="./productImage/<%= products[i].image[0] %>" alt="#"></td>
                                                 <td class="product-des product-name">
@@ -183,7 +183,7 @@
                                                <input class="qty-val" id="cartProductQuantity<%= i %>" value="<%= cartdata[i].quantity %>" style="width: 45px;" type="text" readonly value="">
                                               <button class="btn btn-sm increment-button" data-product-index="<%= i %>" onclick="updateQuantity('<%= cartdata[i].product_id %>','<%= cartdata[i].quantity %>','1','<%= cartdata[i].price %>','<%= i %>','<%= products[i].stock %>')">+</button>
 
-                                                       <% console.log("value of i",i); %>     
+                                                       
                                                         <% } %>
                                                     </div>
                                                 </td>
@@ -198,14 +198,14 @@
         </td>
         
                                             </tr>
-                                            <% console.log(cartdata[i].price * cartdata[i].quantity,"qqqq"); %>
+                                            
 
                                             <%  x +=cartdata[i].price * cartdata[i].quantity%>
                                         <% } %>
                                         <% }  %>
                                        
                          
-                                  <% console.log(x,"xxx"); %>
+                                  
 
                                                         <input type="hidden" name="" id="totalabc" value="<%= x  %>">
                                                     </tbody>
@@ -278,28 +278,23 @@
            
 
             const abc = document.getElementById("totalabc").value
-            console.log(abc, "hi");
-            console.log(productId, cartQuantity, count, productPrice, i, productQuantity);
+
             const cartProductQuantityElement = document.querySelector(`#cartProductQuantity${i}`)
             
-            console.log(cartProductQuantityElement);
-          console.log(cartProductQuantityElement.value);
+
              
             let subtotalElement = document.querySelector(`#subTotal${i}`);
-            console.log(subtotalElement,"subbbbbbb");
+            
              
-             console.log(productPrice);
+        
              
           
 
             let currentQuantity = parseInt(cartProductQuantityElement.value)
-            console.log("currentQuantity",currentQuantity);
+            
             
             let currentSubTotal = parseFloat(subtotalElement.innerText);
 
-            console.log("currentSubtotal",currentSubTotal);
-        
-             console.log("hello");
             
             if(isNaN(currentQuantity))
             {
@@ -318,7 +313,6 @@
 
 const newQuantity = currentQuantity + countAsNumber;
 
-console.log("cipher",newQuantity);
     
     if (newQuantity <= 0) {
         Swal.fire({
@@ -379,11 +373,11 @@ console.log("cipher",newQuantity);
            
             document.getElementById(`subTotal${i}`).innerText = ` ₹${newSubtotal.toFixed(2)}`;
         }
-        console.log("newSubtotal",newSubtotal);
+        
 
         totalSubtotal += newSubtotal;
         const totalElements = document.getElementById('total').innerHTML;
-        console.log("totalsubtotal",totalSubtotal);
+        
              
             $.ajax({
     url: '/updateQuantity',
@@ -393,15 +387,15 @@ console.log("cipher",newQuantity);
         count: count
     },
     success: (response) => {
-        console.log(response,"reSSSS");
+        
        
 
         currentQuantity = parseInt(cartProductQuantityElement.value);
         
-        console.log(currentQuantity, 'currQua');
+        
         currentSubTotal =(subtotalElement.innerText);
         
-        console.log(currentSubTotal, 'subttl');
+        
         
         document.getElementById(`cartProductQuantity${i}`).value = currentQuantity + parseInt(count);
 
@@ -414,7 +408,7 @@ console.log("cipher",newQuantity);
             
             document.getElementById(`subTotal${i}`).innerText = ` ₹${newSubtotal.toFixed(2)}`;
         }
-        console.log("newSubtotal",newSubtotal);
+        
 
         
         totalSubtotal += newSubtotal;
@@ -424,9 +418,15 @@ console.log("cipher",newQuantity);
          document.getElementById('totalPrice').innerHTML=response.tot;
         
     },
-    error: (error) => {
-        // alert(error)
-    }
+error: (xhr, status, error) => {
+    console.error("Failed to update cart quantity:", error);
+
+    Swal.fire(
+        "Error!",
+        "Unable to update the cart. Please try again.",
+        "error"
+    );
+}
 });
         }
 </script>
@@ -437,7 +437,7 @@ function handleDelete(event) {
     
     
     const url = event.currentTarget.getAttribute('href'); 
-    console.log("url", url);
+    
 
     Swal.fire({
         title: "Are you sure?",

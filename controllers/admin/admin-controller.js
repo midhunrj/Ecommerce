@@ -28,8 +28,8 @@ const securepassword = async (password) => {
 
 const loginload = async (req, res) => {
   try {
-    // res.setHeader("Cache-Control","no-store ,max-age=0")
-    console.log("Admin login page")
+
+
 
     if(req.session.admin) {
       res.redirect('/admin/home')
@@ -38,45 +38,34 @@ const loginload = async (req, res) => {
 
     res.render('login', { title: "login page" })
 
-    console.log("hey i am going")
  } } catch (error) {
     console.log(error.message);
   }
 }
 
 const verifyLogin = async (req, res) => {
-  console.log('adminnnnnn');
+  
   try {
 
     const Email = req.body.email
 
     const password = req.body.password
 
-    console.log(Email,"email")
+    
 
     const userdata = await user.findOne({email:Email})
 
-    console.log(userdata)
+    
 
     if (userdata) {
-      console.log("mir")
-
-
-      console.log('joi')
-
       if (password===userdata.password && userdata.is_admin === 1) {
 
-        console.log('admin')
+        
 
         req.session.admin = userdata._id
-
-        console.log("admin id",req.session.admin)
-
-        console.log("hi")
         
         res.redirect('/admin/home')
 
-        console.log('jk')
       }
       else if (password !== userdata.password) {
 
@@ -261,10 +250,10 @@ const loadhomepage = async (req, res) => {
 };
 const logout = async (req, res) => {
   try {
-    console.log("ENTER TO LOGOUT");
-    console.log(req.session.admin,"IDD");
+
+
     req.session.admin=null;
-    console.log(req.session.admin,"iidddd");
+
     res.redirect('/admin/');
   } catch (error) {
     console.log(error.message);
@@ -320,7 +309,7 @@ const securePassword = async (password) => {
 
 const updateUserBlockStatus=async(req,res)=>{
   try {
-    console.log("juro block/unblcok")
+
     const {id,block}=req.body
     const userData=await user.findById(id)
     if(block)
@@ -340,7 +329,7 @@ const updateUserBlockStatus=async(req,res)=>{
 }
 const blockUser = async (req, res) => {
   try {
-    console.log("enteeeeeeeeeeeeeeeeeeeeer");
+
     const userId = req.query.id;
 
     const userData = await user.findOne({ _id: userId });
@@ -363,7 +352,7 @@ const blockUser = async (req, res) => {
 
 const unblockUser = async (req, res) => {
   try {
-    console.log("mreshhjggjgg");
+
     const userId = req.query.id;
 
     const userData = await user.findOne({ _id: userId });
@@ -391,7 +380,7 @@ const unblockUser = async (req, res) => {
 
 const Orderlistpage = async (req, res) => {
   try {
-    console.log(req.query.page,"current page");
+    
     const page = req.query.page || 1;
     const ordersPerPage = 5; 
 
@@ -406,7 +395,6 @@ const Orderlistpage = async (req, res) => {
       .limit(ordersPerPage).sort({placedon:-1});
       const userdata=await user.find({is_admin:0})
     
-      console.log("orderlist dta",orderData);
       let orders = orderData.map(order => {
           let formattedDate = order.Date;;
         
@@ -447,7 +435,7 @@ const orderdetails=async(req,res)=>{
     const productIds = orderData.products.map(product => product.product);
     const productdata = await product.find({ _id: { $in: productIds } });
     res.render('admin-order-details',{users:userdata,orders:orderData,products:productdata})
-    console.log("productdata",productdata);
+    
     
   }
   catch (error) {
@@ -470,7 +458,7 @@ const ordertracking=async(req,res)=>{
 const updateorderstatus = async (req, res) => {
   try {
       const { orderID, newStatus } = req.body;
-      console.log("orderID", orderID, "\n newStatus", newStatus);
+
 
       
       const updatedOrder = await Order.findOneAndUpdate({ _id: orderID }, { Status: newStatus }, { new: true });
@@ -481,16 +469,14 @@ const updateorderstatus = async (req, res) => {
           for (const productItem of updatedOrder.products) {
               const productId = productItem.product;
               const quantity = productItem.quantity;
-              console.log("updatedorder",updatedOrder);
-
               
               const Product = await product.findById(productId);
-            console.log("products restroe time aagaya",Product);
+
               
               if (Product) {
                   Product.stock += quantity; 
                   await Product.save();
-                  console.log("products after restoring\n ratatata !!!! ratattaaatata",Product);
+
               }
           }
 
@@ -586,7 +572,7 @@ const downloadpdf = async (req, res) => {
         Status:"Delivered"
       }
     }
-    console.log('Filter:', filter)
+    
     const orderdata = await Order.find(
       filter)
 
@@ -673,7 +659,7 @@ const downloadExcel=async(req,res)=>{
     {
       filter={Status:"Delivered"}
     }
-    console.log('Filter:', filter)
+    
     const orderdata = await Order.find(
       filter)
 
@@ -714,7 +700,7 @@ const Addproductoffer = async (req, res) => {
   try {
     const productid = req.body.productId;
     const Offer = req.body.offerPercentage;
-    console.log(Offer, "offer");
+  
     if (Offer > 90) {
       return res.json({ success: false, message: "Product offer should be applied below 90" });
     }
@@ -724,7 +710,7 @@ const Addproductoffer = async (req, res) => {
     productdata.originalprice = originalprice;
     productdata.price -= Math.floor(productdata.price * (Offer / 100));
     await productdata.save();
-    console.log(productdata, "productdata");
+    
     return res.json({ success: true });
   } catch (error) {
     console.log(error.message);
@@ -735,13 +721,13 @@ const Addproductoffer = async (req, res) => {
 const removeproductoffer = async (req, res) => {
   try {
     const productid = req.body.productId;
-    console.log(productid, "id from backend");
+    
     const productdata = await product.findOne({ _id: productid });
-    console.log(productdata, "productdata");
+    
     productdata.offer = 0;
     const originalprice = productdata.originalprice; 
     productdata.price = originalprice; 
-    console.log(productdata.price, "djshfsdjf");
+    
     await productdata.save();
     return res.json({ success: true });
   } catch (error) {

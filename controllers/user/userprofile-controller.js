@@ -33,12 +33,12 @@ const getprofilepage=async(req,res)=>{
  
     const totalCount = await Order.countDocuments({ userId: Id });
     const cartData=await Cart.aggregate([{$match:{user_id:req.session.user}},{$unwind:"$cartItems"},{$group:{_id:null,count:{"$sum":"$cartItems.quantity"}}}])
-  console.log(cartData[0]?.count);
+
   
   if(cartData.length>0)
   {
      count=cartData[0].count
-     console.log(count,'countcart')
+    
   }
   else
   {
@@ -74,14 +74,14 @@ const edituserprofile = async (req, res) => {
     try {
 
         const userId = req.query.id;
-console.log(req.body,"user profile update",req.file)
+
 
         
         const { name, email, mobile } = req.body;
 
 
         const croppedProfileImageData = req.file;
-        console.log("=====>",croppedProfileImageData)
+        
 
         
         await User.findByIdAndUpdate(userId, {
@@ -108,7 +108,7 @@ const editpassword=async(req,res)=>{
             let wishcount=req.session.wishcount
             res.render("edit-password",{message1:'',message:"",users:userdata,username:userdata.username,count,wishcount})
         }
-        console.log("user id",userdata._id);
+        
     }
     catch(error)
     {
@@ -118,14 +118,13 @@ const editpassword=async(req,res)=>{
 const changepassword = async (req, res) => {
     try {
         const Userid = req.query.id;
-        console.log("change pswd user id",Userid);
+    
         const data = req.body;
         const newpassword=await bcrypt.hash(data.newpassword,10)
         const confirmpassword=newpassword
         let count=req.session.count
         const userdata = await User.findOne({_id:Userid});
-   console.log("userdata",userdata);
-       console.log(data,"passwords");
+
        let wishcount=req.session.wishcount
             if(data.password!==userdata.password)
             {
@@ -223,13 +222,13 @@ const editaddress=async(req,res)=>{
    try{
     const addressId=req.query.id
     const UserId=req.session.user
-    console.log("hl",addressId);
+
     const Addressdata = await Address.findOne(
         { 'Address._id': addressId },
         { 'Address.$': 1 }
       );
     const userdata=await User.findOne({_id:UserId})
-    console.log("this is ",Addressdata)
+    
     let wishcount=req.session.wishcount
     let count=req.session.count
     res.render('edit-address',{userAddress:Addressdata,username:userdata.username,count,wishcount})
@@ -243,7 +242,7 @@ catch(error)
  const updateaddress = async (req, res) => {
         try {
             const addressid = req.query.id;
-            console.log("query is", addressid);
+            
     
          const Addressdata = await Address.findOneAndUpdate(
             { 'Address._id': addressid },
@@ -263,7 +262,7 @@ catch(error)
                 { new: true }
             );
     
-            console.log("Updated Address data:", Addressdata);
+            
     
             res.redirect('/profile#address');
         } catch (error) {
@@ -274,12 +273,12 @@ catch(error)
     
     const deleteaddress = async (req, res) => {
         try {
-          console.log("entering ")
+        
           const addressid = req.query.id;
-          console.log("this is id",addressid);
+          
           
          const findAddress= await Address.findOne({ 'Address._id': addressid })
-         console.log("my deleting address",findAddress);
+         
          await Address.updateOne({ 'Address._id': addressid },
           {
             $pull:{
@@ -288,7 +287,7 @@ catch(error)
             }
           }
         });
-          console.log("deleting address",findAddress);
+          
           res.redirect("/profile");
         } catch (error) {
           console.error("Error in deleteCategory:", error.message);
@@ -311,7 +310,7 @@ catch(error)
           const productdata = await Product.find({ _id: { $in: productIds } });
           let count=req.session.count
           res.render('user-orderdetails',{users:userdata,username:Userpro.username,orders:orderData,products:productdata,userAddress:Addressdata,count,wishcount,search:req.query.search})
-          console.log("productdata",productdata);
+          
           
         }
         catch (error) {
@@ -337,7 +336,7 @@ catch(error)
         try {
             const { orderID, newStatus } = req.body;
             const Userid=req.session.user
-            console.log("orderID", orderID, "\n newStatus", newStatus);
+            
     
             const userdata=await User.findOne({_id:Userid})
             const updatedOrder = await Order.findOneAndUpdate({ _id: orderID }, { Status: newStatus }, { new: true });
@@ -346,9 +345,7 @@ catch(error)
             if (newStatus === 'Cancelled') {
                 if(updatedOrder.payment=="Online"||updatedOrder.payment=="Wallet")
                 {
-                    console.log("hello it is userdata from refunding",userdata);
-
-                    console.log("hello it is updatedorder data from refunding",updatedOrder);
+    
                    
                   userdata.wallet+=updatedOrder.Totalprice
                   updatedOrder.paymentstatus="refunded"
@@ -370,16 +367,16 @@ catch(error)
                 for (const productItem of updatedOrder.products) {
                     const productId = productItem.product;
                     const quantity = productItem.quantity;
-                    console.log("updatedorder",updatedOrder);
+            
     
                     
                     const product = await Product.findById(productId);
-                  console.log("products restroe time aagaya",product);
+                  
                     
                     if (product) {
                         product.stock += quantity; 
                         await product.save();
-                        console.log("products after restoring\n ratatata !!!! ratattaaatata",product);
+                        
                     }
                 }
             }
@@ -396,8 +393,7 @@ catch(error)
             const orderId = req.params.orderId;
 
             const order = await Order.findById(orderId).populate('products.product');
-    console.log("download",order);
-    console.log("order produt",order.products[0].product);
+
             if (!order) {
                 return res.status(404).send('Order not found');
             }
@@ -473,7 +469,7 @@ catch(error)
     const Addwallet=async(req,res)=>{
         try{
         const amount=req.body.amount;
-        console.log("amount to add wallet",amount);
+        
         const user=req.session.user;
         const userdata=await User.findOne({_id:user})
         if(!userdata){
@@ -511,16 +507,16 @@ const generateOrderRazorpay = (amount) => {
 
 const verifyPayment = async (req, res) => {
     try {
-        console.log("Req.body ==>", req.body);
+        
         const { orderId, data } = req.body;
         const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = data;
         const text = `${razorpay_order_id}|${razorpay_payment_id}`;
-        console.log(text);
+    
         
         const hmac = crypto.createHmac("sha256", instance.key_secret);
         hmac.update(text);
         const generatedSignature = hmac.digest('hex');
-        console.log("Generated Signature:", generatedSignature);
+        
         
         if (generatedSignature === razorpay_signature) {
 

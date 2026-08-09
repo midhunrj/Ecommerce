@@ -12,14 +12,14 @@ user_route.use(
         saveUninitialized: true,
         resave: false,
     }));
-console.log("ygyujguj");
+
 user_route.use(express.static('public'));
 const auth=require('../Middleware/Auth')
 user_route.set('view engine', 'ejs');
 user_route.set('views', './views');
 
 const upload = require("../Multer/multer");
-///user_route.use(upload.array("image", 4))
+
 
 const userController = require('../controllers/user/user-controller');
 const ProfileController=require('../controllers/user/userprofile-controller')
@@ -27,9 +27,6 @@ const CartController=require('../controllers/user/Cart-controller')
 const OrderController=require('../controllers/user/order-controller')
 const wishlistController=require("../controllers/user/wishlist-controller")
 
-console.log("sdfsf");
-
-console.log("sdshhjhjh");
 user_route.get('/signup',userController.signuppage);
 
 
@@ -42,7 +39,7 @@ user_route.post('/forget-password',userController.Forget)
 user_route.get('/forget-password-load',userController.forgetpasswordload)
 user_route.post('/reset-password',userController.resetpassword)
 
-console.log("giraffe");
+
 
 user_route.post('/verify-login',userController.verifyLogin);
 

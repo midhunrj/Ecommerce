@@ -38,7 +38,7 @@ secure: false,
     },
   })
 const securepassword = async (password) => {
-    console.log("hhhhgg");
+    
     try {
         const passwordHash = await bcrypt.hash(password, 10);
         return passwordHash;
@@ -48,7 +48,7 @@ const securepassword = async (password) => {
 }
 
 const sendresetpasswordmail=async(username,email,_id,token)=>{
-  console.log("user-",username,"email-",email,"\nid-",_id,"\n token-",token);
+
   const mailOptions = {
     from: 'mdnrj3600@gmail.com',
     to: email,
@@ -59,13 +59,11 @@ const sendresetpasswordmail=async(username,email,_id,token)=>{
   await transporter.sendMail(mailOptions);
 }
 
-console.log("midhun");
 
 const Loginload = async (req, res) => {
-    console.log("desw");
+    
     try {
-        console.log("kli");
-        console.log("yhfggf");
+
         if(req.session.user)
         {
           res.redirect('/home')
@@ -89,28 +87,24 @@ const verifyLogin = async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
      
-    console.log(email);
-    console.log(password);
-    console.log("I am here");
+
 
     const userdata = await user.findOne({email });
-    console.log(userdata);
+    
 
     if (userdata) {
       const passwordmatch = await bcrypt.compare(password,userdata.password);
-      console.log(passwordmatch,'passwordmatch\n',password,'password\n',userdata.password,"userdata.password");
-     
-     
+          
       if ((passwordmatch||password===userdata.password)&&userdata.is_admin === 0 && userdata.is_blocked === 0) {
-        console.log('User before referalcode',userdata.referalCode);
+        
         if (!userdata.referalCode) {
          
          userdata.referalCode = crypto.randomBytes(5).toString('hex'); 
-         console.log(userdata.referalCode,"before saving referal code");
+
           
          try {
             await userdata.save(); 
-            console.log(`Generated referral code: ${userdata.referalCode}`);
+
           } catch (err) {
             console.error("Error saving referral code:", err.message);
           }
@@ -119,17 +113,17 @@ const verifyLogin = async (req, res) => {
         req.session.user = userdata._id;
         res.redirect('/home');
       } else if ((passwordmatch||password===userdata.password) && userdata.is_admin === 0 && userdata.is_blocked===1) {
-        console.log("Blocked");
+        
         return res.render('Loginpage', { alert: "Your account is blocked" });
       
       } else if(password!==userdata.password||!passwordmatch) {
-        console.log("Invalid password or user");
+        
         return res.render('Loginpage', { alert: "Invalid password" });
       }else if (password===userdata.password&&userdata.is_admin === 1) {
         return res.render('Loginpage', { alert: "Invalid user" });
     }} 
     else {
-      console.log("User not found");
+      
       res.render('Loginpage', { alert: "Invalid user details " });
     }
   } catch (error) {
@@ -171,7 +165,7 @@ const Otppage = async (req, res) => {
 
     
 const insertUser = async (req, res) => {
-    console.log(req.body)
+    
     const {username,email,phone,password,confirmPassword,referalCode}=req.body
     try {
     
@@ -190,7 +184,7 @@ const insertUser = async (req, res) => {
         
         const otp = generateOTP();
          const otpexpire=currentDate.getTime()+20000
-        console.log(otpexpire);
+        
        
         const generatereferalCode = () => Math.random().toString(36).substring(2, 10).toUpperCase();
         const newreferalCode = generatereferalCode();
@@ -229,7 +223,6 @@ const insertUser = async (req, res) => {
     otp,referalCode:newreferalCode,
   referalUserId:referalUser?referalUser._id:null}
 
-  console.log(req.session.tempdata,"tempdata")
       res.render('Otp',{title:"signup page"})
     
     }
@@ -247,14 +240,13 @@ const VerifyOtp= async (req, res) => {
   
     try {
       const otpinput=currentDate.getTime()
-  console.log(otpinput);
-  console.log(req.body);
+
     const enteredOTP = req.body.otp;
-    console.log("entered value is",enteredOTP);
+    
       
       const {username,email,phone,hashpassword,is_admin,
         isVerified,otp,referalCode,referalUserId}=req.session.tempdata
-        console.log(email);
+        
 
         const newuser = await user.findOne({email:email});
     
@@ -287,15 +279,14 @@ const VerifyOtp= async (req, res) => {
         })
       
         const otpexpire=currentDate.getTime()+20000
-        console.log(otpexpire)
-        console.log("user is",User.otp);
-        console.log("Entered is",enteredOTP);
+        
+
       
       if (enteredOTP==User.otp) {
         
           User.isVerified =true;
       await User.save();
-      console.log("heroooo");
+      
       req.session.message='user saved successfuly'
       res.redirect('/login')
       
@@ -304,7 +295,7 @@ const VerifyOtp= async (req, res) => {
       
       else if(enteredOTP!=User.otp)
       {
-        console.log("headache is");
+
         res.render('Otp',{message:"Invalid OTP"})
       }
       else {
@@ -329,22 +320,22 @@ const Forgetload=async(req,res)=>{
  const Forget=async(req,res)=>{
   try {
      const email=req.body.email;
-     console.log("forg");
+     
      const userData=await user.findOne({email:email})
-     console.log("for");
+    
      if(userData)
      {
-      console.log("piare");
+      
       if(userData.isVerified===false)
       {
-        console.log("myself");
+        
         res.render('forgetpassword',{message:"please verify your mail"})
       }
       else{
-        console.log("miare");
+      
         const randomstring=randomString.generate()
         const updatedData=await user.findOneAndUpdate({email:email},{$set:{token:randomstring}},{new:true})
-        console.log(updatedData,"djdjjd");
+        
         sendresetpasswordmail(userData.username,userData.email,userData._id,updatedData.token)
         res.render('forgetpassword',{message:"please check your mail to reset password"})
       }
@@ -365,7 +356,7 @@ console.log(error.message)
   try{
     const token=req.query.token
     const tokendata=await user.findOne({token:token})
-    console.log(tokendata);
+    
     if(tokendata)
     {
       res.render('reset-password',{_id:tokendata._id})
@@ -391,7 +382,7 @@ try{
     if (req.session.user)
     {
  userData = await user.findOne({_id: req.session.user })
-console.log("user",userData);
+
 
   req.session.user?true:false;
    count=0;
@@ -400,38 +391,37 @@ console.log("user",userData);
     { $group: { _id: null, wishcount: { $sum: { $size: "$wishlist" } } } }
 ]);
 
-console.log(wishlistdata[0]?.wishcount,"wishdata");
 
  req.session.wishcount=wishlistdata[0]?.wishcount
  wishcount=req.session.wishcount
   const cartdata=await Cart.aggregate([{$match:{user_id:req.session.user}},{$unwind:"$cartItems"},{$group:{_id:null,count:{"$sum":"$cartItems.quantity"}}}])
-  console.log(cartdata[0]?.count);
+  
   
   if(cartdata.length>0)
   {
      count=cartdata[0].count
-     console.log(count,'countcart')
+     
   }
   else
   {
     count=0
   }  
   req.session.count=count
-  console.log(req.session.count,"req session");
+
   
    count=req.session.count
     const carts=await Cart.find({user_id:req.session.user}).populate('cartItems.product_id')
-    console.log("========>",carts)
+    
     carts.forEach(cart => {
       cart.cartItems.forEach(cartItem => {
-          console.log(cartItem.product_id.productname);
+
       });
   });
 }
 const productData=await product.find({isVerified:true})
 const CategoryData=await Category.find({})
   const bannerdata=await banner.find({status:"active"})
-  console.log(bannerdata);
+
   res.render('userhome',{username:userData?.username??null,products:productData,category:CategoryData,count,wishcount,cart:carts,banners:bannerdata})
   
 
@@ -455,7 +445,7 @@ const resetpassword=async(req,res)=>{
     
     const password=req.body.password
     const cpassword=req.body.cpassword
-    console.log(password);
+    
     if(cpassword!=password)
     {
       res.render('reset-password',{message:'two passwords are not matching'})
@@ -506,7 +496,7 @@ const logRedirect = async (req, res) => {
 }
 const userLogout = async (req, res) => {
     try {
-      console.log(req.session.user,'ytftytfytfy');
+
         req.session.user=null
         res.redirect('/login');
 
@@ -520,7 +510,7 @@ const productdetails=async(req,res)=>{
     const User=req.session.user
     const Userid=req.query.id
     const productData=await product.findOne({_id:Userid})
-    console.log(productData);
+    
     const userdata=await user.findOne({_id:User})
     const CategoryData=await Category.find({})
     if(productData)
@@ -528,7 +518,7 @@ const productdetails=async(req,res)=>{
       let count=req.session.count
 
       const cartdata=await Cart.aggregate([{$match:{user_id:req.session.user}},{$unwind:"$cartItems"},{$group:{_id:null,count:{"$sum":"$cartItems.quantity"}}}])
-      console.log(cartdata[0]?.count);
+      
       
       if(cartdata.length>0)
       {
@@ -570,9 +560,9 @@ const shoppage = async (req, res) => {
     
     const sortCategory = req.query.category;
     if (sortCategory) {
-      console.log("hello guys");
+      
       productQuery.Category = sortCategory;
-      console.log(productQuery.Category,"jum jum barabar");
+
     }
 
     
@@ -613,7 +603,7 @@ const shoppage = async (req, res) => {
    let count=0;
 
    const cartdata=await Cart.aggregate([{$match:{user_id:req.session.user}},{$unwind:"$cartItems"},{$group:{_id:null,count:{"$sum":"$cartItems.quantity"}}}])
-   console.log(cartdata[0]?.count);
+   
    
    if(cartdata.length>0)
    {
@@ -681,7 +671,7 @@ const applycoupon = async (req, res) => {
   try {
     const { coupon, totalSubtotal } = req.body;
     const userId = req.session.user;
-    console.log(req.body,"req body");
+    
     
      req.session.coupon=coupon
 

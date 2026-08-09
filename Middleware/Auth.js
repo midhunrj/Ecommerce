@@ -24,7 +24,7 @@ const isLogin = async (req, res, next) => {
       return res.status(401).json({ success: false, message: "You must login" });
   }
     if (user && user.is_admin === 0) {
-      console.log('User here');
+      
       next();
     } else {
       res.redirect('/login');

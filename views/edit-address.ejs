@@ -1,6 +1,6 @@
 <%- include("./layouts/user-header.ejs") %>
 <div class="container mt-4">
-    <% console.log(userAddress.Address._id); %>
+    
     <form id="editAddressForm" method="post" action="/edit-Address?id=<%= userAddress.Address[0]._id %>" onsubmit="return validateForm()" >
         <div class="row">
             <div class="col-md-6">

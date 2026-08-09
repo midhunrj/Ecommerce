@@ -22,7 +22,6 @@ header-top header-top-ptb-1 d-none d-lg-block {
 
 .home-slider {
     margin-top:20px;
-    /* height: 100vh; */
     overflow: hidden;
     position: relative;
 }
@@ -38,7 +37,6 @@ header-top header-top-ptb-1 d-none d-lg-block {
 
 
 .single-hero-slider .row {
-    /* height: 100%; */
     position: relative;
     z-index: 2;
 }
@@ -724,7 +722,7 @@ header-top header-top-ptb-1 d-none d-lg-block {
             <div id="carousel" class="hero-slider-1 dot-style-1 dot-style-1-position-1">
                 <% const reversedbanners=banners.reverse().slice(0,4) %>
                 <% reversedbanners.forEach((banner, index) => { %>
-                    <% console.log(banner,"");
+                
                      %>
                 <div class="single-hero-slider single-animation-wrap">
                     <div class="container-fluid p-0">
@@ -857,16 +855,16 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                                 <div class="product-price">
                                                     <% if(category&&category.length>0){ %>
                                                         <% for(let j=0; j<category.length; j++){ %>
-                                                            <% console.log(category[j]._id); %>
+                                                            
                                                             <% if(products[i].Category.toString() === category[j]._id.toString()){ %>
-                                                                <% console.log("before offer discounted", category[j].offer); %>
+                                                               
                                                 <% let productprice=products[i].price %>
                                                 <% let productoffer=products[i].offer %>
                                                 <% let categoryoffer=category[j].offer %>
                                                 <% if(category[j].offer > 0|| products[i].offer>0){ %>
                                                     <% let originalPrice = Math.floor(productprice / (1 - categoryoffer+productoffer / 100)); %>
 
-                                                    <% console.log("original price", originalPrice); %>
+                                                    
                                                     <div class="price mb-2">
                                                         <span>&#8377;<%= products[i].price %></span>
                                                         <span class="old-price">&#8377;<%= products[i].originalprice %></span>
@@ -950,16 +948,16 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                                     <div class="product-price">
                                                         <% if(category&&category.length>0){ %>
                                                             <% for(let j=0; j<category.length; j++){ %>
-                                                                <% console.log(category[j]._id); %>
+                                                                
                                                                 <% if(products[i].Category.toString() === category[j]._id.toString()){ %>
-                                                                    <% console.log("before offer discounted", category[j].offer); %>
+                                                                   
                                                     <% let productprice=products[i].price %>
                                                     <% let productoffer=products[i].offer %>
                                                     <% let categoryoffer=category[j].offer %>
                                                     <% if(category[j].offer > 0|| products[i].offer>0){ %>
                                                         <% let originalPrice = Math.floor(productprice / (1 - categoryoffer+productoffer / 100)); %>
     
-                                                        <% console.log("original price", originalPrice); %>
+                                                        
                                                         <div class="price mb-2">
                                                             <span>&#8377;<%= products[i].price %></span>
                                                             <span class="old-price">&#8377;<%= products[i].originalprice %></span>
@@ -1043,16 +1041,16 @@ header-top header-top-ptb-1 d-none d-lg-block {
                                             <div class="product-price">
                                                 <% if(category&&category.length>0){ %>
                                                     <% for(let j=0; j<category.length; j++){ %>
-                                                        <% console.log(category[j]._id); %>
+                                                        
                                                         <% if(products[i].Category.toString() === category[j]._id.toString()){ %>
-                                                            <% console.log("before offer discounted", category[j].offer); %>
+                                                            
                                             <% let productprice=products[i].price %>
                                             <% let productoffer=products[i].offer %>
                                             <% let categoryoffer=category[j].offer %>
                                             <% if(category[j].offer > 0|| products[i].offer>0){ %>
                                                 <% let originalPrice = Math.floor(productprice / (1 - categoryoffer+productoffer / 100)); %>
 
-                                                <% console.log("original price", originalPrice); %>
+                                                
                                                 <div class="price mb-2">
                                                     <span>&#8377;<%= products[i].price %></span>
                                                     <span class="old-price">&#8377;<%= products[i].originalprice %></span>
@@ -1295,7 +1293,7 @@ header-top header-top-ptb-1 d-none d-lg-block {
             method:"POST",
             data:{productId},
             success:(response)=>{
-                console.log(response);
+            
                 if (response.green)
                 {
                 Swal.fire({
@@ -1344,14 +1342,14 @@ Swal.fire({
 
 <script>
 function addToCart(productId) {
-    console.log("Product ID:", productId);
+    
 
     $.ajax({
         url: '/Add-cart',
         method: 'POST',
         data: { productId: productId },  
     success: (response) => {
-        console.log(response);
+        
         if (response.success) {
             
             Swal.fire({

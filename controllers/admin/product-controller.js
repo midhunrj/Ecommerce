@@ -94,36 +94,30 @@ const loadEditProduct = async (req, res) => {
 const deleteSingleImage = async (req, res) => {
   try {
     const { productId, filename } = req.body;
-    console.log("this is pro", productId, "\nthis is file", filename);
-    console.log("gingika");
 
     const products = await product.findById(productId);
 
-    console.log("plinch");
+    
     if (!products) {
       return res
         .status(404)
         .json({ success: false, error: "Product not found" });
     }
 
-    console.log("hello guys");
     const imageIndex = products.image.findIndex(
       (img) => img === filename
     );
 
-    console.log("image index is here", imageIndex);
     if (imageIndex === -1) {
       return res
         .status(404)
         .json({ success: false, error: "Image not found in the product" });
     }
 
-    console.log("hl my friend");
     products.image.splice(imageIndex, 1);
 
     await products.save();
 
-    console.log("fly high");
     const filePath = `public/productImage/${filename}`;
 
 
@@ -135,7 +129,6 @@ const deleteSingleImage = async (req, res) => {
             .status(500)
             .json({ success: false, error: "Error deleting file" });
         }
-        console.log("jigarthanda");
         return res
           .status(200)
           .json({ success: true, message: "Image deleted successfully" });
@@ -154,7 +147,7 @@ const deleteSingleImage = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   try {
-    console.log("entering");
+    
     const id = req.query.id;
     const result = await product.updateOne({ _id: id },{$set:{isVerified:false}});
 
@@ -168,13 +161,11 @@ const deleteProduct = async (req, res) => {
 
 const updateProducts = async (req, res) => {
   try {
-    console.log(req.body); 
-    console.log(req.file);
-    console.log("Entering updateProducts");
+    
+    
     const _id = req.body.id;
     
 
-    console.log("Product ID:", _id);
 
     const {
       productname,
@@ -183,17 +174,15 @@ const updateProducts = async (req, res) => {
       Price,
       Size,
     } = req.body;
-    console.log("Request Body:", req.body);
 
-    console.log(req.files);
+
+  
     const images = req.files
-    console.log("Image Details:", images);
+
 
     let imageArray = [];
 
     if (images) {
-      console.log("Image file entered");
-
 
       imageArray =  req.files.map(file => file.filename);
     }

@@ -10,20 +10,18 @@ const instance=new Razorpay({
     key_secret:process.env.Razorsecret_key
 })
 
-console.log(instance.key_secret,"key_secret");
 
 const orderplaced = async (req, res) => {
     try {
-        console.log("hello");
+
         const userId = req.session.user;
         const coupon=req.body.coupon
-        console.log(coupon,"coupon");
+        
         const paymentOption = req.body.paymentoption;
-        console.log("paymentoption", paymentOption);
         const addressId = req.body.addressId;
-        console.log("addressid", addressId);
+        
         const totalprice=req.body.subtotal;
-        console.log(("Total price",totalprice));
+        
 
 
 const userCart = await Cart.findOne({ user_id: userId });
@@ -41,16 +39,16 @@ if (userCart) {
     }));
     for(let i=0;i<products.length;i++)
     {
-        console.log("product id", products[i].product)
+        
         const prodid= products[i].product
         const proquanty=products[i].quantity
         const productdata=await Product.findOne({_id:prodid})
-              console.log("products data",productdata);
+            
                 if(productdata.stock>=proquanty)
                 {
                     productdata.stock -=proquanty
                     await productdata.save()
-                    console.log("updated product details",productdata);
+
                 }
     }
 
@@ -91,7 +89,7 @@ if (userCart) {
                 });           
         if(paymentOption=="COD"){
       
-            console.log("orderDetails", newOrder);
+            
                 const orderData = await newOrder.save();
                  
 
@@ -108,11 +106,10 @@ if (userCart) {
         }}
         else if(paymentOption === "Wallet")
         {
-            console.log(userdata.wallet,"walet");
-            console.log('total',totalprice)
+
                if(totalprice>userdata.wallet)
                {
-                console.log('entered error wllet')
+                
                  res.json({ jibo:"ben", message: 'Insufficient wallet balance',method:"Wallet" });
                }
                else 
@@ -127,7 +124,7 @@ if (userCart) {
 
                   })
                 await userdata.save()
-                console.log("orderDetails", newOrder);
+                
                 const orderData = await newOrder.save();
                  
 
@@ -148,19 +145,13 @@ if (userCart) {
         else if(paymentOption=="Online")
         {
             
-            console.log(process.env.RAZORPAY_ID_KEY,"jumboes");
-            console.log(process.env.Razorsecret_key,"juyrew");
-            console.log(newOrder._id,"jor");
-            console.log(newOrder.Totalprice,"siuy");
-            console.log(Order._id,"uhg");
-            console.log(Order.Totalprice,"lo",Order.totalprice);
+
             const generatedOrder = await generateOrderRazorpay(
                 newOrder._id,
                 newOrder.Totalprice
 
         )
-        console.log("order generate",generatedOrder);
-        console.log("orderDetails", newOrder);
+
         const orderData = await newOrder.save();
          
 
@@ -192,17 +183,16 @@ if (userCart) {
 };
 
 const generateOrderRazorpay = (orderId, total) => {
-    console.log("order",orderId,"total",total);
+    
     return new Promise((resolve, reject) => {
       const options = {
         amount: total*100,
         currency: "INR",
         receipt: String(orderId),
         
-      };console.log(options.receipt,"receipt");
+      };
       instance.orders.create(options, (err, order) => {
-        console.log("neworder",options);
-        console.log("credentials",instance);
+ 
         if (err) {
           console.log(err)
           reject(err);
@@ -216,7 +206,7 @@ const generateOrderRazorpay = (orderId, total) => {
 
   const verifypayment=async(req,res)=>{
     try{
-   console.log("Req.boyd ==>" , req.body);
+
    const {orderId,data}=req.body
    const {razorpay_order_id,razorpay_payment_id,razorpay_signature}=data
    const text=`${razorpay_order_id}|${razorpay_payment_id}`
@@ -224,7 +214,7 @@ const generateOrderRazorpay = (orderId, total) => {
    const hmac=crypto.createHmac("sha256",instance.key_secret)
    hmac.update(text)
    const generatedsign=hmac.digest('hex')
-   console.log("gen",generatedsign);
+   
    if (generatedsign === razorpay_signature) {
     
     await Order.updateOne({ _id: orderId }, { $set: { paymentstatus: "Paid" } });
@@ -244,7 +234,7 @@ const generateOrderRazorpay = (orderId, total) => {
 const retryPayment = async (req, res) => {
     try {
         const orderId = req.params.orderId;
-        console.log("Retrying payment for order:", orderId);
+
 
         const order = await Order.findById(orderId);
 
@@ -268,7 +258,7 @@ const retryPayment = async (req, res) => {
             payment_capture: 1, 
         };
 
-        console.log("Creating Razorpay order with options:", options);
+
 
         instance.orders.create(options, (err, razorpayOrder) => {
             if (err) {
@@ -276,7 +266,7 @@ const retryPayment = async (req, res) => {
                 return res.status(500).json({ success: false, message: "Failed to create Razorpay order." });
             }
 
-            console.log("New Razorpay order created:", razorpayOrder);
+
 
             res.json({ 
                 success: true, 

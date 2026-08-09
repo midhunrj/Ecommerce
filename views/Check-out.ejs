@@ -264,7 +264,7 @@
                                             <tr>
                                                 <th>Shipping</th>
                                                 <td colspan="2"><% let ship;if(totalSubtotal>=1000){ ship=0%><em>Free Shipping </em><% } else{ ship=40 %><em>₹<%= ship %></em><% } %></td>
-                                                <% console.log("ship",ship);%>
+                                                
                                             </tr>
                                             
                                             <tr>
@@ -297,7 +297,7 @@
 
                         <% if(userAddress && userAddress.Address.length > 0){ %>
                             <% userAddress.Address.forEach((Address) => { %>
-                                <% console.log("Address array",Address._id); %>
+                                
                                 <div class="col-lg-4">
                                     <div class="card mb-3 mb-lg-0">
                                         <div class="card-header">
@@ -580,7 +580,7 @@
             return;
         }
 
-        console.log("Total Subtotal before sending:", totalSubtotal);
+        
 
         try {
                 const response = await fetch('/applyCoupon', {
@@ -590,11 +590,11 @@
                     },
                     body: JSON.stringify({ coupon: couponCode, totalSubtotal }),
                 });
-                console.log(response,"response");
+                
                 
                 
                     const data = await response.json();
-                    console.log(data,"data");
+                    
     
 
                 if (response.status === 200) {
@@ -826,7 +826,7 @@ function handleRazorpayPayment(response) {
 }
 
 function verifyPayment(orderId, data) {
-    console.log("Calling /verify-payment with:", orderId, data);
+    
     $.ajax({
         url: '/verify-payment',
         method: 'POST',

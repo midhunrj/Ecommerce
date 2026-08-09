@@ -201,14 +201,14 @@
     <script>
         
 function addToCart(productId) {
-    console.log("Product ID:", productId);
+    
 
     $.ajax({
         url: '/Add-cart',
         method: 'POST',
         data: { productId: productId },  
     success: (response) => {
-        console.log(response);
+    
         if (response.success) {
         
             Swal.fire({

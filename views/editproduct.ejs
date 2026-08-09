@@ -3,7 +3,7 @@
 
         <form action="/admin/update-Product" method="POST" enctype="multipart/form-data" class="row g-3" onsubmit="return validate()" novalidate>
 
-            <% console.log( "this is "+ products._id ) %>
+            
     <input type="hidden" name="id" value="<%= products._id %>">
     <div class="col-12">
         <div class="content-header">
@@ -95,9 +95,6 @@
                     
                         <% for(let i=0;i<category.length;i++){%>
 
-                      <% console.log("prdoucts-category",products.Category); %>
-
-                      <% console.log("category.id",category[i]._id); %>
                       <label class="mb-2 form-check form-check-inline" style="width: 45%;">
                         <input  class="form-check-input"  name="category" <% if (products.Category.toString() === category[i]._id.toString()) { %> checked <% } %>   type="radio" id="category"  required>
                         <span class="form-check-label">  <%= category[i].catName %></span>

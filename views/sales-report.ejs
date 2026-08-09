@@ -9,7 +9,7 @@
 }
 .pagination-area{
    margin-bottom: 100px;
-   /* margin-top:20px; */
+   
 }
 .page-item.active {
  background-color: #007bff; 
@@ -152,7 +152,7 @@ document.getElementById('paginationLinks').addEventListener('click', function(ev
   });
 function fetchFilteredOrders() {
   const timeRange = document.getElementById('timeRangeFilter').value;
-  console.log("Time range selected:", timeRange);
+  
 
   fetch(`/admin/sales/${timeRange}?page=${currentPage}`)
   .then(response => {
@@ -164,11 +164,15 @@ function fetchFilteredOrders() {
   .then(data => {
       renderOrders(data.orders);
       renderPagination(data.totalPages, data.currentPage);
-      console.log("order", orders);
+      
   })
   .catch(error => {
       console.error('Error fetching filtered orders:', error);
-      alert('Error fetching filtered orders. Please try again later.');
+Swal.fire({
+    icon: 'error',
+    title: 'Error',
+    text: 'Error fetching filtered orders. Please try again later.'
+});
   });
 }
 

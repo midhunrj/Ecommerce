@@ -54,7 +54,7 @@
                                     <% for (let i = 0;i<orders.length; i++) { %>
                                         <tr>
                                             <td><%= orders[i]._id %></td>
-                                            <% console.log("userid in order", orders[i].userId); %>
+
                                             <% if (users) { %>
                                                 <% for (let j = 0; j < users.length; j++) { %>
                                                     <% if (users[j]._id.toString() === orders[i].userId) { %>

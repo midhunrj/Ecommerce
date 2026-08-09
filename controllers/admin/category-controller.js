@@ -63,7 +63,7 @@ const addCategory = async (req, res) => {
 
 const deleteCategory = async (req, res) => {
   try {
-    console.log("entering ")
+
     const id = req.query.id;
     await Category.deleteOne({ _id: id });
     res.redirect("/admin/categories");
@@ -76,19 +76,17 @@ const deleteCategory = async (req, res) => {
 
 const updateCategory = async (req, res) => {
   try {
-    console.log(req.body)
-    console.log(req.body._id);
+
     const selectedList = req.body.liOrUl;
     const listed = selectedList === "list" ? false : true;
-    console.log("helllohjfgjg",selectedList);
-    console.log("jirafe",listed);
+
     const exist=req.body.catName
-    console.log("mime",exist);
+  
     const offer = req.body.offer;
     const type = req.body.offerType;
-console.log(offer,type,"offer and offer and offertype");
+
     const categorylist=await Category.find({})
-console.log(categorylist,"categorylidt")
+
     const existingproducts = await Category.findOne({_id: { $ne: req.body._id  } ,catName: { $regex: new RegExp(exist, 'i') } });
         if (existingproducts)
          {
@@ -132,7 +130,7 @@ const addCategoryOffer = async (req, res) => {
     }
 
       const findCategory = await Category.findOne({ _id: categoryId });
-      console.log(findCategory);
+      
 
       await Category.updateOne(
           { _id: categoryId },
@@ -148,12 +146,12 @@ const addCategoryOffer = async (req, res) => {
       });
 
       const productData = await Product.find({ Category: categoryId, isVerified: true });
-      console.log(productData);
+      
 
       for (const product of productData) {
            product.originalprice = product.price; 
            const originalprice=product.originalprice
-          console.log("before offer", product.originalprice);
+          
           product.price -= Math.floor(product.price * (percentage / 100));
           await product.save();
 
@@ -171,13 +169,13 @@ const addCategoryOffer = async (req, res) => {
 
 const removerCategoryOffer = async (req, res) => {
     try {
-        console.log(req.body);
+        
         const categoryId = req.body.categoryId;
         const findCategory = await Category.findOne({ _id: categoryId });
-        console.log(findCategory);
+      
 
         const percentage = findCategory.offer;
-        console.log(percentage);
+        
 
         const productData = await Product.find({ Category: categoryId, isVerified: true });
 
