@@ -24,7 +24,7 @@ const wishlistpage=async(req,res)=>{
   
       let userid=req.session.user
       if (!userid) {
-        return res.status(401).json({ success: false, message: "You must login" });
+        return res.status(HttpStatusCodes.UNAUTHORIZED).json({ success: false, message: "You must login" });
     }
        const existuser = await user.findOne({ _id: userid, wishlist:{$in: [new mongoose.Types.ObjectId(productid)] }});
     
@@ -32,7 +32,7 @@ const wishlistpage=async(req,res)=>{
       if(existuser)
       {
         
-        return res.status(200).json({red:true,message:"product is already added to wishlist"})
+        return res.status(HttpStatusCodes.OK).json({red:true,message:"product is already added to wishlist"})
       }
       else
       {
@@ -42,7 +42,7 @@ const wishlistpage=async(req,res)=>{
       );
       
       
-      return res.status(200).json({green:true,message:"product has been marked as favourite and added to wishlist"})
+      return res.status(HttpStatusCodes.OK).json({green:true,message:"product has been marked as favourite and added to wishlist"})
       }
     }
       catch(error)

@@ -304,7 +304,7 @@ const VerifyOtp= async (req, res) => {
       }
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: 'Failed to verify OTP' });
+      return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to verify OTP' });
     }
 }
 const Forgetload=async(req,res)=>{
@@ -534,7 +534,7 @@ const productdetails=async(req,res)=>{
    res.render('productdetails',{products:productData,username:userdata?.username??null,category:CategoryData,count,relatedproducts,wishcount,search:req.query.search})
     }
     else{
-      res.status(200).json({ message: 'Product is  not inside' });
+      res.status(HttpStatusCodes.OK).json({ message: 'Product is  not inside' });
     }
   }
   catch (error) {
@@ -677,19 +677,19 @@ const applycoupon = async (req, res) => {
 
     const parsedTotalSubtotal = parseFloat(totalSubtotal);
     if (isNaN(parsedTotalSubtotal)) {
-      return res.status(400).json({ error: 'Invalid total subtotal value' });
+      return res.status(HttpStatusCodes.BAD_REQUEST).json({ error: 'Invalid total subtotal value' });
     }
 
     const couponDocument = await Coupon.findOne({ Couponcode: coupon });
 
     if (!couponDocument) {
 
-      return res.status(409).json({ error: 'Coupon code not found' });
+      return res.status(HttpStatusCodes.CONFLICT).json({ error: 'Coupon code not found' });
     }
 
 
     if (parsedTotalSubtotal < couponDocument.Minimumamount) {
-      return res.status(400).json({ error: 'Total subtotal is below the minimum amount required for this coupon',miniamount:couponDocument.Minimumamount });
+      return res.status(HttpStatusCodes.BAD_REQUEST).json({ error: 'Total subtotal is below the minimum amount required for this coupon',miniamount:couponDocument.Minimumamount });
     }
 
 
@@ -697,20 +697,20 @@ const applycoupon = async (req, res) => {
 
     const couponUsage = userdata.coupons.find(c => c.couponCode === coupon);
     if (couponUsage && couponUsage.usageCount >= couponDocument.Usagelimit) {
-      return res.status(404).json({ success: false, message: `You have already used this coupon. This coupon can be used only ${couponDocument.Usagelimit} times` });
+      return res.status(HttpStatusCodes.NOT_FOUND).json({ success: false, message: `You have already used this coupon. This coupon can be used only ${couponDocument.Usagelimit} times` });
     }
     
     await userdata.save();
     
     let discountedTotal = parsedTotalSubtotal - couponDocument.Amount;
 
-    res.status(200).json({ 
+    res.status(HttpStatusCodes.OK).json({ 
       discount: discountedTotal,
       message: `Coupon code "${coupon}" applied successfully! Discounted total amount: ₹${discountedTotal}`
     });
   } catch (error) {
     console.error('Error applying coupon:', error);
-    res.status(500).json({ error: 'Failed to apply coupon. Please try again.' });
+    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to apply coupon. Please try again.' });
   }
 };
 
@@ -722,20 +722,20 @@ const removeCoupon = async (req, res) => {
     const userdata = await user.findOne({ _id: userId });
 
     if (!userdata) {
-      return res.status(404).json({ success: false, message: 'User not found' });
+      return res.status(HttpStatusCodes.NOT_FOUND).json({ success: false, message: 'User not found' });
     }
 
     const couponUsageIndex = userdata.coupons.findIndex(c => c.couponCode === coupon);
       if(req.session.coupon)
       {
         req.session.coupon=''
-      return res.status(200).json({ success: true, message: 'Coupon has been removed successfully' });
+      return res.status(HttpStatusCodes.OK).json({ success: true, message: 'Coupon has been removed successfully' });
     } else {
-      return res.status(400).json({ success: false, message: 'Coupon usage count is already at zero' });
+      return res.status(HttpStatusCodes.BAD_REQUEST).json({ success: false, message: 'Coupon usage count is already at zero' });
     }
   } catch (error) {
     console.error('Error removing coupon:', error);
-    res.status(500).json({ error: 'Failed to remove coupon. Please try again.' });
+    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to remove coupon. Please try again.' });
   }
 }
 

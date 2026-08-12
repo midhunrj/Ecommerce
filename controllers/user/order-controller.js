@@ -101,7 +101,7 @@ if (userCart) {
                     const deletecart = await Cart.deleteOne({ user_id: userId })
 
                     if (deletecart) {
-                        res.status(200).json({ success: true,method:"COD", message: 'Order placed successfully' });
+                        res.status(HttpStatusCodes.OK).json({ success: true,method:"COD", message: 'Order placed successfully' });
                     }
         }}
         else if(paymentOption === "Wallet")
@@ -136,7 +136,7 @@ if (userCart) {
                     const deletecart = await Cart.deleteOne({ user_id: userId })
 
                     if (deletecart) {
-                        res.status(200).json({ success: true,jibo:"glen",method:"Wallet", message: 'Order placed successfully' });
+                        res.status(HttpStatusCodes.OK).json({ success: true,jibo:"glen",method:"Wallet", message: 'Order placed successfully' });
                     }
 
                }
@@ -163,22 +163,22 @@ if (userCart) {
             const deletecart = await Cart.deleteOne({ user_id: userId })
 
             if (deletecart) {
-                res.status(200).json({razorpayorder:generatedOrder ,method:"Online" ,success:true ,razorId:process.env.RAZORPAY_ID_KEY})
+                res.status(HttpStatusCodes.OK).json({razorpayorder:generatedOrder ,method:"Online" ,success:true ,razorId:process.env.RAZORPAY_ID_KEY})
                
             }
     }
             
                 }
              else {
-                res.status(400).json({ success: false, message: 'Invalid payment option' });
+                res.status(HttpStatusCodes.BAD_REQUEST).json({ success: false, message: 'Invalid payment option' });
             }
         }} }else {
-            res.status(404).json({ success: false, message: 'User cart not found' });
+            res.status(HttpStatusCodes.NOT_FOUND).json({ success: false, message: 'User cart not found' });
         }
     } catch (error) {
         console.error('catcherror',error);
 
-        res.status(500).json({ success: false, error: 'Internal Server Error' });
+        res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ success: false, error: 'Internal Server Error' });
     }
 };
 
@@ -218,11 +218,11 @@ const generateOrderRazorpay = (orderId, total) => {
    if (generatedsign === razorpay_signature) {
     
     await Order.updateOne({ _id: orderId }, { $set: { paymentstatus: "Paid" } });
-    res.status(200).json({ success: true, message: "Payment verified successfully" });
+    res.status(HttpStatusCodes.OK).json({ success: true, message: "Payment verified successfully" });
 } else {
     
     await Order.updateOne({ _id: orderId }, { $set: { paymentstatus: "Failed" } });
-    res.status(400).json({ success: false, message: "Payment verification failed" });
+    res.status(HttpStatusCodes.BAD_REQUEST).json({ success: false, message: "Payment verification failed" });
 }
     }
     catch(error){
@@ -239,15 +239,15 @@ const retryPayment = async (req, res) => {
         const order = await Order.findById(orderId);
 
         if (!order) {
-            return res.status(404).json({ success: false, message: "Order not found" });
+            return res.status(HttpStatusCodes.NOT_FOUND).json({ success: false, message: "Order not found" });
         }
 
         if (order.paymentstatus !== "Failed") {
-            return res.status(400).json({ success: false, message: "Payment is already completed or not failed." });
+            return res.status(HttpStatusCodes.BAD_REQUEST).json({ success: false, message: "Payment is already completed or not failed." });
         }
 
         if (!order.Totalprice || order.Totalprice <= 0) {
-            return res.status(400).json({ success: false, message: "Invalid total price for order." });
+            return res.status(HttpStatusCodes.BAD_REQUEST).json({ success: false, message: "Invalid total price for order." });
         }
 
     
@@ -263,7 +263,7 @@ const retryPayment = async (req, res) => {
         instance.orders.create(options, (err, razorpayOrder) => {
             if (err) {
                 console.error("Error creating Razorpay order:", err);
-                return res.status(500).json({ success: false, message: "Failed to create Razorpay order." });
+                return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ success: false, message: "Failed to create Razorpay order." });
             }
 
 
@@ -279,7 +279,7 @@ const retryPayment = async (req, res) => {
 
     } catch (error) {
         console.error("Retry Payment Error:", error);
-        res.status(500).json({ success: false, message: "Internal Server Error" });
+        res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ success: false, message: "Internal Server Error" });
     }
 };
 

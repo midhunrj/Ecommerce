@@ -95,7 +95,7 @@ const edituserprofile = async (req, res) => {
         res.redirect('/profile');
     } catch (error) {
         console.error('Error updating user profile:', error);
-        res.status(500).json({ error: 'Failed to update user profile' });
+        res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to update user profile' });
     }
 }
 const editpassword=async(req,res)=>{
@@ -267,7 +267,7 @@ catch(error)
             res.redirect('/profile#address');
         } catch (error) {
             console.log(error.message);
-            res.status(500).send("Internal Server Error");
+            res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Internal Server Error");
         }
     };
     
@@ -291,7 +291,7 @@ catch(error)
           res.redirect("/profile");
         } catch (error) {
           console.error("Error in deleteCategory:", error.message);
-          res.status(500).send("Internal Server Error");
+          res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Internal Server Error");
         }
       };
       const orderdetails=async(req,res)=>{
@@ -382,10 +382,10 @@ catch(error)
             }
     
             
-            res.status(200).json({ success: true, updatedOrder });
+            res.status(HttpStatusCodes.OK).json({ success: true, updatedOrder });
         } catch (error) {
             console.error('Error updating order status:', error);
-            res.status(500).json({ error: 'Error updating order status' });
+            res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Error updating order status' });
         }
     }
     const orderinfo = async (req, res) => {
@@ -395,7 +395,7 @@ catch(error)
             const order = await Order.findById(orderId).populate('products.product');
 
             if (!order) {
-                return res.status(404).send('Order not found');
+                return res.status(HttpStatusCodes.NOT_FOUND).send('Order not found');
             }
     
     var data = {
@@ -459,11 +459,11 @@ catch(error)
     
             const pdfBuffer = await easyinvoice.createInvoice(data);
     
-                        res.status(200).json(pdfBuffer);
+                        res.status(HttpStatusCodes.OK).json(pdfBuffer);
         } 
         catch (error) {
             console.error('Error generating invoice:', error);
-            res.status(500).send('Internal Server Error');
+            res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send('Internal Server Error');
         }
     };
     const Addwallet=async(req,res)=>{
@@ -473,16 +473,16 @@ catch(error)
         const user=req.session.user;
         const userdata=await User.findOne({_id:user})
         if(!userdata){
-            return res.status(400).json({success:false,message:"failed to add money"})
+            return res.status(HttpStatusCodes.BAD_REQUEST).json({success:false,message:"failed to add money"})
         }
         const generatedOrder = await generateOrderRazorpay(amount);
         
          
-         res.status(200).json({ success:true,message: "Money has been added to wallet successfully",Wallet:userdata.wallet,razorpayOrder: generatedOrder,amount, razorId: process.env.RAZORPAY_ID_KEY  });
+         res.status(HttpStatusCodes.OK).json({ success:true,message: "Money has been added to wallet successfully",Wallet:userdata.wallet,razorpayOrder: generatedOrder,amount, razorId: process.env.RAZORPAY_ID_KEY  });
     }
     catch (error) {
         console.error(error.message);
-        res.status(500).send('Internal Server Error');
+        res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send('Internal Server Error');
     }
 }
 
@@ -533,13 +533,13 @@ const verifyPayment = async (req, res) => {
 
             await user.save();
 
-            res.status(200).json({ success: true, message: "Payment verified and wallet updated successfully",amount });
+            res.status(HttpStatusCodes.OK).json({ success: true, message: "Payment verified and wallet updated successfully",amount });
         } else {
-            res.status(400).json({ success: false, message: "Payment verification failed" });
+            res.status(HttpStatusCodes.BAD_REQUEST).json({ success: false, message: "Payment verification failed" });
         }
     } catch (error) {
         console.error('Error verifying payment:', error);
-        res.status(500).json({ error: 'Failed to verify payment' });
+        res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to verify payment' });
     }
 };
 

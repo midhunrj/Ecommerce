@@ -4,6 +4,7 @@ const Address = require('../../models/Addressmodel')
 const Category=require('../../models/categorymodel')
 const user=require('../../models/usermodel')
 const Coupon=require("../../models/couponmodel")
+const HttpStatusCodes=require('../../configure/statusCodes')
 const Razorpay=require("razorpay")
 const razorypay=new Razorpay({
     key_id:'process.env.RAZORPAY_ID_KEY',
@@ -36,7 +37,7 @@ const Cartpage=async(req,res)=>{
         if(!cartdata)
         {
             let CartIsEmpty="true"
-          return res.status(404).render("Cart",{Cart:cartdata,username:userdata.username,count,wishcount,search:req.query.search})
+          return res.status(HttpStatusCodes.NOT_FOUND).render("Cart",{Cart:cartdata,username:userdata.username,count,wishcount,search:req.query.search})
         }
        
         const Cartlist=cartdata.cartItems.map(item=>item.product_id)
@@ -83,7 +84,7 @@ const Cartpage=async(req,res)=>{
         
         if (!cartData) {
 
-            return res.status(404).render('Check-out', {username:userdata.username,count});
+            return res.status(HttpStatusCodes.NOT_FOUND).render('Check-out', {username:userdata.username,count});
         }
         const products = cartData.products;
         const cartItems = cartData.cartItems;
@@ -98,7 +99,7 @@ const Cartpage=async(req,res)=>{
     } catch (error) {
         console.log(error.message);
         
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error' });
     }
 };
 
@@ -108,7 +109,7 @@ const addToCart = async (req, res) => {
         const userId = req.session.user;
         
         if (!userId) {
-            return res.status(401).json({ success: false, message: "You must login" });
+            return res.status(HttpStatusCodes.UNAUTHORIZED).json({ success: false, message: "You must login" });
         }
         
         let cartData = await Cart.findOne({ user_id: userId });
@@ -119,13 +120,13 @@ const addToCart = async (req, res) => {
         
 
         if (!productData) {
-            return res.status(404).json({ success: false, message: 'Product not found' });
+            return res.status(HttpStatusCodes.NOT_FOUND).json({ success: false, message: 'Product not found' });
         }
 
         
         
         if (productData.stock < 1) {
-            return res.status(200).json({ success: false, message: 'Product is out of stock' });
+            return res.status(HttpStatusCodes.OK).json({ success: false, message: 'Product is out of stock' });
        }
 
         
@@ -136,7 +137,7 @@ const addToCart = async (req, res) => {
             
             if (cartItem) {
                 if (productData.stock < 1||cartItem.quantity+1>productData.stock) {
-                    return res.status(200).json({ success: false, message: 'Product is out of stock' });
+                    return res.status(HttpStatusCodes.OK).json({ success: false, message: 'Product is out of stock' });
                 }    
 
                 cartItem.quantity += 1;
@@ -147,7 +148,7 @@ const addToCart = async (req, res) => {
 
                 
                 if (productData.stock < 1) {
-                    return res.status(200).json({ success: false, message: 'Product is out of stock' });
+                    return res.status(HttpStatusCodes.OK).json({ success: false, message: 'Product is out of stock' });
                }
                 const newItem = {
                     product_id: productId,
@@ -167,7 +168,7 @@ const addToCart = async (req, res) => {
 
 
             await cartData.save();
-            res.status(200).json({success:true, message: 'Product added to cart successfully' });
+            res.status(HttpStatusCodes.OK).json({success:true, message: 'Product added to cart successfully' });
         } else {
 
             const newCart = new Cart({
@@ -185,7 +186,7 @@ const addToCart = async (req, res) => {
 
             {
             await newCart.save();
-            res.status(200).json({ success:true,message: 'Product added to cart successfully' });
+            res.status(HttpStatusCodes.OK).json({ success:true,message: 'Product added to cart successfully' });
 
             }   
            
@@ -207,7 +208,7 @@ const addToCart = async (req, res) => {
         
     } catch (error) {
         console.error(error);
-        res.status(500).json({success:false, error: 'Internal Server Error' });
+        res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({success:false, error: 'Internal Server Error' });
     }
 };
 
@@ -233,7 +234,7 @@ const updateQuantity = async (req, res) => {
                     newQuantity = productInCart.quantity - 1;
                     
                 } else {
-                    return res.status(400).json({ status: false, error: "Invalid count" });
+                    return res.status(HttpStatusCodes.BAD_REQUEST).json({ status: false, error: "Invalid count" });
                 }
 
                 if(newQuantity==0)
@@ -294,7 +295,7 @@ const updateQuantity = async (req, res) => {
         }
     } catch (error) {
         console.error(error.message);
-        return res.status(500).json({ status: false, error: "Server error" });
+        return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ status: false, error: "Server error" });
     }
 };
 
@@ -307,7 +308,7 @@ const DeleteCart = async (req, res) => {
 
 
         if (!mongoose.Types.ObjectId.isValid(cartId)) {
-            return res.status(400).json({ error: 'Invalid cart ID' });
+            return res.status(HttpStatusCodes.BAD_REQUEST).json({ error: 'Invalid cart ID' });
         }
 
         const updatedCart = await Cart.findOneAndUpdate(
@@ -326,7 +327,7 @@ const DeleteCart = async (req, res) => {
             count-=1
             req.session.count=count
         }
-        res.status(200).json({ success: true, message: 'Item removed from cart', });
+        res.status(HttpStatusCodes.OK).json({ success: true, message: 'Item removed from cart', });
         if(updatedCart&updatedCart.cartItems.length==0)
         {
             let CartIsEmpty="true"
@@ -336,7 +337,7 @@ const DeleteCart = async (req, res) => {
     } catch (error) {
         console.log(error.message);
 
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error' });
     }
 };
 
